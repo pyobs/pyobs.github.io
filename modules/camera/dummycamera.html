@@ -1,0 +1,420 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6.3.2. DummyCamera &mdash; pyobs  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyobs  documentation" href="../../index.html"/>
+        <link rel="up" title="6.3. Camera" href="index.html"/>
+        <link rel="next" title="6.4. Filecache" href="../filecache/index.html"/>
+        <link rel="prev" title="6.3.1. BaseCamera" href="basecamera.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basicusage.html">3. Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">6. Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../autofocus/index.html">6.1. Auto-focus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoguiding/index.html">6.2. Auto-guiding</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">6.3. Camera</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basecamera.html">6.3.1. BaseCamera</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">6.3.2. DummyCamera</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../filecache/index.html">6.4. Filecache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imagedb/index.html">6.5. Image database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxy/index.html">6.6. Proxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roof/index.html">6.7. Roof</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../telescope/index.html">6.8. Telescope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test/index.html">6.9. Test modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">6. Modules</a> &raquo;</li>
+        
+          <li><a href="index.html">6.3. Camera</a> &raquo;</li>
+        
+      <li>6.3.2. DummyCamera</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/camera/dummycamera.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dummycamera">
+<h1>6.3.2. DummyCamera<a class="headerlink" href="#dummycamera" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs.modules.camera.DummyCamera">
+<em class="property">class </em><code class="descclassname">pyobs.modules.camera.</code><code class="descname">DummyCamera</code><span class="sig-paren">(</span><em>readout_time: float = 2</em>, <em>sim: dict = None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dummy camera for testing.</p>
+<dl class="method">
+<dt id="pyobs.modules.camera.DummyCamera.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>readout_time: float = 2</em>, <em>sim: dict = None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new dummy cammera.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>readout_time</strong> – Readout time in seconds.</li>
+<li><strong>sim</strong> – Dictionary with config for image simulator.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.DummyCamera.get_binning">
+<code class="descname">get_binning</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera.get_binning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the camera binning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple with x and y.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.DummyCamera.get_cooling_status">
+<code class="descname">get_cooling_status</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'bool'&gt;</em>, <em>&lt;class 'float'&gt;</em>, <em>&lt;class 'float'&gt;</em>, <em>&lt;class 'dict'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera.get_cooling_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current status for the cooling.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Enabled (bool):         Whether the cooling is enabled
+SetPoint (float):       Setpoint for the cooling in celsius.
+Power (float):          Current cooling power in percent or None.
+Temperatures (dict):    Dictionary of sensor name/value pairs with temperatures</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Tuple containing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.DummyCamera.get_full_frame">
+<code class="descname">get_full_frame</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera.get_full_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns full size of CCD.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple with left, top, width, and height set.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.DummyCamera.get_temperatures">
+<code class="descname">get_temperatures</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pyobs.modules.camera.DummyCamera.get_temperatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all temperatures measured by this module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dict containing temperatures.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.DummyCamera.get_window">
+<code class="descname">get_window</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera.get_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the camera window.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple with left, top, width, and height set.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.DummyCamera.set_binning">
+<code class="descname">set_binning</code><span class="sig-paren">(</span><em>x: int</em>, <em>y: int</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera.set_binning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the camera binning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – X binning.</li>
+<li><strong>y</strong> – Y binning.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If binning could not be set.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.DummyCamera.set_cooling">
+<code class="descname">set_cooling</code><span class="sig-paren">(</span><em>enabled: bool</em>, <em>setpoint: float</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera.set_cooling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables/disables cooling and sets setpoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>enabled</strong> – Enable or disable cooling.</li>
+<li><strong>setpoint</strong> – Setpoint in celsius for the cooling.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If cooling could not be set.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.DummyCamera.set_window">
+<code class="descname">set_window</code><span class="sig-paren">(</span><em>left: float</em>, <em>top: float</em>, <em>width: float</em>, <em>height: float</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera.set_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the camera window.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>left</strong> – X offset of window.</li>
+<li><strong>top</strong> – Y offset of window.</li>
+<li><strong>width</strong> – Width of window.</li>
+<li><strong>height</strong> – Height of window.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If binning could not be set.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../filecache/index.html" class="btn btn-neutral float-right" title="6.4. Filecache" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="basecamera.html" class="btn btn-neutral" title="6.3.1. BaseCamera" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

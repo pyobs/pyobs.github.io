@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Basic Usage &mdash; pyobs  documentation</title>
+  <title>3. Basic Usage &mdash; pyobs  documentation</title>
   
 
   
@@ -17,36 +17,42 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
 
+  
+  
     
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="The Comm module" href="comm.html" />
-    <link rel="prev" title="Installing pyobs" href="installing.html" /> 
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyobs  documentation" href="index.html"/>
+        <link rel="next" title="4. Command Line Interface" href="cli.html"/>
+        <link rel="prev" title="2. Installing pyobs" href="installing.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
    
   <div class="wy-grid-for-nav">
+
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search">
           
 
           
@@ -82,14 +88,16 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing pyobs</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#environment">Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#comm">Comm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Basic Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#environment">3.1. Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comm">3.2. Comm</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="comm.html">The Comm module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="environment.html">Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/index.html">6. Modules</a></li>
 </ul>
 
             
@@ -101,7 +109,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyobs</a>
@@ -109,10 +117,9 @@
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
@@ -135,7 +142,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Basic Usage</li>
+      <li>3. Basic Usage</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -155,27 +162,20 @@
            <div itemprop="articleBody">
             
   <div class="section" id="basic-usage">
-<h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
-<p>After installing pyobs, you have the new command <code class="docutils literal notranslate"><span class="pre">pyobs</span></code>, which creates and
+<h1>3. Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
+<p>After installing pyobs, you have the new command <code class="docutils literal"><span class="pre">pyobs</span></code>, which creates and
 starts pyobs modules from the command line based on a configuration file, written
 in YAML.</p>
-<p>A simple configuration file (<code class="docutils literal notranslate"><span class="pre">standalone.yaml</span></code>) might look like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">Application</span>
-
-<span class="n">module</span><span class="p">:</span>
-  <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">StandAlone</span>
-  <span class="n">message</span><span class="p">:</span> <span class="n">Hello</span> <span class="n">world</span>
-  <span class="n">interval</span><span class="p">:</span> <span class="mi">10</span>
+<p>A simple configuration file (<code class="docutils literal"><span class="pre">standalone.yaml</span></code>) might look like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">StandAlone</span>
+<span class="n">message</span><span class="p">:</span> <span class="n">Hello</span> <span class="n">world</span>
+<span class="n">interval</span><span class="p">:</span> <span class="mi">10</span>
 </pre></div>
 </div>
-<p>Basically you always define a <code class="docutils literal notranslate"><span class="pre">class</span></code> for a block together with its properties.</p>
-<p>In this example, an object is created from the class <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.Application</span></code>, which usually
-should always be the top-level class in a pyobs configuration. Among other parameters, this
-class accepts a <code class="docutils literal notranslate"><span class="pre">module</span></code> parameter, in which we can define another object, that defines
-the logic of the program.</p>
-<p>The module itself is of type <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.test.StandAlone</span></code>, which is a trivial implementation
+<p>Basically you always define a <code class="docutils literal"><span class="pre">class</span></code> for a block together with its properties.</p>
+<p>In this example, the module is of type <a class="reference internal" href="modules/test/standalone.html#pyobs.modules.test.StandAlone" title="pyobs.modules.test.StandAlone"><code class="xref py py-class docutils literal"><span class="pre">pyobs.modules.test.StandAlone</span></code></a>, which is a trivial implementation
 of a module that does nothing more than logging a given message continuously in a given interval:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">StandAlone</span><span class="p">(</span><span class="n">pyobsModule</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">StandAlone</span><span class="p">(</span><span class="n">pyObsModule</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">pyobsModule</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thread_funcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">thread_func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -198,24 +198,24 @@ of a module that does nothing more than logging a given message continuously in 
             <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;interval&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>The constructor just calls the constructor of <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.pyobsModule</span></code>, adding the <code class="docutils literal notranslate"><span class="pre">thread_funcs</span></code>
+<p>The constructor just calls the constructor of <code class="xref py py-class docutils literal"><span class="pre">pyobs.pyObsModule</span></code>, adding the <code class="docutils literal"><span class="pre">thread_funcs</span></code>
 parameter, that takes a method that is run in an extra thread. In this case, it is the method
 thread_func(), that does some logging in a loop that runs until the
 program quits.</p>
 <p>The class method default_config() defines the default configuration for the module, and open() and close()
 are called when the module is opened and closed, respectively.</p>
-<p>If the configuration file is saved as <code class="docutils literal notranslate"><span class="pre">standalone.yaml</span></code>, one can easily start it via the <code class="docutils literal notranslate"><span class="pre">pyobs</span></code> command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyobs</span> <span class="n">standalone</span><span class="o">.</span><span class="n">yaml</span>
+<p>If the configuration file is saved as <code class="docutils literal"><span class="pre">standalone.yaml</span></code>, one can easily start it via the <code class="docutils literal"><span class="pre">pyobs</span></code> command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyobs</span> <span class="n">standalone</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
-<p>The program quits gracefully when it receives an interrupt, so you can stop it by simply pressing <code class="docutils literal notranslate"><span class="pre">Ctrl+c</span></code>.</p>
+<p>The program quits gracefully when it receives an interrupt, so you can stop it by simply pressing <code class="docutils literal"><span class="pre">Ctrl+c</span></code>.</p>
 <div class="section" id="environment">
-<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h2>
+<h2>3.1. Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h2>
 <p>There is some functionality that is required in many modules, including those concerning the environment,
-especially the location of the telescope and the local time. For this, the <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.Application</span></code> class
-has support for an additional module of type <a class="reference internal" href="environment.html#pyobs.environment.Environment" title="pyobs.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.environment.Environment</span></code></a>, which can be
+especially the location of the telescope and the local time. For this, the <code class="xref py py-class docutils literal"><span class="pre">pyobs.Application</span></code> class
+has support for an additional module of type <a class="reference internal" href="auxiliary/environment.html#pyobs.environment.Environment" title="pyobs.environment.Environment"><code class="xref py py-class docutils literal"><span class="pre">pyobs.environment.Environment</span></code></a>, which can be
 defined in the application’s configuration like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">environment</span><span class="p">:</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">environment</span><span class="p">:</span>
   <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">Environment</span>
   <span class="n">timezone</span><span class="p">:</span> <span class="n">utc</span>
   <span class="n">location</span><span class="p">:</span>
@@ -224,39 +224,41 @@ defined in the application’s configuration like this:</p>
     <span class="n">elevation</span><span class="p">:</span> <span class="mf">1798.</span>
 </pre></div>
 </div>
-<p>Now an object of this type is automatically pushed into the module and can be accessed via the <code class="docutils literal notranslate"><span class="pre">environment</span></code>
+<p>Now an object of this type is automatically pushed into the module and can be accessed via the <code class="docutils literal"><span class="pre">environment</span></code>
 property, e.g.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pyobsModule</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="comm">
-<h2>Comm<a class="headerlink" href="#comm" title="Permalink to this headline">¶</a></h2>
+<h2>3.2. Comm<a class="headerlink" href="#comm" title="Permalink to this headline">¶</a></h2>
 <p>In case the module is supposed to communicate with others, we need another module of type
-<code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.comm.Comm</span></code>, which can be defined in the application’s configuration like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comm</span><span class="p">:</span>
+<code class="xref py py-class docutils literal"><span class="pre">pyobs.comm.Comm</span></code>, which can be defined in the application’s configuration like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">comm</span><span class="p">:</span>
   <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
   <span class="n">jid</span><span class="p">:</span> <span class="n">some_module</span><span class="nd">@my</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">com</span>
 </pre></div>
 </div>
-<p>More details about this can be found in the <a class="reference internal" href="comm.html"><span class="doc">The Comm module</span></a> section.</p>
+<p>More details about this can be found in the <a class="reference internal" href="auxiliary/comm.html"><span class="doc">Comm</span></a> section.</p>
 </div>
 </div>
 
 
            </div>
-           
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="comm.html" class="btn btn-neutral float-right" title="The Comm module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="cli.html" class="btn btn-neutral float-right" title="4. Command Line Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="installing.html" class="btn btn-neutral float-left" title="Installing pyobs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="installing.html" class="btn btn-neutral" title="2. Installing pyobs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -265,11 +267,11 @@ property, e.g.:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Tim-Oliver Husser
+        &copy; Copyright 2019, Tim-Oliver Husser.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -282,15 +284,36 @@ property, e.g.:</p>
   
 
 
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
 
   
   
-    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
    
 
 </body>

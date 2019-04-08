@@ -1,0 +1,415 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6.3.1. BaseCamera &mdash; pyobs  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyobs  documentation" href="../../index.html"/>
+        <link rel="up" title="6.3. Camera" href="index.html"/>
+        <link rel="next" title="6.3.2. DummyCamera" href="dummycamera.html"/>
+        <link rel="prev" title="6.3. Camera" href="index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basicusage.html">3. Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">6. Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../autofocus/index.html">6.1. Auto-focus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoguiding/index.html">6.2. Auto-guiding</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">6.3. Camera</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">6.3.1. BaseCamera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dummycamera.html">6.3.2. DummyCamera</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../filecache/index.html">6.4. Filecache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imagedb/index.html">6.5. Image database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxy/index.html">6.6. Proxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roof/index.html">6.7. Roof</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../telescope/index.html">6.8. Telescope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test/index.html">6.9. Test modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">6. Modules</a> &raquo;</li>
+        
+          <li><a href="index.html">6.3. Camera</a> &raquo;</li>
+        
+      <li>6.3.1. BaseCamera</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/camera/basecamera.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="basecamera">
+<h1>6.3.1. BaseCamera<a class="headerlink" href="#basecamera" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs.modules.camera.BaseCamera">
+<em class="property">class </em><code class="descclassname">pyobs.modules.camera.</code><code class="descname">BaseCamera</code><span class="sig-paren">(</span><em>fits_headers: dict = None</em>, <em>centre: typing.Tuple[float</em>, <em>float] = None</em>, <em>rotation: float = None</em>, <em>filenames: str = '/cache/pyobs_{DATE-OBS|date}T{DATE-OBS|time}{IMAGETYP}.fits.gz'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.BaseCamera" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="pyobs.modules.camera.BaseCamera.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fits_headers: dict = None</em>, <em>centre: typing.Tuple[float</em>, <em>float] = None</em>, <em>rotation: float = None</em>, <em>filenames: str = '/cache/pyobs_{DATE-OBS|date}T{DATE-OBS|time}{IMAGETYP}.fits.gz'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.BaseCamera.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new BaseCamera.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fits_headers</strong> – Additional FITS headers.</li>
+<li><strong>centre</strong> – (x, y) tuple of camera centre.</li>
+<li><strong>rotation</strong> – Rotation east of north.</li>
+<li><strong>filenames</strong> – Template for file naming.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.BaseCamera.abort">
+<code class="descname">abort</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.BaseCamera.abort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aborts the current exposure and sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Success or not.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.BaseCamera.abort_sequence">
+<code class="descname">abort_sequence</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.BaseCamera.abort_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aborts the current sequence after current exposure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Success or not.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.BaseCamera.expose">
+<code class="descname">expose</code><span class="sig-paren">(</span><em>exposure_time: int</em>, <em>image_type: pyobs.interfaces.ICamera.ICamera.ImageType</em>, <em>count: int = 1</em>, <em>broadcast: bool = True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#pyobs.modules.camera.BaseCamera.expose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts exposure and returns reference to image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>exposure_time</strong> – Exposure time in seconds.</li>
+<li><strong>image_type</strong> – Type of image.</li>
+<li><strong>count</strong> – Number of images to take.</li>
+<li><strong>broadcast</strong> – Broadcast existence of image.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of references to the image that was taken.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.BaseCamera.get_exposure_progress">
+<code class="descname">get_exposure_progress</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#pyobs.modules.camera.BaseCamera.get_exposure_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the progress of the current exposure in percent.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Progress of the current exposure in percent.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.BaseCamera.get_exposure_status">
+<code class="descname">get_exposure_status</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; pyobs.interfaces.ICamera.ICamera.ExposureStatus<a class="headerlink" href="#pyobs.modules.camera.BaseCamera.get_exposure_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current status of the camera, which is one of ‘idle’, ‘exposing’, or ‘readout’.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Current status of camera.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.BaseCamera.get_exposure_time_left">
+<code class="descname">get_exposure_time_left</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#pyobs.modules.camera.BaseCamera.get_exposure_time_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the remaining exposure time on the current exposure in ms.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Remaining exposure time in ms.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.BaseCamera.get_exposures_left">
+<code class="descname">get_exposures_left</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#pyobs.modules.camera.BaseCamera.get_exposures_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the remaining exposures.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Remaining exposures</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.camera.BaseCamera.open">
+<code class="descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.BaseCamera.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open module.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyobs.modules.camera.BaseCamera.set_biassec_trimsec">
+<em class="property">static </em><code class="descname">set_biassec_trimsec</code><span class="sig-paren">(</span><em>hdr: astropy.io.fits.header.Header</em>, <em>left: int</em>, <em>top: int</em>, <em>width: int</em>, <em>height: int</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.BaseCamera.set_biassec_trimsec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates and sets the BIASSEC and TRIMSEC areas.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hdr</strong> – FITS header (in/out)</li>
+<li><strong>left</strong> – left edge of data area</li>
+<li><strong>top</strong> – top edge of data area</li>
+<li><strong>width</strong> – width of data area</li>
+<li><strong>height</strong> – height of data area</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dummycamera.html" class="btn btn-neutral float-right" title="6.3.2. DummyCamera" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="6.3. Camera" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

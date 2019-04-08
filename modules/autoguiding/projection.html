@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6.2.1. AutoGuidingProjection &mdash; pyobs  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pyobs  documentation" href="../../index.html"/>
+        <link rel="up" title="6.2. Auto-guiding" href="index.html"/>
+        <link rel="next" title="6.3. Camera" href="../camera/index.html"/>
+        <link rel="prev" title="6.2. Auto-guiding" href="index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basicusage.html">3. Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">6. Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../autofocus/index.html">6.1. Auto-focus</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">6.2. Auto-guiding</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">6.2.1. AutoGuidingProjection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../camera/index.html">6.3. Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filecache/index.html">6.4. Filecache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imagedb/index.html">6.5. Image database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../proxy/index.html">6.6. Proxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../roof/index.html">6.7. Roof</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../telescope/index.html">6.8. Telescope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test/index.html">6.9. Test modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">6. Modules</a> &raquo;</li>
+        
+          <li><a href="index.html">6.2. Auto-guiding</a> &raquo;</li>
+        
+      <li>6.2.1. AutoGuidingProjection</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/autoguiding/projection.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="autoguidingprojection">
+<h1>6.2.1. AutoGuidingProjection<a class="headerlink" href="#autoguidingprojection" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs.modules.autoguiding.AutoGuidingProjection">
+<em class="property">class </em><code class="descclassname">pyobs.modules.autoguiding.</code><code class="descname">AutoGuidingProjection</code><span class="sig-paren">(</span><em>telescope: typing.Union[str, pyobs.interfaces.ITelescope.ITelescope], max_offset: float = 10, max_exposure_time: float = 20, max_interval: float = 30, separation_reset: float = 10, new_images_channel: str = 'new_images', pid: bool = False, *args, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.autoguiding.AutoGuidingProjection" title="Permalink to this definition">¶</a></dt>
+<dd><p>An auto-guiding system based on comparing collapsed images along the x&amp;y axes with a reference image.</p>
+<dl class="method">
+<dt id="pyobs.modules.autoguiding.AutoGuidingProjection.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>telescope: typing.Union[str, pyobs.interfaces.ITelescope.ITelescope], max_offset: float = 10, max_exposure_time: float = 20, max_interval: float = 30, separation_reset: float = 10, new_images_channel: str = 'new_images', pid: bool = False, *args, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.autoguiding.AutoGuidingProjection.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a new auto guiding system.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>telescope</strong> – Telescope to use.</li>
+<li><strong>max_offset</strong> – Max offset in arcsec to move.</li>
+<li><strong>max_exposure_time</strong> – Maximum exposure time in sec for images to analyse.</li>
+<li><strong>max_interval</strong> – Maximum interval in sec between to consecutive images to guide.</li>
+<li><strong>separation_reset</strong> – Min separation in arcsec between two consecutive images that triggers a reset.</li>
+<li><strong>new_images_channel</strong> – Channel for receiving new images.</li>
+<li><strong>pid</strong> – Whether to use a PID for guiding.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.autoguiding.AutoGuidingProjection.add_image">
+<code class="descname">add_image</code><span class="sig-paren">(</span><em>event: pyobs.events.newimage.NewImageEvent</em>, <em>sender: str</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.autoguiding.AutoGuidingProjection.add_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes an image asynchronously, returns immediately.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – Filename of image to process.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.autoguiding.AutoGuidingProjection.is_running">
+<code class="descname">is_running</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#pyobs.modules.autoguiding.AutoGuidingProjection.is_running" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether auto-guiding is running.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Auto-guiding is running.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.autoguiding.AutoGuidingProjection.open">
+<code class="descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.autoguiding.AutoGuidingProjection.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open module.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.autoguiding.AutoGuidingProjection.start">
+<code class="descname">start</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#pyobs.modules.autoguiding.AutoGuidingProjection.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts/resets auto-guiding.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.autoguiding.AutoGuidingProjection.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.autoguiding.AutoGuidingProjection.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops auto-guiding.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../camera/index.html" class="btn btn-neutral float-right" title="6.3. Camera" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="6.2. Auto-guiding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

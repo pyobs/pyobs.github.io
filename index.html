@@ -17,35 +17,41 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
 
+  
+  
     
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installing pyobs" href="installing.html" /> 
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pyobs  documentation" href="#"/>
+        <link rel="next" title="1. Quickstart" href="quickstart.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
    
   <div class="wy-grid-for-nav">
+
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search">
           
 
           
@@ -81,10 +87,12 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing pyobs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="basicusage.html">Basic Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="comm.html">The Comm module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="environment.html">Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicusage.html">3. Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/index.html">6. Modules</a></li>
 </ul>
 
             
@@ -96,7 +104,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="#">pyobs</a>
@@ -104,10 +112,9 @@
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
@@ -130,7 +137,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Welcome to pyobs!</li>
+      <li>Welcome to <em>pyobs</em>!</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -150,22 +157,50 @@
            <div itemprop="articleBody">
             
   <div class="section" id="welcome-to-pyobs">
-<h1>Welcome to pyobs!<a class="headerlink" href="#welcome-to-pyobs" title="Permalink to this headline">¶</a></h1>
+<h1>Welcome to <em>pyobs</em>!<a class="headerlink" href="#welcome-to-pyobs" title="Permalink to this headline">¶</a></h1>
+<p><em>pyobs</em> is a Python framework for operating remote or autonomous telescope systems.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installing pyobs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installing.html#using-the-pyobsd-tool">Using the pyobsd tool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installing.html#docker">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">1. Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#install-pyobs">1.1. Install <em>pyobs</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-simple-config">1.2. Run simple config</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="basicusage.html">Basic Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="basicusage.html#environment">Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basicusage.html#comm">Comm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing pyobs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installing.html#setting-up-ejabberd">2.1. Setting up ejabberd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing.html#local-installation">2.2. Local installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing.html#using-the-pyobsd-tool">2.3. Using the pyobsd tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing.html#docker">2.4. Docker</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="comm.html">The Comm module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="environment.html">Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicusage.html">3. Basic Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basicusage.html#environment">3.1. Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basicusage.html#comm">3.2. Comm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">4. Command Line Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#module-launcher-pyobs">4.1. Module launcher <em>pyobs</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#pyobsd-daemon">4.2. <em>pyobsd</em> daemon</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary/index.html">5. Auxiliary objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auxiliary/comm.html">5.1. Comm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auxiliary/environment.html">5.2. Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules/index.html">6. Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/autofocus/index.html">6.1. Auto-focus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/autoguiding/index.html">6.2. Auto-guiding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/camera/index.html">6.3. Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/filecache/index.html">6.4. Filecache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/imagedb/index.html">6.5. Image database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/proxy/index.html">6.6. Proxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/roof/index.html">6.7. Roof</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/telescope/index.html">6.8. Telescope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/test/index.html">6.9. Test modules</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -180,13 +215,15 @@
 
 
            </div>
-           
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="installing.html" class="btn btn-neutral float-right" title="Installing pyobs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="1. Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -196,11 +233,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Tim-Oliver Husser
+        &copy; Copyright 2019, Tim-Oliver Husser.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -213,15 +250,36 @@
   
 
 
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
 
   
   
-    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
    
 
 </body>
