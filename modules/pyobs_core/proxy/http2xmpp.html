@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6.1.6.1. HTTP2XMPP &mdash; pyobs  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="6.1.7. Roof" href="../roof/index.html" />
+    <link rel="prev" title="6.1.6. Proxy" href="index.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basicusage.html">3. Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">6. Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">6.1. pyobs_core</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../autofocus/index.html">6.1.1. Auto-focus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../autoguiding/index.html">6.1.2. Auto-guiding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../camera/index.html">6.1.3. Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../filecache/index.html">6.1.4. Filecache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imagedb/index.html">6.1.5. Image database</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">6.1.6. Proxy</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">6.1.6.1. HTTP2XMPP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../roof/index.html">6.1.7. Roof</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../telescope/index.html">6.1.8. Telescope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../test/index.html">6.1.9. Test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../pyobs_fli/index.html">6.2. pyobs_fli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pyobs_sbig/index.html">6.3. pyobs_sbig</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">6. Modules</a> &raquo;</li>
+        
+          <li><a href="../index.html">6.1. pyobs_core</a> &raquo;</li>
+        
+          <li><a href="index.html">6.1.6. Proxy</a> &raquo;</li>
+        
+      <li>6.1.6.1. HTTP2XMPP</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/modules/pyobs_core/proxy/http2xmpp.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="http2xmpp">
+<h1>6.1.6.1. HTTP2XMPP<a class="headerlink" href="#http2xmpp" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs.modules.proxy.HTTP2XMPP">
+<em class="property">class </em><code class="descclassname">pyobs.modules.proxy.</code><code class="descname">HTTP2XMPP</code><span class="sig-paren">(</span><em>port: int = 37077</em>, <em>auth: dict = None</em>, <em>ignore_log: list = None</em>, <em>base_href: str = '/pyobs/'</em>, <em>web_config: dict = None</em>, <em>public_html: str = None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.proxy.HTTP2XMPP" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP to XMPP proxy server.</p>
+<dl class="method">
+<dt id="pyobs.modules.proxy.HTTP2XMPP.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>port: int = 37077</em>, <em>auth: dict = None</em>, <em>ignore_log: list = None</em>, <em>base_href: str = '/pyobs/'</em>, <em>web_config: dict = None</em>, <em>public_html: str = None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.proxy.HTTP2XMPP.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize new proxy server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>port</strong> – Port for HTTP server.</li>
+<li><strong>auth</strong> – Authentication module for HTTP.</li>
+<li><strong>ignore_log</strong> – List of regular expression for methods that should NOT be logged.</li>
+<li><strong>base_href</strong> – base_href for web app.</li>
+<li><strong>web_config</strong> – Configuration for Angular web app.</li>
+<li><strong>public_html</strong> – Path to Angular web app.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyobs.modules.proxy.HTTP2XMPP.auth_handlers">
+<code class="descname">auth_handlers</code><a class="headerlink" href="#pyobs.modules.proxy.HTTP2XMPP.auth_handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return authentification handlers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyobs.modules.proxy.HTTP2XMPP.base_href">
+<code class="descname">base_href</code><a class="headerlink" href="#pyobs.modules.proxy.HTTP2XMPP.base_href" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return base href.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.proxy.HTTP2XMPP.call_method">
+<code class="descname">call_method</code><span class="sig-paren">(</span><em>client: str</em>, <em>method: str</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.proxy.HTTP2XMPP.call_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call a method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client</strong> – Client to call method on.</li>
+<li><strong>method</strong> – Method to call.</li>
+<li><strong>*args, **kwargs</strong> – Parameters for method.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Method result.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">JsonRpcMethodNotFoundException</span></code> – If method was not found.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">JsonRpcInternalErrorException</span></code> – If something else went wrong.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.proxy.HTTP2XMPP.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.proxy.HTTP2XMPP.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.proxy.HTTP2XMPP.get_modules">
+<code class="descname">get_modules</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#pyobs.modules.proxy.HTTP2XMPP.get_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all available modules/clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of modules.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyobs.modules.proxy.HTTP2XMPP.login_handler">
+<code class="descname">login_handler</code><a class="headerlink" href="#pyobs.modules.proxy.HTTP2XMPP.login_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return login handlers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.proxy.HTTP2XMPP.ping">
+<code class="descname">ping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.proxy.HTTP2XMPP.ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ping function.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../roof/index.html" class="btn btn-neutral float-right" title="6.1.7. Roof" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="6.1.6. Proxy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Tim-Oliver Husser
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

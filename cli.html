@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>4. Command Line Interface &mdash; pyobs  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5. Auxiliary objects" href="auxiliary/index.html" />
+    <link rel="prev" title="3. Basic Usage" href="basicusage.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basicusage.html">3. Basic Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Command Line Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-launcher-pyobs">4.1. Module launcher <em>pyobs</em></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">4.1.1. Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#username-and-password">4.1.2. Username and password</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pyobsd-daemon">4.2. <em>pyobsd</em> daemon</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#commands">4.2.1. Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">4.2.2. Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>4. Command Line Interface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cli.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="command-line-interface">
+<h1>4. Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h1>
+<p><em>pyobs</em> comes with two different command line tools, <strong class="program">pyobs</strong> and <strong class="program">pyobsd</strong>, which can run a single
+module or start multiple ones, respectively.</p>
+<div class="section" id="module-launcher-pyobs">
+<span id="cli-pyobs"></span><h2>4.1. Module launcher <em>pyobs</em><a class="headerlink" href="#module-launcher-pyobs" title="Permalink to this headline">¶</a></h2>
+<p>The <strong class="program">pyobs</strong> command runs a single module. A typical command for running <em>pyobs</em> simply defines a configuration
+file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyobs</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<div class="section" id="parameters">
+<h3>4.1.1. Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<p>The command accepts the following optional parameters:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">-h/--help:</th><td class="field-body">Shows the help for the <em>pyobs</em> command.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">--log-level &lt;level&gt;:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">One of critical, error, warning, info, debug. Indicates the level of logging.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">-l/--log-file &lt;file&gt;:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">If provided, in addition to logging to stdout, the log is also written to the given file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">--log-rotate:</th><td class="field-body">Only valid in combination with <strong>-l/--log-file</strong>. Requests an automated rotation of log files to avoid
+large files.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">-p/--pid-file &lt;file&gt;:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">If given, <em>pyobs</em> writes its process ID into the given file and starts in the background.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">--gui:</th><td class="field-body">Shows an additional GUI, which is especially useful under Windows, where a graceful exit is otherwise
+impossible.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">--username &lt;username&gt; and --password &lt;password&gt;:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Username and password for connecting to the central server can be provided here as well as in the given config
+or in environment variables.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">--server &lt;host:ip&gt;:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">If the server to connect to cannot be inferred from the username, another one can be specified as &lt;host&gt;:&lt;ip&gt;.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">--comm &lt;type&gt;:</th><td class="field-body">The Comm type to use, if <strong>--username</strong> and <strong>--password</strong> are provided on command line. Must be <strong>xmpp</strong>
+at the moment.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="username-and-password">
+<h3>4.1.2. Username and password<a class="headerlink" href="#username-and-password" title="Permalink to this headline">¶</a></h3>
+<p>There are three different ways for providing a server connection:</p>
+<ol class="arabic">
+<li><p class="first">Provide it in the config YAML file. It then should have a section like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comm</span><span class="p">:</span>
+  <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+  <span class="n">jid</span><span class="p">:</span> <span class="n">test</span><span class="nd">@example</span><span class="o">.</span><span class="n">com</span>
+  <span class="n">password</span><span class="p">:</span> <span class="n">topsecret</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Use the <strong>--username</strong> and <strong>--password</strong> command line parameters.</p>
+</li>
+<li><p class="first">Provide the username and password in the environment variables <strong>PYOBS_USERNAME</strong> and <strong>PYOBS_PASSWORD</strong>,
+respectively. The server can be defined via <strong>PYOBS_SERVER</strong>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="pyobsd-daemon">
+<span id="cli-pyobsd"></span><h2>4.2. <em>pyobsd</em> daemon<a class="headerlink" href="#pyobsd-daemon" title="Permalink to this headline">¶</a></h2>
+<p>The <strong class="program">pyobsd</strong> command can automatically start and stop multiple modules, if their configuration files are all
+stored in a single directory.</p>
+<div class="section" id="commands">
+<h3>4.2.1. Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h3>
+<p>There are four basic commands:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">pyobsd start:</th><td class="field-body">A call to <strong class="program">pyobsd start</strong> starts modules from every single configuration YAML file it can find.
+Every additional parameter limits this to the given module, i.e. <strong class="program">pyobsd start camera</strong> only starts
+the camera module with aconfiguration in <strong>camera.yaml</strong>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">pyobsd stop:</th><td class="field-body">Works the same way as <strong class="program">pyobsd start</strong>, but stops the modules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">pyobsd restart:</th><td class="field-body">The <strong>restart</strong> command is equivalent to calling first <strong>stop</strong> and then <strong>start</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">pyobsd status:</th><td class="field-body">Gives an overview of detected configuration files and started modules.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id1">
+<h3>4.2.2. Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The command accepts the following optional parameters:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">-h/--help:</th><td class="field-body">Shows the help for the <em>pyobs</em> command.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">-c/--config-path &lt;path&gt;:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Defines the path in which to look for configuration files, defaults to <strong>/opt/pyobs/config</strong>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">-r/--run-path &lt;path&gt;:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Defines the path in which to store PID files, defaults to <strong>/opt/pyobs/run</strong>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">-r/--run-path &lt;path&gt;:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Defines the path in which to store log files, defaults to <strong>/opt/pyobs/log</strong>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">--log-level &lt;level&gt;:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">One of critical, error, warning, info, debug. Indicates the level of logging.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">--chuid &lt;user&gt;:&lt;group&gt;:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Switches user to the given user in the given group when starting/stopping a module.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">--start-stop-daemon &lt;path&gt;:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The path to the <strong class="program">start-stop-daemon</strong> executable, defaults to <strong>/sbin/start-stop-daemon</strong>.</td>
+</tr>
+</tbody>
+</table>
+<p>Note that none of the pathes have to be defined, if the recommended path structure is used.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="auxiliary/index.html" class="btn btn-neutral float-right" title="5. Auxiliary objects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="basicusage.html" class="btn btn-neutral" title="3. Basic Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Tim-Oliver Husser
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

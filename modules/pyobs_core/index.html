@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6.1. pyobs_core &mdash; pyobs  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="6.1.1. Auto-focus" href="autofocus/index.html" />
+    <link rel="prev" title="6. Modules" href="../index.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basicusage.html">3. Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">6. Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">6.1. pyobs_core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autofocus/index.html">6.1.1. Auto-focus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autoguiding/index.html">6.1.2. Auto-guiding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera/index.html">6.1.3. Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filecache/index.html">6.1.4. Filecache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="imagedb/index.html">6.1.5. Image database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="proxy/index.html">6.1.6. Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roof/index.html">6.1.7. Roof</a></li>
+<li class="toctree-l3"><a class="reference internal" href="telescope/index.html">6.1.8. Telescope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/index.html">6.1.9. Test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../pyobs_fli/index.html">6.2. pyobs_fli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyobs_sbig/index.html">6.3. pyobs_sbig</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">6. Modules</a> &raquo;</li>
+        
+      <li>6.1. pyobs_core</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/pyobs_core/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pyobs-core">
+<h1>6.1. pyobs_core<a class="headerlink" href="#pyobs-core" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autofocus/index.html">6.1.1. Auto-focus</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autofocus/projection.html">6.1.1.1. AutoFocusProjection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autoguiding/index.html">6.1.2. Auto-guiding</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autoguiding/projection.html">6.1.2.1. AutoGuidingProjection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="camera/index.html">6.1.3. Camera</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="camera/basecamera.html">6.1.3.1. BaseCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="camera/dummycamera.html">6.1.3.2. DummyCamera</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filecache/index.html">6.1.4. Filecache</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filecache/http.html">6.1.4.1. HttpFileCacheServer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="imagedb/index.html">6.1.5. Image database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="imagedb/imagedb.html">6.1.5.1. ImageDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagedb/newimagewatcher.html">6.1.5.2. NewImageWatcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imagedb/newimagewriter.html">6.1.5.3. NewImageWriter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="proxy/index.html">6.1.6. Proxy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="proxy/http2xmpp.html">6.1.6.1. HTTP2XMPP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roof/index.html">6.1.7. Roof</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="roof/baseroof.html">6.1.7.1. BaseRoof</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roof/dummyroof.html">6.1.7.2. DummyRoof</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="telescope/index.html">6.1.8. Telescope</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="telescope/basetelescope.html">6.1.8.1. BaseTelescope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="telescope/dummytelescope.html">6.1.8.2. DummyTelescope</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="test/index.html">6.1.9. Test</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="test/standalone.html">6.1.9.1. StandAlone</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="autofocus/index.html" class="btn btn-neutral float-right" title="6.1.1. Auto-focus" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="6. Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Tim-Oliver Husser
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6.1.7.2. DummyRoof &mdash; pyobs  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="6.1.8. Telescope" href="../telescope/index.html" />
+    <link rel="prev" title="6.1.7.1. BaseRoof" href="baseroof.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basicusage.html">3. Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">6. Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">6.1. pyobs_core</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../autofocus/index.html">6.1.1. Auto-focus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../autoguiding/index.html">6.1.2. Auto-guiding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../camera/index.html">6.1.3. Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../filecache/index.html">6.1.4. Filecache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imagedb/index.html">6.1.5. Image database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxy/index.html">6.1.6. Proxy</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">6.1.7. Roof</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="baseroof.html">6.1.7.1. BaseRoof</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">6.1.7.2. DummyRoof</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../telescope/index.html">6.1.8. Telescope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../test/index.html">6.1.9. Test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../pyobs_fli/index.html">6.2. pyobs_fli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pyobs_sbig/index.html">6.3. pyobs_sbig</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">6. Modules</a> &raquo;</li>
+        
+          <li><a href="../index.html">6.1. pyobs_core</a> &raquo;</li>
+        
+          <li><a href="index.html">6.1.7. Roof</a> &raquo;</li>
+        
+      <li>6.1.7.2. DummyRoof</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/modules/pyobs_core/roof/dummyroof.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dummyroof">
+<h1>6.1.7.2. DummyRoof<a class="headerlink" href="#dummyroof" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs.modules.roof.DummyRoof">
+<em class="property">class </em><code class="descclassname">pyobs.modules.roof.</code><code class="descname">DummyRoof</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.roof.DummyRoof" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dummy camera for testing.</p>
+<dl class="method">
+<dt id="pyobs.modules.roof.DummyRoof.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.roof.DummyRoof.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new dummy root.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.roof.DummyRoof.close_roof">
+<code class="descname">close_roof</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.roof.DummyRoof.close_roof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the roof.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AcquireLockFailed</span></code> – If current motion could not be aborted.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.roof.DummyRoof.get_percent_open">
+<code class="descname">get_percent_open</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#pyobs.modules.roof.DummyRoof.get_percent_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the percentage the roof is open.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.roof.DummyRoof.open_roof">
+<code class="descname">open_roof</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.roof.DummyRoof.open_roof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the roof.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AcquireLockFailed</span></code> – If current motion could not be aborted.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.roof.DummyRoof.stop_motion">
+<code class="descname">stop_motion</code><span class="sig-paren">(</span><em>device: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.roof.DummyRoof.stop_motion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the motion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>device</strong> – Name of device to stop, or None for all.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AcquireLockFailed</span></code> – If current motion could not be aborted.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../telescope/index.html" class="btn btn-neutral float-right" title="6.1.8. Telescope" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="baseroof.html" class="btn btn-neutral" title="6.1.7.1. BaseRoof" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Tim-Oliver Husser
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

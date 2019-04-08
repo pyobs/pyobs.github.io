@@ -7,24 +7,16 @@ in YAML.
 
 A simple configuration file (``standalone.yaml``) might look like this::
 
-    class: pyobs.Application
-
-    module:
-      class: pyobs.modules.test.StandAlone
-      message: Hello world
-      interval: 10
+    class: pyobs.modules.test.StandAlone
+    message: Hello world
+    interval: 10
 
 Basically you always define a ``class`` for a block together with its properties.
 
-In this example, an object is created from the class :class:`pyobs.Application`, which usually
-should always be the top-level class in a pyobs configuration. Among other parameters, this
-class accepts a ``module`` parameter, in which we can define another object, that defines
-the logic of the program.
-
-The module itself is of type :class:`pyobs.modules.test.StandAlone`, which is a trivial implementation
+In this example, the module is of type :class:`pyobs.modules.test.StandAlone`, which is a trivial implementation
 of a module that does nothing more than logging a given message continuously in a given interval::
 
-    class StandAlone(pyobsModule):
+    class StandAlone(pyObsModule):
         def __init__(self, *args, **kwargs):
             pyobsModule.__init__(self, thread_funcs=self.thread_func, *args, **kwargs)
 
@@ -46,7 +38,7 @@ of a module that does nothing more than logging a given message continuously in 
                 log.info(self.config['message'])
                 self.closing.wait(self.config['interval'])
 
-The constructor just calls the constructor of :class:`pyobs.pyobsModule`, adding the ``thread_funcs``
+The constructor just calls the constructor of :class:`pyobs.pyObsModule`, adding the ``thread_funcs``
 parameter, that takes a method that is run in an extra thread. In this case, it is the method
 thread_func(), that does some logging in a loop that runs until the
 program quits.
@@ -94,4 +86,4 @@ In case the module is supposed to communicate with others, we need another modul
       class: pyobs.comm.xmpp.XmppComm
       jid: some_module@my.domain.com
 
-More details about this can be found in the :doc:`comm` section.
+More details about this can be found in the :doc:`auxiliary/comm` section.

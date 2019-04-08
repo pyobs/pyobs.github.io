@@ -1,0 +1,398 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6.2.1. FliCamera &mdash; pyobs  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="6.3. pyobs_sbig" href="../pyobs_sbig/index.html" />
+    <link rel="prev" title="6.2. pyobs_fli" href="index.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basicusage.html">3. Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auxiliary/index.html">5. Auxiliary objects</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">6. Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../pyobs_core/index.html">6.1. pyobs_core</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">6.2. pyobs_fli</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">6.2.1. FliCamera</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../pyobs_sbig/index.html">6.3. pyobs_sbig</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">6. Modules</a> &raquo;</li>
+        
+          <li><a href="index.html">6.2. pyobs_fli</a> &raquo;</li>
+        
+      <li>6.2.1. FliCamera</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/pyobs_fli/flicamera.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="flicamera">
+<h1>6.2.1. FliCamera<a class="headerlink" href="#flicamera" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs_fli.FliCamera">
+<em class="property">class </em><code class="descclassname">pyobs_fli.</code><code class="descname">FliCamera</code><span class="sig-paren">(</span><em>setpoint: float = -20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pyobs module for FLI cameras.</p>
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>setpoint: float = -20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a new FliCamera.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>setpoint</strong> – Cooling temperature setpoint.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the module.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.get_binning">
+<code class="descname">get_binning</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.get_binning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the camera binning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple with x and y.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.get_cooling_status">
+<code class="descname">get_cooling_status</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'bool'&gt;</em>, <em>&lt;class 'float'&gt;</em>, <em>&lt;class 'float'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.get_cooling_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current status for the cooling.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Enabled (bool):         Whether the cooling is enabled
+SetPoint (float):       Setpoint for the cooling in celsius.
+Power (float):          Current cooling power in percent or None.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Tuple containing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.get_full_frame">
+<code class="descname">get_full_frame</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.get_full_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns full size of CCD.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple with left, top, width, and height set.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.get_temperatures">
+<code class="descname">get_temperatures</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pyobs_fli.FliCamera.get_temperatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all temperatures measured by this module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dict containing temperatures.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.get_window">
+<code class="descname">get_window</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.get_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the camera window.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple with left, top, width, and height set.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.open">
+<code class="descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open module.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.set_binning">
+<code class="descname">set_binning</code><span class="sig-paren">(</span><em>x: int</em>, <em>y: int</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.set_binning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the camera binning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – X binning.</li>
+<li><strong>y</strong> – Y binning.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If binning could not be set.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.set_cooling">
+<code class="descname">set_cooling</code><span class="sig-paren">(</span><em>enabled: bool</em>, <em>setpoint: float</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.set_cooling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables/disables cooling and sets setpoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>enabled</strong> – Enable or disable cooling.</li>
+<li><strong>setpoint</strong> – Setpoint in celsius for the cooling.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If cooling could not be set.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_fli.FliCamera.set_window">
+<code class="descname">set_window</code><span class="sig-paren">(</span><em>left: float</em>, <em>top: float</em>, <em>width: float</em>, <em>height: float</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_fli.FliCamera.set_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the camera window.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>left</strong> – X offset of window.</li>
+<li><strong>top</strong> – Y offset of window.</li>
+<li><strong>width</strong> – Width of window.</li>
+<li><strong>height</strong> – Height of window.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If binning could not be set.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../pyobs_sbig/index.html" class="btn btn-neutral float-right" title="6.3. pyobs_sbig" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="6.2. pyobs_fli" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Tim-Oliver Husser
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
