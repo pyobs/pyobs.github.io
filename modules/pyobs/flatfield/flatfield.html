@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>FlatField &#8212; pyobs  documentation</title>
+    <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="FlatFieldScheduler" href="scheduler.html" />
+    <link rel="prev" title="FlatField" href="index.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="scheduler.html" title="FlatFieldScheduler"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="FlatField"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >pyobs</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">FlatField</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="flatfield">
+<h1>FlatField<a class="headerlink" href="#flatfield" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs.modules.flatfield.FlatField">
+<em class="property">class </em><code class="sig-prename descclassname">pyobs.modules.flatfield.</code><code class="sig-name descname">FlatField</code><span class="sig-paren">(</span><em class="sig-param">telescope: Union[str, pyobs.interfaces.ITelescope.ITelescope], camera: Union[str, pyobs.interfaces.ICamera.ICamera], filters: Union[str, pyobs.interfaces.IFilters.IFilters], flat_fielder: Union[dict, pyobs.utils.skyflats.flatfielder.FlatFielder], *args, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.flatfield.FlatField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module for auto-focusing a telescope.</p>
+<dl class="class">
+<dt id="pyobs.modules.flatfield.FlatField.State">
+<em class="property">class </em><code class="sig-name descname">State</code><a class="headerlink" href="#pyobs.modules.flatfield.FlatField.State" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enumeration.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyobs.modules.flatfield.FlatField.Twilight">
+<em class="property">class </em><code class="sig-name descname">Twilight</code><a class="headerlink" href="#pyobs.modules.flatfield.FlatField.Twilight" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enumeration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.flatfield.FlatField.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">telescope: Union[str, pyobs.interfaces.ITelescope.ITelescope], camera: Union[str, pyobs.interfaces.ICamera.ICamera], filters: Union[str, pyobs.interfaces.IFilters.IFilters], flat_fielder: Union[dict, pyobs.utils.skyflats.flatfielder.FlatFielder], *args, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.flatfield.FlatField.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new flat fielder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>telescope</strong> – Name of ITelescope.</p></li>
+<li><p><strong>camera</strong> – Name of ICamera.</p></li>
+<li><p><strong>filters</strong> – Name of IFilters, if any.</p></li>
+<li><p><strong>pointing</strong> – Pointing to use.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.flatfield.FlatField.abort">
+<code class="sig-name descname">abort</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.flatfield.FlatField.abort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abort current actions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.flatfield.FlatField.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.flatfield.FlatField.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close module.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.flatfield.FlatField.flat_field">
+<code class="sig-name descname">flat_field</code><span class="sig-paren">(</span><em class="sig-param">filter_name: str</em>, <em class="sig-param">count: int = 20</em>, <em class="sig-param">binning: int = 1</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.flatfield.FlatField.flat_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do a series of flat fields in the given filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter_name</strong> – Name of filter</p></li>
+<li><p><strong>count</strong> – Number of images to take</p></li>
+<li><p><strong>binning</strong> – Binning to use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of images actually taken and total exposure time in ms</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.flatfield.FlatField.flat_field_status">
+<code class="sig-name descname">flat_field_status</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pyobs.modules.flatfield.FlatField.flat_field_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current status of auto focus.</p>
+<p>Returned dictionary contains a list of focus/fwhm pairs in X and Y direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with current status.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.flatfield.FlatField.open">
+<code class="sig-name descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.flatfield.FlatField.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open module</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation index</a><ul>
+  <li><a href="../../index.html">Modules</a><ul>
+  <li><a href="../index.html">pyobs</a><ul>
+  <li><a href="index.html">FlatField</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">FlatField</a></li>
+      <li>Next: <a href="scheduler.html" title="next chapter">FlatFieldScheduler</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/modules/pyobs/flatfield/flatfield.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+  </div>
+  
+  </body>
+</html>

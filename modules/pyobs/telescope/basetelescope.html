@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>BaseTelescope &#8212; pyobs  documentation</title>
+    <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="DummyTelescope" href="dummytelescope.html" />
+    <link rel="prev" title="Telescope" href="index.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dummytelescope.html" title="DummyTelescope"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Telescope"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >pyobs</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Telescope</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="basetelescope">
+<h1>BaseTelescope<a class="headerlink" href="#basetelescope" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs.modules.telescope.BaseTelescope">
+<em class="property">class </em><code class="sig-prename descclassname">pyobs.modules.telescope.</code><code class="sig-name descname">BaseTelescope</code><span class="sig-paren">(</span><em class="sig-param">fits_headers: dict = None</em>, <em class="sig-param">min_altitude: float = 10</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for telescopes.</p>
+<dl class="method">
+<dt id="pyobs.modules.telescope.BaseTelescope.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">fits_headers: dict = None</em>, <em class="sig-param">min_altitude: float = 10</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new base telescope.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fits_headers</strong> – Additional FITS headers to send.</p></li>
+<li><p><strong>min_altitude</strong> – Minimal altitude for telescope.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.telescope.BaseTelescope.get_fits_headers">
+<code class="sig-name descname">get_fits_headers</code><span class="sig-paren">(</span><em class="sig-param">namespaces: list = None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope.get_fits_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns FITS header for the current status of this module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>namespaces</strong> – If given, only return FITS headers for the given namespaces.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary containing FITS headers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.telescope.BaseTelescope.init">
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize telescope.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If telescope could not be initialized.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.telescope.BaseTelescope.move_altaz">
+<code class="sig-name descname">move_altaz</code><span class="sig-paren">(</span><em class="sig-param">alt: float</em>, <em class="sig-param">az: float</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope.move_altaz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves to given coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alt</strong> – Alt in deg to move to.</p></li>
+<li><p><strong>az</strong> – Az in deg to move to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – On error.</p></li>
+<li><p><strong>AcquireLockFailed</strong> – If current motion could not be aborted.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.telescope.BaseTelescope.open">
+<code class="sig-name descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open module.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.telescope.BaseTelescope.park">
+<code class="sig-name descname">park</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope.park" title="Permalink to this definition">¶</a></dt>
+<dd><p>Park telescope.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If telescope could not be parked.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.telescope.BaseTelescope.track_radec">
+<code class="sig-name descname">track_radec</code><span class="sig-paren">(</span><em class="sig-param">ra: float</em>, <em class="sig-param">dec: float</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope.track_radec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts tracking on given coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ra</strong> – RA in deg to track.</p></li>
+<li><p><strong>dec</strong> – Dec in deg to track.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If telescope could not track.</p></li>
+<li><p><strong>AcquireLockFailed</strong> – If current motion could not be aborted.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation index</a><ul>
+  <li><a href="../../index.html">Modules</a><ul>
+  <li><a href="../index.html">pyobs</a><ul>
+  <li><a href="index.html">Telescope</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Telescope</a></li>
+      <li>Next: <a href="dummytelescope.html" title="next chapter">DummyTelescope</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/modules/pyobs/telescope/basetelescope.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+  </div>
+  
+  </body>
+</html>

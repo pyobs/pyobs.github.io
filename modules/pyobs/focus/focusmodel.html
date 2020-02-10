@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>FocusModel &#8212; pyobs  documentation</title>
+    <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="AutoFocusSeries" href="focusseries.html" />
+    <link rel="prev" title="Auto-focus" href="index.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="focusseries.html" title="AutoFocusSeries"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Auto-focus"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >pyobs</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Auto-focus</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="focusmodel">
+<h1>FocusModel<a class="headerlink" href="#focusmodel" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs.modules.focus.FocusModel">
+<em class="property">class </em><code class="sig-prename descclassname">pyobs.modules.focus.</code><code class="sig-name descname">FocusModel</code><span class="sig-paren">(</span><em class="sig-param">focuser: str = None</em>, <em class="sig-param">weather: str = None</em>, <em class="sig-param">interval: int = 300</em>, <em class="sig-param">temperatures: dict = None</em>, <em class="sig-param">model: str = None</em>, <em class="sig-param">coefficients: dict = None</em>, <em class="sig-param">update: bool = False</em>, <em class="sig-param">measurements: str = '/pyobs/focus_model.csv'</em>, <em class="sig-param">min_measurements: int = 10</em>, <em class="sig-param">enabled: bool = True</em>, <em class="sig-param">temp_sensor: str = 'average.temp'</em>, <em class="sig-param">default_filter: str = None</em>, <em class="sig-param">filter_offsets: dict = None</em>, <em class="sig-param">filter_wheel: str = None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.focus.FocusModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>A focus model that is automatically applied to an IFocuser.</p>
+<p>If, e.g., the model is defined as:</p>
+<blockquote>
+<div><p>model: -0.043807*T1 - 0.031798*T2 + 0.062042*temp + 41.694895</p>
+</div></blockquote>
+<p>Then “temp” is taken from the weather module automatically. The other temperatures must be defined, e.g., as:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>temperatures:</dt><dd><dl class="simple">
+<dt>T1:</dt><dd><p>module: telescope
+sensor: T1</p>
+</dd>
+<dt>T2:</dt><dd><p>module: telescope
+sensor: T2</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>In this case, the method get_temperatures() is called on the module “telescope” and the values T1 and T2 are
+taken for the model.</p>
+<p>Alternatively, the coefficients can be defined as symbols:</p>
+<blockquote>
+<div><p>model: a*T1 + b*T2 + c*temp + d</p>
+</div></blockquote>
+<p>For this to work, initial values must be specified separately:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>coefficients:</dt><dd><p>a: -0.043807
+b: -0.031798
+c: 0.062042
+d: 41.694895</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Only this way it is possible to automatically re-calculate the model.</p>
+<dl class="method">
+<dt id="pyobs.modules.focus.FocusModel.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">focuser: str = None</em>, <em class="sig-param">weather: str = None</em>, <em class="sig-param">interval: int = 300</em>, <em class="sig-param">temperatures: dict = None</em>, <em class="sig-param">model: str = None</em>, <em class="sig-param">coefficients: dict = None</em>, <em class="sig-param">update: bool = False</em>, <em class="sig-param">measurements: str = '/pyobs/focus_model.csv'</em>, <em class="sig-param">min_measurements: int = 10</em>, <em class="sig-param">enabled: bool = True</em>, <em class="sig-param">temp_sensor: str = 'average.temp'</em>, <em class="sig-param">default_filter: str = None</em>, <em class="sig-param">filter_offsets: dict = None</em>, <em class="sig-param">filter_wheel: str = None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.focus.FocusModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a focus model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>focuser</strong> – Name of focuser.</p></li>
+<li><p><strong>weather</strong> – Name of weather station.</p></li>
+<li><p><strong>interval</strong> – Interval for setting focus or None, if no regular setting of focus is required.</p></li>
+<li><p><strong>model</strong> – Focus model to use.</p></li>
+<li><p><strong>coefficients</strong> – Coefficients in model, mainly used when updating it.</p></li>
+<li><p><strong>update</strong> – Whether to update the model on new focus values.</p></li>
+<li><p><strong>measurements</strong> – Path to file containing all focus measurements.</p></li>
+<li><p><strong>min_measurements</strong> – Minimum number of measurements to update model.</p></li>
+<li><p><strong>enabled</strong> – If False, no focus is set.</p></li>
+<li><p><strong>temp_sensor</strong> – Name of sensor at weather station to provide ambient temperature.</p></li>
+<li><p><strong>default_filter</strong> – Name of default filter. If None, filters are ignored.</p></li>
+<li><p><strong>filter_offsets</strong> – Offsets for different filters. If None, they are not modeled.</p></li>
+<li><p><strong>filter_wheel</strong> – Name of filter wheel module to use for fetching filter before setting focus.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.focus.FocusModel.get_optimal_focus">
+<code class="sig-name descname">get_optimal_focus</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#pyobs.modules.focus.FocusModel.get_optimal_focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the optimal focus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Optimum focus calculated from model.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If anything went wrong.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.focus.FocusModel.open">
+<code class="sig-name descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.focus.FocusModel.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open module.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.focus.FocusModel.set_optimal_focus">
+<code class="sig-name descname">set_optimal_focus</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.focus.FocusModel.set_optimal_focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets optimal focus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If anything went wrong.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation index</a><ul>
+  <li><a href="../../index.html">Modules</a><ul>
+  <li><a href="../index.html">pyobs</a><ul>
+  <li><a href="index.html">Auto-focus</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Auto-focus</a></li>
+      <li>Next: <a href="focusseries.html" title="next chapter">AutoFocusSeries</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/modules/pyobs/focus/focusmodel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+  </div>
+  
+  </body>
+</html>

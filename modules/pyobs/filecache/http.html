@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>HttpFileCacheServer &#8212; pyobs  documentation</title>
+    <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="FlatField" href="../flatfield/index.html" />
+    <link rel="prev" title="Filecache" href="index.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../flatfield/index.html" title="FlatField"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Filecache"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >pyobs</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Filecache</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="httpfilecacheserver">
+<h1>HttpFileCacheServer<a class="headerlink" href="#httpfilecacheserver" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs.modules.filecache.HttpFileCacheServer">
+<em class="property">class </em><code class="sig-prename descclassname">pyobs.modules.filecache.</code><code class="sig-name descname">HttpFileCacheServer</code><span class="sig-paren">(</span><em class="sig-param">port: int = 37075</em>, <em class="sig-param">cache_size: int = 25</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.filecache.HttpFileCacheServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A file cache based on a HTTP server.</p>
+<dl class="method">
+<dt id="pyobs.modules.filecache.HttpFileCacheServer.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">port: int = 37075</em>, <em class="sig-param">cache_size: int = 25</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.filecache.HttpFileCacheServer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes file cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> – Port for HTTP server.</p></li>
+<li><p><strong>cache_size</strong> – Size of file cache, i.e. number of files to cache.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.filecache.HttpFileCacheServer.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.filecache.HttpFileCacheServer.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.filecache.HttpFileCacheServer.fetch">
+<code class="sig-name descname">fetch</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span> &#x2192; Union[None, bytearray]<a class="headerlink" href="#pyobs.modules.filecache.HttpFileCacheServer.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a file to the requesting client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – Name of file to send.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Data of file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.filecache.HttpFileCacheServer.opened">
+<em class="property">property </em><code class="sig-name descname">opened</code><a class="headerlink" href="#pyobs.modules.filecache.HttpFileCacheServer.opened" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the server is started.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs.modules.filecache.HttpFileCacheServer.store">
+<code class="sig-name descname">store</code><span class="sig-paren">(</span><em class="sig-param">data: bytearray</em>, <em class="sig-param">filename: str = None</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#pyobs.modules.filecache.HttpFileCacheServer.store" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store an incoming file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Data to store.</p></li>
+<li><p><strong>filename</strong> – Filename to store as.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Filename in cache.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation index</a><ul>
+  <li><a href="../../index.html">Modules</a><ul>
+  <li><a href="../index.html">pyobs</a><ul>
+  <li><a href="index.html">Filecache</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Filecache</a></li>
+      <li>Next: <a href="../flatfield/index.html" title="next chapter">FlatField</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/modules/pyobs/filecache/http.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+  </div>
+  
+  </body>
+</html>
