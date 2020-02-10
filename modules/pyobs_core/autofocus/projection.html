@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="6.1.2. Auto-guiding" href="../autoguiding/index.html" />
     <link rel="prev" title="6.1.1. Auto-focus" href="index.html" /> 
-
-  
-  <script src="../../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -150,13 +152,13 @@
     
       <li><a href="../../../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../../index.html">6. Modules</a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">6. </span>Modules</a> &raquo;</li>
         
-          <li><a href="../index.html">6.1. pyobs_core</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">6.1. </span>pyobs_core</a> &raquo;</li>
         
-          <li><a href="index.html">6.1.1. Auto-focus</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">6.1.1. </span>Auto-focus</a> &raquo;</li>
         
-      <li>6.1.1.1. AutoFocusProjection</li>
+      <li><span class="section-number">6.1.1.1. </span>AutoFocusProjection</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -176,58 +178,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="autofocusprojection">
-<h1>6.1.1.1. AutoFocusProjection<a class="headerlink" href="#autofocusprojection" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pyobs.modules.autofocus.AutoFocusProjection">
-<em class="property">class </em><code class="descclassname">pyobs.modules.autofocus.</code><code class="descname">AutoFocusProjection</code><span class="sig-paren">(</span><em>focuser: Union[str, pyobs.interfaces.IFocuser.IFocuser], camera: Union[str, pyobs.interfaces.ICamera.ICamera], *args, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.autofocus.AutoFocusProjection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Module for auto-focusing a telescope.</p>
-<dl class="method">
-<dt id="pyobs.modules.autofocus.AutoFocusProjection.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>focuser: Union[str, pyobs.interfaces.IFocuser.IFocuser], camera: Union[str, pyobs.interfaces.ICamera.ICamera], *args, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.autofocus.AutoFocusProjection.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize a new auto focus system.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyobs.modules.autofocus.AutoFocusProjection.auto_focus">
-<code class="descname">auto_focus</code><span class="sig-paren">(</span><em>count: int</em>, <em>step: float</em>, <em>guess: float</em>, <em>exposure_time: int</em>, <em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'float'&gt;</em>, <em>&lt;class 'float'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.autofocus.AutoFocusProjection.auto_focus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform an auto-focus series.</p>
-<p>This method performs an auto-focus series with “count” images on each side of the initial guess and the given
-step size. With count=3, step=1 and guess=10, this takes images at the following focus values:</p>
-<blockquote>
-<div>7, 8, 9, 10, 11, 12, 13</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>count</strong> – Number of images to take on each side of the initial guess. Should be an odd number.</li>
-<li><strong>step</strong> – Step size.</li>
-<li><strong>guess</strong> – Initial guess.</li>
-<li><strong>exposure_time</strong> – Exposure time for images.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Tuple of obtained best focus value and its uncertainty.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If focus could not be obtained.</li>
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">FileNotFoundException</span></code> – If image could not be downloaded.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyobs.modules.autofocus.AutoFocusProjection.open">
-<code class="descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.autofocus.AutoFocusProjection.open" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open module</p>
-</dd></dl>
-
-</dd></dl>
-
+<h1><span class="section-number">6.1.1.1. </span>AutoFocusProjection<a class="headerlink" href="#autofocusprojection" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -241,7 +192,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
         <a href="../autoguiding/index.html" class="btn btn-neutral float-right" title="6.1.2. Auto-guiding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="6.1.1. Auto-focus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="6.1.1. Auto-focus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -267,25 +218,16 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

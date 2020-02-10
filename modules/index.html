@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="6.1. pyobs_core" href="pyobs_core/index.html" />
     <link rel="prev" title="5.2. Environment" href="../auxiliary/environment.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -136,7 +138,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>6. Modules</li>
+      <li><span class="section-number">6. </span>Modules</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,50 +158,70 @@
            <div itemprop="articleBody">
             
   <div class="section" id="modules">
-<h1>6. Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">6. </span>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">pyobs-core repository:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pyobs_core/index.html">6.1. pyobs_core</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_core/autofocus/index.html">6.1.1. Auto-focus</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/autofocus/projection.html">6.1.1.1. AutoFocusProjection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/acquisition/index.html">6.1.1. Acquisition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/acquisition/brighteststar.html">6.1.1.1. BrightestStarAcquisition</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_core/autoguiding/index.html">6.1.2. Auto-guiding</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/autoguiding/projection.html">6.1.2.1. AutoGuidingProjection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/camera/index.html">6.1.2. Camera</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/camera/basecamera.html">6.1.2.1. BaseCamera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/camera/dummycamera.html">6.1.2.2. DummyCamera</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_core/camera/index.html">6.1.3. Camera</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/camera/basecamera.html">6.1.3.1. BaseCamera</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/camera/dummycamera.html">6.1.3.2. DummyCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/filecache/index.html">6.1.3. Filecache</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/filecache/http.html">6.1.3.1. HttpFileCacheServer</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_core/filecache/index.html">6.1.4. Filecache</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/filecache/http.html">6.1.4.1. HttpFileCacheServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/flatfield/index.html">6.1.4. FlatField</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/flatfield/flatfield.html">6.1.4.1. FlatField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/flatfield/scheduler.html">6.1.4.2. FlatFieldScheduler</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_core/imagedb/index.html">6.1.5. Image database</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/imagedb/imagedb.html">6.1.5.1. ImageDB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/imagedb/newimagewatcher.html">6.1.5.2. NewImageWatcher</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/imagedb/newimagewriter.html">6.1.5.3. NewImageWriter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/focus/index.html">6.1.5. Auto-focus</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/focus/focusmodel.html">6.1.5.1. FocusModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/focus/focusseries.html">6.1.5.2. AutoFocusSeries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/focus/projection.html">6.1.5.3. AutoFocusProjection</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_core/proxy/index.html">6.1.6. Proxy</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/proxy/http2xmpp.html">6.1.6.1. HTTP2XMPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/guiding/index.html">6.1.6. Auto-guiding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/guiding/autoguider.html">6.1.6.1. AutoGuider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/guiding/scienceframe.html">6.1.6.2. ScienceFrameAutoGuider</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_core/roof/index.html">6.1.7. Roof</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/roof/baseroof.html">6.1.7.1. BaseRoof</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/roof/dummyroof.html">6.1.7.2. DummyRoof</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/image/index.html">6.1.7. Image database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/image/imagewatcher.html">6.1.7.1. NewImageWatcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/image/imagewriter.html">6.1.7.2. ImageWriter</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_core/telescope/index.html">6.1.8. Telescope</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/telescope/basetelescope.html">6.1.8.1. BaseTelescope</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/telescope/dummytelescope.html">6.1.8.2. DummyTelescope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/mastermind/index.html">6.1.8. Mastermind</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/mastermind/robotic.html">6.1.8.1. RoboticMastermind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/mastermind/scheduler.html">6.1.8.2. Scheduler</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_core/test/index.html">6.1.9. Test</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs_core/test/standalone.html">6.1.9.1. StandAlone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/proxy/index.html">6.1.9. Proxy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/proxy/http2xmpp.html">6.1.9.1. HTTP2XMPP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/roof/index.html">6.1.10. Roof</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/roof/baseroof.html">6.1.10.1. BaseRoof</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/roof/dummyroof.html">6.1.10.2. DummyRoof</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/telescope/index.html">6.1.11. Telescope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/telescope/basetelescope.html">6.1.11.1. BaseTelescope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/telescope/dummytelescope.html">6.1.11.2. DummyTelescope</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/test/index.html">6.1.12. Test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/test/standalone.html">6.1.12.1. StandAlone</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs_core/weather/index.html">6.1.13. Weather</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyobs_core/weather/weather.html">6.1.13.1. Weather</a></li>
 </ul>
 </li>
 </ul>
@@ -237,7 +259,7 @@
         <a href="pyobs_core/index.html" class="btn btn-neutral float-right" title="6.1. pyobs_core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../auxiliary/environment.html" class="btn btn-neutral" title="5.2. Environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../auxiliary/environment.html" class="btn btn-neutral float-left" title="5.2. Environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -263,25 +285,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

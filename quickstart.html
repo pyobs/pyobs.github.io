@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2. Installing pyobs" href="installing.html" />
     <link rel="prev" title="Welcome to pyobs!" href="index.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -135,7 +137,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>1. Quickstart</li>
+      <li><span class="section-number">1. </span>Quickstart</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -155,31 +157,16 @@
            <div itemprop="articleBody">
             
   <div class="section" id="quickstart">
-<h1>1. Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">1. </span>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="install-pyobs">
-<h2>1.1. Install <em>pyobs</em><a class="headerlink" href="#install-pyobs" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic">
-<li><p class="first">Clone the <em>pyobs</em> repository:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@gitlab</span><span class="o">.</span><span class="n">gwdg</span><span class="o">.</span><span class="n">de</span><span class="p">:</span><span class="n">pyobs</span><span class="o">/</span><span class="n">pyobs</span><span class="o">-</span><span class="n">core</span><span class="o">.</span><span class="n">git</span> <span class="n">pyobs</span>
-<span class="n">cd</span> <span class="n">pyobs</span>
+<h2><span class="section-number">1.1. </span>Install <em>pyobs</em><a class="headerlink" href="#install-pyobs" title="Permalink to this headline">¶</a></h2>
+<p>Just use pip:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">pyobs</span><span class="o">-</span><span class="n">core</span>
 </pre></div>
 </div>
-</li>
-<li><p class="first">Create virtual environment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">venv</span>
-<span class="n">source</span> <span class="o">./</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Install requirements:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
-</li>
-</ol>
 </div>
 <div class="section" id="run-simple-config">
-<h2>1.2. Run simple config<a class="headerlink" href="#run-simple-config" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.2. </span>Run simple config<a class="headerlink" href="#run-simple-config" title="Permalink to this headline">¶</a></h2>
 <p>Create a new file <strong>standalone.yaml</strong> with the following content:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">StandAlone</span>
 <span class="n">message</span><span class="p">:</span> <span class="n">Hello</span> <span class="n">world</span>
@@ -209,7 +196,7 @@
         <a href="installing.html" class="btn btn-neutral float-right" title="2. Installing pyobs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Welcome to pyobs!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to pyobs!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -235,25 +222,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

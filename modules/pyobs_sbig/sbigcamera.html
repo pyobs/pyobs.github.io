@@ -17,33 +17,35 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="prev" title="6.3. pyobs_sbig" href="index.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -138,11 +140,11 @@
     
       <li><a href="../../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../index.html">6. Modules</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">6. </span>Modules</a> &raquo;</li>
         
-          <li><a href="index.html">6.3. pyobs_sbig</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">6.3. </span>pyobs_sbig</a> &raquo;</li>
         
-      <li>6.3.1. SbigCamera</li>
+      <li><span class="section-number">6.3.1. </span>SbigCamera</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,239 +164,138 @@
            <div itemprop="articleBody">
             
   <div class="section" id="sbigcamera">
-<h1>6.3.1. SbigCamera<a class="headerlink" href="#sbigcamera" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">6.3.1. </span>SbigCamera<a class="headerlink" href="#sbigcamera" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyobs_sbig.SbigCamera">
-<em class="property">class </em><code class="descclassname">pyobs_sbig.</code><code class="descname">SbigCamera</code><span class="sig-paren">(</span><em>filter_wheel: str = 'UNKNOWN'</em>, <em>filter_names: list = None</em>, <em>setpoint: float = -20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyobs_sbig.</code><code class="sig-name descname">SbigCamera</code><span class="sig-paren">(</span><em class="sig-param">setpoint: float = -20</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera" title="Permalink to this definition">¶</a></dt>
 <dd><p>A pyobs module for SBIG cameras.</p>
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>filter_wheel: str = 'UNKNOWN'</em>, <em>filter_names: list = None</em>, <em>setpoint: float = -20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">setpoint: float = -20</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes a new SbigCamera.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filter_wheel</strong> – Name of filter wheel used by the camera.</li>
-<li><strong>filter_names</strong> – List of filter names.</li>
-<li><strong>setpoint</strong> – Cooling temperature setpoint.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyobs_sbig.SbigCamera.close">
-<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>setpoint</strong> – Cooling temperature setpoint.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.get_binning">
-<code class="descname">get_binning</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pyobs_sbig.SbigCamera.get_binning" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_binning</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pyobs_sbig.SbigCamera.get_binning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the camera binning.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dictionary with x and y.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with x and y.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.get_cooling_status">
-<code class="descname">get_cooling_status</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'bool'&gt;</em>, <em>&lt;class 'float'&gt;</em>, <em>&lt;class 'float'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.get_cooling_status" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_cooling_status</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs) -&gt; (&lt;class 'bool'&gt;</em>, <em class="sig-param">&lt;class 'float'&gt;</em>, <em class="sig-param">&lt;class 'float'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.get_cooling_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the current status for the cooling.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Enabled (bool):         Whether the cooling is enabled
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Enabled (bool):         Whether the cooling is enabled
 SetPoint (float):       Setpoint for the cooling in celsius.
-Power (float):          Current cooling power in percent or None.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Tuple containing</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyobs_sbig.SbigCamera.get_filter">
-<code class="descname">get_filter</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#pyobs_sbig.SbigCamera.get_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get currently set filter.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Name of currently set filter.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If filter could not be fetched.</li>
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code> – If camera doesn’t have a filter wheel.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+Power (float):          Current cooling power in percent or None.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tuple containing</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.get_full_frame">
-<code class="descname">get_full_frame</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.get_full_frame" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_full_frame</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.get_full_frame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns full size of CCD.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple with left, top, width, and height set.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple with left, top, width, and height set.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.get_temperatures">
-<code class="descname">get_temperatures</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pyobs_sbig.SbigCamera.get_temperatures" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_temperatures</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pyobs_sbig.SbigCamera.get_temperatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all temperatures measured by this module.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dict containing temperatures.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict containing temperatures.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.get_window">
-<code class="descname">get_window</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em>, <em>&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.get_window" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_window</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs) -&gt; (&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'int'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.get_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the camera window.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple with left, top, width, and height set.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyobs_sbig.SbigCamera.list_filters">
-<code class="descname">list_filters</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#pyobs_sbig.SbigCamera.list_filters" title="Permalink to this definition">¶</a></dt>
-<dd><p>List available filters.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of available filters.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code> – If camera doesn’t have a filter wheel.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple with left, top, width, and height set.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.open">
-<code class="descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.open" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.open" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open module.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If cannot connect to camera or set filter wheel.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If cannot connect to camera or set filter wheel.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.set_binning">
-<code class="descname">set_binning</code><span class="sig-paren">(</span><em>x: int</em>, <em>y: int</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.set_binning" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_binning</code><span class="sig-paren">(</span><em class="sig-param">x: int</em>, <em class="sig-param">y: int</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.set_binning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the camera binning.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>x</strong> – X binning.</li>
-<li><strong>y</strong> – Y binning.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – X binning.</p></li>
+<li><p><strong>y</strong> – Y binning.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.set_cooling">
-<code class="descname">set_cooling</code><span class="sig-paren">(</span><em>enabled: bool</em>, <em>setpoint: float</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.set_cooling" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_cooling</code><span class="sig-paren">(</span><em class="sig-param">enabled: bool</em>, <em class="sig-param">setpoint: float</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.set_cooling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables/disables cooling and sets setpoint.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>enabled</strong> – Enable or disable cooling.</li>
-<li><strong>setpoint</strong> – Setpoint in celsius for the cooling.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>enabled</strong> – Enable or disable cooling.</p></li>
+<li><p><strong>setpoint</strong> – Setpoint in celsius for the cooling.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If cooling could not be set.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyobs_sbig.SbigCamera.set_filter">
-<code class="descname">set_filter</code><span class="sig-paren">(</span><em>filter_name: str</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.set_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the current filter.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filter_name</strong> – Name of filter to set.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If binning could not be set.</li>
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code> – If camera doesn’t have a filter wheel.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If cooling could not be set.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyobs_sbig.SbigCamera.set_window">
-<code class="descname">set_window</code><span class="sig-paren">(</span><em>left: int</em>, <em>top: int</em>, <em>width: int</em>, <em>height: int</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.set_window" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_window</code><span class="sig-paren">(</span><em class="sig-param">left: int</em>, <em class="sig-param">top: int</em>, <em class="sig-param">width: int</em>, <em class="sig-param">height: int</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera.set_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the camera window.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>left</strong> – X offset of window.</li>
-<li><strong>top</strong> – Y offset of window.</li>
-<li><strong>width</strong> – Width of window.</li>
-<li><strong>height</strong> – Height of window.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> – X offset of window.</p></li>
+<li><p><strong>top</strong> – Y offset of window.</p></li>
+<li><p><strong>width</strong> – Width of window.</p></li>
+<li><p><strong>height</strong> – Height of window.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -410,7 +311,7 @@ Power (float):          Current cooling power in percent or None.</td>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="index.html" class="btn btn-neutral" title="6.3. pyobs_sbig" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="6.3. pyobs_sbig" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -436,25 +337,16 @@ Power (float):          Current cooling power in percent or None.</td>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
