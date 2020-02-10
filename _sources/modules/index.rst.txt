@@ -5,7 +5,7 @@ Modules
    :maxdepth: 3
    :caption: pyobs-core repository:
 
-   pyobs_core/index
+   pyobs/index
 
 .. toctree::
    :maxdepth: 2

@@ -1,15 +1,8 @@
 Quickstart
 ==========
 
-Install *pyobs*
----------------
-
-Just use pip::
-
-    pip3 install pyobs-core
-
-Run simple config
------------------
+Run a simple config
+-------------------
 Create a new file **standalone.yaml** with the following content::
 
     class: pyobs.modules.test.StandAlone
