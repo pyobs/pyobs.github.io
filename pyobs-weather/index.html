@@ -14,7 +14,7 @@
     <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyobs-archive" href="../pyobs-archive/index.html" />
+    <link rel="next" title="List of weather station classes" href="stations/index.html" />
     <link rel="prev" title="SbigCamera" href="../modules/pyobs_sbig/sbigcamera.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -30,7 +30,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../pyobs-archive/index.html" title="pyobs-archive"
+          <a href="stations/index.html" title="List of weather station classes"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../modules/pyobs_sbig/sbigcamera.html" title="SbigCamera"
@@ -158,6 +158,87 @@ example:</p>
 <p>The web frontend should now be accessible via web browser at <a class="reference external" href="http://localhost:8002/">http://localhost:8002/</a> and the admin panel
 at <a class="reference external" href="http://localhost:8002/admin">http://localhost:8002/admin</a>.</p>
 </div>
+<div class="section" id="setting-it-up">
+<h2>Setting it up<a class="headerlink" href="#setting-it-up" title="Permalink to this headline">¶</a></h2>
+<p>Setting <em>pyobs-weather</em> up mainly consists of adding weather stations and evaluators for their sensors in the admin
+panel. Three stations have automatically been added by the initweather weather script during the installation:</p>
+<ul class="simple">
+<li><p>Current: Always returns the averaged latest values from all weather stations.</p></li>
+<li><p>Average: Returns 5-minutes averages for all values</p></li>
+<li><p>Observer: An “astronomical observer” that mainly calculates the position of the sun.</p></li>
+</ul>
+<div class="section" id="adding-a-station">
+<h3>Adding a station<a class="headerlink" href="#adding-a-station" title="Permalink to this headline">¶</a></h3>
+<p>When adding a new station, one has to provide a unique code for it and a name. Then a Python class must be given
+and optionally JSON encoded arguments that are passed to its constructor. Finally, for regular polling of the station
+a crontab or an interval must be specified.</p>
+<p>See a list of available weather station classes in the <a class="reference internal" href="#stations"><span class="std std-ref">Stations</span></a> below. New station types can easily be added
+by creating new Python classes.</p>
+</div>
+<div class="section" id="adding-evaluators">
+<h3>Adding evaluators<a class="headerlink" href="#adding-evaluators" title="Permalink to this headline">¶</a></h3>
+<p>Adding a new station automatically adds its sensors to the system. In order to device, whether the current value
+of a sensors is good or bad, evaluators need to be attached to them. For a list of available evaluators see
+<a class="reference internal" href="#evaluators"><span class="std std-ref">Evaluators</span></a>. New evaluators can simply be added by creating new Python classes.</p>
+<p>For adding an evaluator, you just click on a sensor and select the evaluator from the list of evaluators.</p>
+</div>
+</div>
+<div class="section" id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sensor-types">
+<h3>Sensor Types<a class="headerlink" href="#sensor-types" title="Permalink to this headline">¶</a></h3>
+<p><em>pyobs-weather</em> assumes that every weather station returns only one value for a given <em>type</em> of sensor, which makes
+it easier to combine values from different stations. For instance, if multiple stations give a value for “humid”, the
+system can easily combine them to create an average humidity.</p>
+<p>Sensor types are defined within the Python classes for the stations, and can be extended by new stations easily. The
+current list of sensor types is:</p>
+<ul class="simple">
+<li><p>temp: Temperature [°C]</p></li>
+<li><p>humid: Relative humidity [%]</p></li>
+<li><p>press: Pressure [hPa]</p></li>
+<li><p>winddir: Wind direction [°E of N’]</p></li>
+<li><p>windspeed: Wind speed [km/h’]</p></li>
+<li><p>particles: Particle count [ppcm]</p></li>
+<li><p>rain: Raining [0/1]</p></li>
+<li><p>skytemp: Relative sky temperature [°C]</p></li>
+<li><p>sunalt: Solar altitude [°]</p></li>
+</ul>
+</div>
+<div class="section" id="stations">
+<h3>Stations<a class="headerlink" href="#stations" title="Permalink to this headline">¶</a></h3>
+<p>A station in <em>pyobs-weather</em> is a single weather station, from which it polls data.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="stations/index.html">List of weather station classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stations/average.html">pyobs_weather.weather.stations.Average</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stations/current.html">pyobs_weather.weather.stations.Current</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stations/mcdlocke.html">pyobs_weather.weather.stations.McDonaldLocke</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stations/mcdlockearchive.html">pyobs_weather.weather.stations.McDonaldLockeArchive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stations/mcdtelnet.html">pyobs_weather.weather.stations.McDonaldTelnet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stations/monet.html">pyobs_weather.weather.stations.Monet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stations/mysql.html">pyobs_weather.weather.stations.MySQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stations/observer.html">pyobs_weather.weather.stations.Observer</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="evaluators">
+<h3>Evaluators<a class="headerlink" href="#evaluators" title="Permalink to this headline">¶</a></h3>
+<p>Evaluators take sensors and evaluate their values.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="evaluators/index.html">List of evaluators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evaluators/boolean.html">pyobs_weather.weather.evaluators.Boolean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluators/schmitt.html">pyobs_weather.weather.evaluators.SchmittTrigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluators/switch.html">pyobs_weather.weather.evaluators.Switch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluators/valid.html">pyobs_weather.weather.evaluators.Valid</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -170,6 +251,17 @@ at <a class="reference external" href="http://localhost:8002/admin">http://local
   <ul>
 <li><a class="reference internal" href="#"><em>pyobs-weather</em></a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#setting-it-up">Setting it up</a><ul>
+<li><a class="reference internal" href="#adding-a-station">Adding a station</a></li>
+<li><a class="reference internal" href="#adding-evaluators">Adding evaluators</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api-reference">API Reference</a><ul>
+<li><a class="reference internal" href="#sensor-types">Sensor Types</a></li>
+<li><a class="reference internal" href="#stations">Stations</a></li>
+<li><a class="reference internal" href="#evaluators">Evaluators</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -177,7 +269,7 @@ at <a class="reference external" href="http://localhost:8002/admin">http://local
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
       <li>Previous: <a href="../modules/pyobs_sbig/sbigcamera.html" title="previous chapter">SbigCamera</a></li>
-      <li>Next: <a href="../pyobs-archive/index.html" title="next chapter">pyobs-archive</a></li>
+      <li>Next: <a href="stations/index.html" title="next chapter">List of weather station classes</a></li>
   </ul></li>
 </ul>
   <div role="note" aria-label="source link">

@@ -117,3 +117,81 @@ While at it, you can also create a super user::
 
 The web frontend should now be accessible via web browser at http://localhost:8002/ and the admin panel
 at http://localhost:8002/admin.
+
+
+Setting it up
+-------------
+
+Setting *pyobs-weather* up mainly consists of adding weather stations and evaluators for their sensors in the admin
+panel. Three stations have automatically been added by the initweather weather script during the installation:
+
+- Current: Always returns the averaged latest values from all weather stations.
+- Average: Returns 5-minutes averages for all values
+- Observer: An "astronomical observer" that mainly calculates the position of the sun.
+
+
+Adding a station
+^^^^^^^^^^^^^^^^
+
+When adding a new station, one has to provide a unique code for it and a name. Then a Python class must be given
+and optionally JSON encoded arguments that are passed to its constructor. Finally, for regular polling of the station
+a crontab or an interval must be specified.
+
+See a list of available weather station classes in the :ref:`Stations` below. New station types can easily be added
+by creating new Python classes.
+
+
+Adding evaluators
+^^^^^^^^^^^^^^^^^
+
+Adding a new station automatically adds its sensors to the system. In order to device, whether the current value
+of a sensors is good or bad, evaluators need to be attached to them. For a list of available evaluators see
+:ref:`Evaluators`. New evaluators can simply be added by creating new Python classes.
+
+For adding an evaluator, you just click on a sensor and select the evaluator from the list of evaluators.
+
+.. _weather API Reference:
+API Reference
+-------------
+
+Sensor Types
+^^^^^^^^^^^^
+
+*pyobs-weather* assumes that every weather station returns only one value for a given *type* of sensor, which makes
+it easier to combine values from different stations. For instance, if multiple stations give a value for "humid", the
+system can easily combine them to create an average humidity.
+
+Sensor types are defined within the Python classes for the stations, and can be extended by new stations easily. The
+current list of sensor types is:
+
+- temp: Temperature [°C]
+- humid: Relative humidity [%]
+- press: Pressure [hPa]
+- winddir: Wind direction [°E of N']
+- windspeed: Wind speed [km/h']
+- particles: Particle count [ppcm]
+- rain: Raining [0/1]
+- skytemp: Relative sky temperature [°C]
+- sunalt: Solar altitude [°]
+
+
+Stations
+^^^^^^^^
+
+A station in *pyobs-weather* is a single weather station, from which it polls data.
+
+.. toctree::
+   :maxdepth: 2
+
+   stations/index
+
+
+Evaluators
+^^^^^^^^^^
+
+Evaluators take sensors and evaluate their values.
+
+.. toctree::
+   :maxdepth: 2
+
+   evaluators/index

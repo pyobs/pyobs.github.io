@@ -1,5 +1,5 @@
-FlatField
-=========
+Flat-Fielding
+=============
 
 .. toctree::
    :maxdepth: 2

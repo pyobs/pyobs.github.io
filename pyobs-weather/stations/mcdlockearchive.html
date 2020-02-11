@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pyobs_weather.weather.stations.McDonaldLockeArchive &#8212; pyobs  documentation</title>
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pyobs_weather.weather.stations.McDonaldTelnet" href="mcdtelnet.html" />
+    <link rel="prev" title="pyobs_weather.weather.stations.McDonaldLocke" href="mcdlocke.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mcdtelnet.html" title="pyobs_weather.weather.stations.McDonaldTelnet"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mcdlocke.html" title="pyobs_weather.weather.stations.McDonaldLocke"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><em>pyobs-weather</em></a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of weather station classes</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyobs-weather-weather-stations-mcdonaldlockearchive">
+<h1>pyobs_weather.weather.stations.McDonaldLockeArchive<a class="headerlink" href="#pyobs-weather-weather-stations-mcdonaldlockearchive" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs_weather.weather.stations.McDonaldLockeArchive">
+<em class="property">class </em><code class="sig-prename descclassname">pyobs_weather.weather.stations.</code><code class="sig-name descname">McDonaldLockeArchive</code><span class="sig-paren">(</span><em class="sig-param">fields: dict</em>, <em class="sig-param">url: str = 'http://weather.as.utexas.edu/cgi-bin/weather/weather-data.pl'</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLockeArchive" title="Permalink to this definition">¶</a></dt>
+<dd><p>The McDonaldLockeArchive weather station reads current weather information from the Mt. Lock weather archive
+at <a class="reference external" href="http://weather.as.utexas.edu/cgi-bin/weather/weather-data.pl">http://weather.as.utexas.edu/cgi-bin/weather/weather-data.pl</a>.</p>
+<p>Creates a new McDonaldLockeArchive weather station.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fields</strong> – Dictionary with field-&gt;SensorType data,
+e.g. {‘cloud-Sky-ambient’: {code=”skytemp”, name=”Temperature”, unit=”C”}}</p></li>
+<li><p><strong>time_offset</strong> – Offset in seconds to add to current time to get UTC.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyobs_weather.weather.stations.McDonaldLockeArchive.create_sensors">
+<code class="sig-name descname">create_sensors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLockeArchive.create_sensors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for creating sensors for this station.</p>
+<p>New sensors are created based on the configuration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_weather.weather.stations.McDonaldLockeArchive.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLockeArchive.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for updating sensor values for this station.</p>
+<p>This method reads the Mt. Locke weather archive and extracts the latest values.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation index</a><ul>
+  <li><a href="../index.html"><em>pyobs-weather</em></a><ul>
+  <li><a href="index.html">List of weather station classes</a><ul>
+      <li>Previous: <a href="mcdlocke.html" title="previous chapter">pyobs_weather.weather.stations.McDonaldLocke</a></li>
+      <li>Next: <a href="mcdtelnet.html" title="next chapter">pyobs_weather.weather.stations.McDonaldTelnet</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/pyobs-weather/stations/mcdlockearchive.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+  </div>
+  
+  </body>
+</html>

@@ -53,10 +53,7 @@
 <dt id="pyobs.modules.guiding.ScienceFrameAutoGuider">
 <em class="property">class </em><code class="sig-prename descclassname">pyobs.modules.guiding.</code><code class="sig-name descname">ScienceFrameAutoGuider</code><span class="sig-paren">(</span><em class="sig-param">camera: str, telescope: Union[str, pyobs.interfaces.ITelescope.ITelescope], guider: Union[dict, pyobs.utils.guiding.base.BaseGuider], new_images_channel: str = 'new_images', *args, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.guiding.ScienceFrameAutoGuider" title="Permalink to this definition">¶</a></dt>
 <dd><p>An auto-guiding system based on comparing collapsed images along the x&amp;y axes with a reference image.</p>
-<dl class="method">
-<dt id="pyobs.modules.guiding.ScienceFrameAutoGuider.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">camera: str, telescope: Union[str, pyobs.interfaces.ITelescope.ITelescope], guider: Union[dict, pyobs.utils.guiding.base.BaseGuider], new_images_channel: str = 'new_images', *args, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.guiding.ScienceFrameAutoGuider.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes a new science frame auto guiding system.</p>
+<p>Initializes a new science frame auto guiding system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -67,8 +64,6 @@
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
 <dl class="method">
 <dt id="pyobs.modules.guiding.ScienceFrameAutoGuider.add_image">
 <code class="sig-name descname">add_image</code><span class="sig-paren">(</span><em class="sig-param">event: pyobs.events.newimage.NewImageEvent</em>, <em class="sig-param">sender: str</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.guiding.ScienceFrameAutoGuider.add_image" title="Permalink to this definition">¶</a></dt>

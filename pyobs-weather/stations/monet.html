@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pyobs_weather.weather.stations.Monet &#8212; pyobs  documentation</title>
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pyobs_weather.weather.stations.MySQL" href="mysql.html" />
+    <link rel="prev" title="pyobs_weather.weather.stations.McDonaldTelnet" href="mcdtelnet.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mysql.html" title="pyobs_weather.weather.stations.MySQL"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mcdtelnet.html" title="pyobs_weather.weather.stations.McDonaldTelnet"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><em>pyobs-weather</em></a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of weather station classes</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyobs-weather-weather-stations-monet">
+<h1>pyobs_weather.weather.stations.Monet<a class="headerlink" href="#pyobs-weather-weather-stations-monet" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyobs_weather.weather.stations.Monet">
+<em class="property">class </em><code class="sig-prename descclassname">pyobs_weather.weather.stations.</code><code class="sig-name descname">Monet</code><span class="sig-paren">(</span><em class="sig-param">url='https://monet.as.utexas.edu/'</em>, <em class="sig-param">current=False</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.Monet" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Monet weather station reads current weather information from a ThiesWS weather station.</p>
+<p>Initializes a new Monet weather station.</p>
+<p>The URLs should be:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://monet.saao.ac.za/">https://monet.saao.ac.za/</a> for Monet/S</p></li>
+<li><p><a class="reference external" href="https://monet.as.utexas.edu/">https://monet.as.utexas.edu/</a> for Monet/N</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> – URL of Monet weather station.</p></li>
+<li><p><strong>current</strong> – If True, latest values are fetched, otherwise a 5-minute average.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyobs_weather.weather.stations.Monet.create_sensors">
+<code class="sig-name descname">create_sensors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.Monet.create_sensors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for creating sensors for this station.</p>
+<p>These sensors are created:</p>
+<ul class="simple">
+<li><p>temp</p></li>
+<li><p>humid</p></li>
+<li><p>winddir</p></li>
+<li><p>windspeed</p></li>
+<li><p>press</p></li>
+<li><p>rain</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyobs_weather.weather.stations.Monet.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.Monet.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for updating sensor values for this station.</p>
+<p>This method reads the current weather information from Monet weather homepage.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation index</a><ul>
+  <li><a href="../index.html"><em>pyobs-weather</em></a><ul>
+  <li><a href="index.html">List of weather station classes</a><ul>
+      <li>Previous: <a href="mcdtelnet.html" title="previous chapter">pyobs_weather.weather.stations.McDonaldTelnet</a></li>
+      <li>Next: <a href="mysql.html" title="next chapter">pyobs_weather.weather.stations.MySQL</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/pyobs-weather/stations/monet.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+  </div>
+  
+  </body>
+</html>
