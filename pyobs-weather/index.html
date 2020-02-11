@@ -57,7 +57,7 @@ defined to be “good”. It provides both a web frontend and an API for access.
 <span class="n">docker</span> <span class="n">build</span> <span class="o">.</span> <span class="o">-</span><span class="n">t</span> <span class="n">pyobs</span><span class="o">-</span><span class="n">weather</span>
 </pre></div>
 </div>
-<p>pyobs-weather requires a database for storing its data, redis for task brokering, celery for providing those tasks,
+<p><em>pyobs-weather</em> requires a database for storing its data, redis for task brokering, celery for providing those tasks,
 and nginx for serving static files. Easiest way to deploy everything is using docker-compose.</p>
 <p>A typical docker-compose.yml looks like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span>
@@ -127,7 +127,7 @@ and nginx for serving static files. Easiest way to deploy everything is using do
 }
 </pre></div>
 </div>
-<p>And pyobs-weather itself needs a configuration file called local_settings.py. Here is the file for MONET/S as an
+<p>And <em>pyobs-weather</em> itself needs a configuration file called local_settings.py. Here is the file for MONET/S as an
 example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># disable debug</span>
 <span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
@@ -158,8 +158,8 @@ example:</p>
 <p>The web frontend should now be accessible via web browser at <a class="reference external" href="http://localhost:8002/">http://localhost:8002/</a> and the admin panel
 at <a class="reference external" href="http://localhost:8002/admin">http://localhost:8002/admin</a>.</p>
 </div>
-<div class="section" id="setting-it-up">
-<h2>Setting it up<a class="headerlink" href="#setting-it-up" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p>Setting <em>pyobs-weather</em> up mainly consists of adding weather stations and evaluators for their sensors in the admin
 panel. Three stations have automatically been added by the initweather weather script during the installation:</p>
 <ul class="simple">
@@ -251,7 +251,7 @@ current list of sensor types is:</p>
   <ul>
 <li><a class="reference internal" href="#"><em>pyobs-weather</em></a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#setting-it-up">Setting it up</a><ul>
+<li><a class="reference internal" href="#configuration">Configuration</a><ul>
 <li><a class="reference internal" href="#adding-a-station">Adding a station</a></li>
 <li><a class="reference internal" href="#adding-evaluators">Adding evaluators</a></li>
 </ul>
@@ -294,7 +294,7 @@ current list of sensor types is:</p>
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2020, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
   </div>
   

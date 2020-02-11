@@ -14,7 +14,7 @@
     <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Valid" href="../pyobs-weather/evaluators/valid.html" />
+    <link rel="prev" title="pyobs_weather.weather.evaluators.Valid" href="../pyobs-weather/evaluators/valid.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -29,7 +29,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../pyobs-weather/evaluators/valid.html" title="Valid"
+          <a href="../pyobs-weather/evaluators/valid.html" title="pyobs_weather.weather.evaluators.Valid"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">pyobs  documentation</a> &#187;</li> 
       </ul>
@@ -42,6 +42,224 @@
             
   <div class="section" id="pyobs-archive">
 <h1>pyobs-archive<a class="headerlink" href="#pyobs-archive" title="Permalink to this headline">¶</a></h1>
+<p><em>pyobs-archive</em> is a stand-alone archive for FITS images. It provides a general look&amp;feel and an REST API similar
+to the one used by the <a class="reference external" href="https://developers.lco.global/#archive">LCO archive</a>.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>While it is definitely possible to run <em>pyobs-weather</em> without Docker, we highly recommend it for its simplicity.</p>
+<p>First, build the image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pyobs</span><span class="o">/</span><span class="n">pyobs</span><span class="o">-</span><span class="n">archive</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">pyobs</span><span class="o">-</span><span class="n">archive</span>
+<span class="n">docker</span> <span class="n">build</span> <span class="o">.</span> <span class="o">-</span><span class="n">t</span> <span class="n">pyobs</span><span class="o">-</span><span class="n">archive</span>
+</pre></div>
+</div>
+<p><em>pyobs-archive</em> requires a database for storing its data and nginx for serving static files. Easiest way to deploy
+everything is using docker-compose.</p>
+<p>A typical docker-compose.yml looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="s1">&#39;3&#39;</span>
+
+<span class="n">services</span><span class="p">:</span>
+  <span class="n">db</span><span class="p">:</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">postgres</span><span class="p">:</span><span class="mi">11</span>
+    <span class="n">volumes</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">pgdata</span><span class="p">:</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">data</span>
+    <span class="n">restart</span><span class="p">:</span> <span class="n">always</span>
+
+  <span class="n">archive</span><span class="p">:</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">-</span><span class="n">archive</span>
+    <span class="n">volumes</span><span class="p">:</span>
+      <span class="o">-</span> <span class="o">/</span><span class="n">local_data</span><span class="o">/</span><span class="p">:</span><span class="o">/</span><span class="n">data</span><span class="o">/</span>
+      <span class="o">-</span> <span class="o">./</span><span class="n">local_settings</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">pyobs_archive</span><span class="o">/</span><span class="n">local_settings</span><span class="o">.</span><span class="n">py</span>
+      <span class="o">-</span> <span class="n">static</span><span class="p">:</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">static</span>
+    <span class="n">depends_on</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">db</span>
+    <span class="n">restart</span><span class="p">:</span> <span class="n">always</span>
+    <span class="n">command</span><span class="p">:</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;python manage.py collectstatic --no-input &amp;&amp; python manage.py makemigrations &amp;&amp; python manage.py migrate &amp;&amp; gunicorn --workers=3 pyobs_archive.wsgi -b 0.0.0.0:8000&quot;</span>
+
+  <span class="n">nginx</span><span class="p">:</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">nginx</span>
+    <span class="n">volumes</span><span class="p">:</span>
+      <span class="o">-</span> <span class="o">./</span><span class="n">nginx</span><span class="o">.</span><span class="n">conf</span><span class="p">:</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">default</span><span class="o">.</span><span class="n">conf</span>
+      <span class="o">-</span> <span class="n">static</span><span class="p">:</span><span class="o">/</span><span class="n">static</span><span class="o">/</span><span class="n">static</span>
+    <span class="n">ports</span><span class="p">:</span>
+      <span class="o">-</span> <span class="mi">8001</span><span class="p">:</span><span class="mi">80</span>
+    <span class="n">restart</span><span class="p">:</span> <span class="n">always</span>
+
+<span class="n">volumes</span><span class="p">:</span>
+  <span class="n">pgdata</span><span class="p">:</span>
+  <span class="n">static</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>The configuration for the “archive” container contains a volume that points to the local directory /local_data/. This
+will be the directory where the archive stores its files. Please adjust as necessary.</p>
+<p>In this example, nginx needs a configuration file nginx.conf in the same directory, which might look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>server {
+    listen 80;
+    server_name  127.0.0.1;
+    client_max_body_size 50M;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        if (!-f $request_filename) {
+            proxy_pass http://archive:8000;
+            break;
+        }
+    }
+
+    location /static/ {
+        root /static;
+    }
+}
+</pre></div>
+</div>
+<p>And <em>pyobs-archive</em> itself needs a configuration file called local_settings.py. Here is the file for MONET/S as an
+example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># disable debug</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># we&#39;re reverse proxying, so only localhost is allowed to access</span>
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;localhost&#39;</span><span class="p">]</span>
+
+<span class="c1"># settings for archive</span>
+<span class="n">ARCHIV_SETTINGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;HTTP_ROOT&#39;</span><span class="p">:</span> <span class="s1">&#39;https://archive.example.com/&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ARCHIVE_ROOT&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PATH_FORMATTER&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{SITEID}</span><span class="s1">/{DAY-OBS}/&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;FILENAME_FORMATTER&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You have to adjust the settings in ARCHIV_SETTINGS as necessary:</p>
+<ul class="simple">
+<li><p>HTTP_ROOT is the URL the archive will be accessible at.</p></li>
+<li><p>ARCHIVE_ROOT is the internal data directory and is mapped in the docker-compose file to a local directory. Should
+be left as it is.</p></li>
+<li><p>PATH_FORMATTER: A format for the pathes to store the image in. Uses FITS header keywords as placeholders.</p></li>
+<li><p>FILENAME_FORMATTER: Same as the PATH_FORMATTER, but for the filename. If None, filenames won’t be changed.</p></li>
+</ul>
+<p>With all three files in one directory, you can easily do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+<p>and the whole system should be up and running within a minute.</p>
+<p>Finally, you need to get into the container and create a superuser:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">it</span> <span class="n">weather_weather_1</span> <span class="n">bash</span>
+<span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
+</pre></div>
+</div>
+<p>The web frontend should now be accessible via web browser at <a class="reference external" href="http://localhost:8001/">http://localhost:8001/</a> and the admin panel
+at <a class="reference external" href="http://localhost:8001/admin">http://localhost:8001/admin</a>.</p>
+</div>
+<div class="section" id="rest-api-reference">
+<h2>REST API Reference<a class="headerlink" href="#rest-api-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="authentication">
+<h3>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h3>
+<p>All requests to the REST API must contain a HTTP header of the form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Authentication</span><span class="p">:</span> <span class="n">Token</span> <span class="o">&lt;</span><span class="n">token</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Where &lt;token&gt; is an auth token that can be obtained by calling the /api-token-auth/ endpoint with valid credentials.</p>
+<p>As an example, you can get a token like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">-</span><span class="n">token</span><span class="o">-</span><span class="n">auth</span><span class="o">/</span> <span class="n">username</span><span class="o">=</span><span class="n">husser</span> <span class="n">password</span><span class="o">=</span><span class="n">topsecret</span>
+</pre></div>
+</div>
+<p>Which might return something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;token&quot;</span><span class="p">:</span><span class="s2">&quot;3d46d6b98edef947402e032e73eca7b54661c968&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The token can now be used in other requests:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">frames</span><span class="o">/</span> <span class="s2">&quot;Authorization: Token 3d46d6b98edef947402e032e73eca7b54661c968&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-images">
+<h3>List images<a class="headerlink" href="#list-images" title="Permalink to this headline">¶</a></h3>
+<p>Images in the archive can easily be listed using the /frames/ endpoint. It accepts HTTP GET parameters for filtering.
+A typical example would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http https://archive.example.com/frames/?night=2020-02-01
+</pre></div>
+</div>
+<p>for getting a list of all images taken in the night of 1 Feb, 2020.</p>
+<p>Other possible filter parameters are:</p>
+<ul class="simple">
+<li><p>IMAGETYPE: Type of image (see <a class="reference internal" href="#filter-options"><span class="std std-ref">Filter options</span></a> for details).</p></li>
+<li><p>binning: Binning of image (see <a class="reference internal" href="#filter-options"><span class="std std-ref">Filter options</span></a> for details).</p></li>
+<li><p>SITE: Site the image was taken (see <a class="reference internal" href="#filter-options"><span class="std std-ref">Filter options</span></a> for details).</p></li>
+<li><p>TELESCOPE: Telescope the image was taken with (see <a class="reference internal" href="#filter-options"><span class="std std-ref">Filter options</span></a> for details).</p></li>
+<li><p>INSTRUMENT: Instrument the image was taken with (see <a class="reference internal" href="#filter-options"><span class="std std-ref">Filter options</span></a> for details).</p></li>
+<li><p>FILTER: Filter the image was taken with (see <a class="reference internal" href="#filter-options"><span class="std std-ref">Filter options</span></a> for details).</p></li>
+<li><p>RLEVEL: Reduction level (0=unreduced, 1=reduced).</p></li>
+<li><p>OBJECT: Name of observed object.</p></li>
+<li><p>EXPTIME: Exposure time in seconds.</p></li>
+<li><p>night: Night of observation in yyyy-mm-dd format.</p></li>
+<li><p>basename: Name of FITS file.</p></li>
+<li><p>REQNUM: Request number from robotic system.</p></li>
+<li><p>start: Limit to images taken after this, given in isot format.</p></li>
+<li><p>end: Limit to images taken before this, given in isot format.</p></li>
+<li><p>RA: If RA/DEC are given, limit search to 10’ around position</p></li>
+<li><p>DEC: See above.</p></li>
+<li><p>limit: Maximum number of images to return.</p></li>
+<li><p>offset: Offset for list of images to return, use for pagination together with limit above.</p></li>
+<li><p>order: Order results using this column.</p></li>
+<li><p>asc: If given, order ascending instead of descending.</p></li>
+</ul>
+</div>
+<div class="section" id="filter-options">
+<h3>Filter options<a class="headerlink" href="#filter-options" title="Permalink to this headline">¶</a></h3>
+<p>A call to the /frames/aggregate/ endpoint gives possible choices for some of the filter options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">frames</span><span class="o">/</span><span class="n">aggregate</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>Might result in something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;binnings&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;1x1&quot;</span><span class="p">,</span> <span class="s2">&quot;3x3&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;imagetypes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bias&quot;</span><span class="p">,</span> <span class="s2">&quot;dark&quot;</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;skyflat&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;instruments&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;instr1&quot;</span><span class="p">,</span> <span class="s2">&quot;instr2&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;sites&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Paranal&quot;</span><span class="p">,</span> <span class="s2">&quot;Mauna Kea&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;telescopes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;39m0&quot;</span><span class="p">,</span><span class="s2">&quot;30m0&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="image-information">
+<h3>Image information<a class="headerlink" href="#image-information" title="Permalink to this headline">¶</a></h3>
+<p>Information about a single image can be retrieved using the /frames/image/ endpoint, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">frames</span><span class="o">/</span><span class="mi">1000</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>More specific information can be obtaines using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># for a list of related images.</span>
+<span class="n">http</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">frames</span><span class="o">/</span><span class="mi">1000</span><span class="o">/</span><span class="n">related</span><span class="o">/</span>
+
+<span class="c1"># for the FITS headers in JSON format.</span>
+<span class="n">http</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">frames</span><span class="o">/</span><span class="mi">1000</span><span class="o">/</span><span class="n">headers</span><span class="o">/</span>
+
+<span class="c1"># for a preview image.</span>
+<span class="n">http</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">frames</span><span class="o">/</span><span class="mi">1000</span><span class="o">/</span><span class="n">preview</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>A single image can be downloaded via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">frames</span><span class="o">/</span><span class="mi">1000</span><span class="o">/</span><span class="n">download</span><span class="o">/</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="downloading-images">
+<h3>Downloading images<a class="headerlink" href="#downloading-images" title="Permalink to this headline">¶</a></h3>
+<p>A whole bunch of images can be downloaded via /zip/ and listing the frames in the body, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">archive</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">frames</span><span class="o">/</span><span class="nb">zip</span><span class="o">/</span> <span class="o">--</span><span class="n">post</span><span class="o">-</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;auth_token=&lt;token&gt;&amp;frame_ids[]=1000&amp;frame_ids[]=1001&quot;</span> <span class="o">-</span><span class="n">O</span> <span class="n">data</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
+</div>
+<p>The auth token needs to go into the POST body in this case, and a list of image IDs can be added using “frame_ids[]”.</p>
+</div>
+<div class="section" id="uploading-images">
+<h3>Uploading images<a class="headerlink" href="#uploading-images" title="Permalink to this headline">¶</a></h3>
+<p>A registered admin user may send new files to the /create/ endpoint for automatically inserting images into the archive.</p>
+</div>
+</div>
 </div>
 
 
@@ -49,10 +267,27 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyobs-archive</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#rest-api-reference">REST API Reference</a><ul>
+<li><a class="reference internal" href="#authentication">Authentication</a></li>
+<li><a class="reference internal" href="#list-images">List images</a></li>
+<li><a class="reference internal" href="#filter-options">Filter options</a></li>
+<li><a class="reference internal" href="#image-information">Image information</a></li>
+<li><a class="reference internal" href="#downloading-images">Downloading images</a></li>
+<li><a class="reference internal" href="#uploading-images">Uploading images</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
-      <li>Previous: <a href="../pyobs-weather/evaluators/valid.html" title="previous chapter">Valid</a></li>
+      <li>Previous: <a href="../pyobs-weather/evaluators/valid.html" title="previous chapter">pyobs_weather.weather.evaluators.Valid</a></li>
   </ul></li>
 </ul>
   <div role="note" aria-label="source link">
@@ -77,7 +312,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2020, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
   </div>
   

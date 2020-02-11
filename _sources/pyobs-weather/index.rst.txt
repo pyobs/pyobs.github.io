@@ -4,6 +4,7 @@
 *pyobs-weather* is an aggregator for data from several weather stations. Rules can be defined for when weather is
 defined to be "good". It provides both a web frontend and an API for access.
 
+.. _weather Installation:
 Installation
 ------------
 
@@ -15,7 +16,7 @@ First, build the image::
     cd pyobs-weather
     docker build . -t pyobs-weather
 
-pyobs-weather requires a database for storing its data, redis for task brokering, celery for providing those tasks,
+*pyobs-weather* requires a database for storing its data, redis for task brokering, celery for providing those tasks,
 and nginx for serving static files. Easiest way to deploy everything is using docker-compose.
 
 A typical docker-compose.yml looks like this::
@@ -86,7 +87,7 @@ In this example, nginx needs a configuration file nginx.conf in the same directo
         }
     }
 
-And pyobs-weather itself needs a configuration file called local_settings.py. Here is the file for MONET/S as an
+And *pyobs-weather* itself needs a configuration file called local_settings.py. Here is the file for MONET/S as an
 example::
 
     # disable debug
@@ -119,7 +120,8 @@ The web frontend should now be accessible via web browser at http://localhost:80
 at http://localhost:8002/admin.
 
 
-Setting it up
+.. _weather Configuration:
+Configuration
 -------------
 
 Setting *pyobs-weather* up mainly consists of adding weather stations and evaluators for their sensors in the admin
