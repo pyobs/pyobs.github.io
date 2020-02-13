@@ -239,6 +239,161 @@ current list of sensor types is:</p>
 </div>
 </div>
 </div>
+<div class="section" id="rest-api-reference">
+<h2>REST API Reference<a class="headerlink" href="#rest-api-reference" title="Permalink to this headline">¶</a></h2>
+<p>All API endpoints return JSON data.</p>
+<div class="section" id="current-weather">
+<h3>Current weather<a class="headerlink" href="#current-weather" title="Permalink to this headline">¶</a></h3>
+<p>The /api/current/ endpoint returns the current values for all sensor types, as shown on the web page in the left column:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ http https://weather.monet.saao.ac.za/api/current/
+
+{
+    &quot;good&quot;: false,
+    &quot;sensors&quot;: {
+        &quot;dewpoint&quot;: {&quot;good&quot;: null, &quot;value&quot;: -5.22835},
+        &quot;humid&quot;: {&quot;good&quot;: true, &quot;value&quot;: 15.754024},
+        &quot;press&quot;: {&quot;good&quot;: null, &quot;value&quot;: 824.888119047619},
+        &quot;rain&quot;: {&quot;good&quot;: true, &quot;value&quot;: 0.0},
+        &quot;skytemp&quot;: {&quot;good&quot;: false, &quot;value&quot;: -19.43},
+        &quot;sunalt&quot;: {&quot;good&quot;: false, &quot;value&quot;: 71.0194850756101},
+        &quot;temp&quot;: {&quot;good&quot;: null, &quot;value&quot;: 25.7139337142857},
+        &quot;winddir&quot;: {&quot;good&quot;: null, &quot;value&quot;: 298.59207},
+        &quot;windspeed&quot;: {&quot;good&quot;: true, &quot;value&quot;: 32.2115857142857}
+    },
+    &quot;time&quot;: &quot;2020-02-13T10:44:29.302Z&quot;
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="single-station-sensor">
+<h3>Single station/sensor<a class="headerlink" href="#single-station-sensor" title="Permalink to this headline">¶</a></h3>
+<p>A list of weather stations can be retrieved via /api/stations/:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ http https://weather.monet.saao.ac.za/api/stations/
+
+[
+    {&quot;code&quot;: &quot;average&quot;, &quot;name&quot;: &quot;Average values&quot;},
+    {&quot;code&quot;: &quot;current&quot;, &quot;name&quot;: &quot;Current values&quot;},
+    {&quot;code&quot;: &quot;observer&quot;, &quot;name&quot;: &quot;Observer&quot;},
+    {&quot;code&quot;: &quot;lco&quot;, &quot;name&quot;: &quot;LCO&quot;},
+    {&quot;code&quot;: &quot;salt&quot;, &quot;name&quot;: &quot;SALT&quot;},
+    {&quot;code&quot;: &quot;suth&quot;, &quot;name&quot;: &quot;Sutherland Weather&quot;},
+    {&quot;code&quot;: &quot;monet_cur&quot;, &quot;name&quot;: &quot;MONET current&quot;},
+    {&quot;code&quot;: &quot;monet&quot;, &quot;name&quot;: &quot;MONET&quot;}
+]
+</pre></div>
+</div>
+<p>Using one of the codes returned by /api/stations/, all its respective sensor values can be requested from
+/api/stations/&lt;station&gt;/:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ http https://weather.monet.saao.ac.za/api/stations/monet/
+
+{
+    &quot;code&quot;: &quot;monet&quot;,
+    &quot;name&quot;: &quot;MONET&quot;,
+    &quot;sensors&quot;: [
+        {
+            &quot;code&quot;: &quot;temp&quot;,
+            &quot;name&quot;: &quot;Temperature&quot;,
+            &quot;time&quot;: &quot;2020-02-13T10:45:00Z&quot;,
+            &quot;value&quot;: 25.3448275862069
+        },
+        {
+            &quot;code&quot;: &quot;press&quot;,
+            &quot;name&quot;: &quot;Pressure&quot;,
+            &quot;time&quot;: &quot;2020-02-13T10:45:00Z&quot;,
+            &quot;value&quot;: 824.786206896552
+        },
+        {
+            &quot;code&quot;: &quot;winddir&quot;,
+            &quot;name&quot;: &quot;Wind direction&quot;,
+            &quot;time&quot;: &quot;2020-02-13T10:45:00Z&quot;,
+            &quot;value&quot;: 285.51724137931
+        },
+        {
+            &quot;code&quot;: &quot;humid&quot;,
+            &quot;name&quot;: &quot;Relative humidity&quot;,
+            &quot;time&quot;: &quot;2020-02-13T10:45:00Z&quot;,
+            &quot;value&quot;: 16.8931034482759
+        },
+        {
+            &quot;code&quot;: &quot;rain&quot;,
+            &quot;name&quot;: &quot;Raining&quot;,
+            &quot;time&quot;: &quot;2020-02-13T10:45:00Z&quot;,
+            &quot;value&quot;: 0.0
+        },
+        {
+            &quot;code&quot;: &quot;windspeed&quot;,
+            &quot;name&quot;: &quot;Wind speed&quot;,
+            &quot;time&quot;: &quot;2020-02-13T10:45:00Z&quot;,
+            &quot;value&quot;: 35.0193103448276
+        }
+    ]
+}
+</pre></div>
+</div>
+<p>Which also works just for single values using the code of a sensor at /api/stations/&lt;station&gt;/&lt;sensor&gt;/:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ http https://weather.monet.saao.ac.za/api/stations/monet/windspeed/
+
+{
+    &quot;code&quot;: &quot;windspeed&quot;,
+    &quot;good&quot;: true,
+    &quot;name&quot;: &quot;Wind speed&quot;,
+    &quot;since&quot;: &quot;2020-02-05T19:00:06.769Z&quot;,
+    &quot;time&quot;: &quot;2020-02-13T10:50:00Z&quot;,
+    &quot;unit&quot;: &quot;km/h&quot;,
+    &quot;value&quot;: 36.2358620689655
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="history">
+<h3>History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h3>
+<p>A list of sensor types, for which historic data is available, can be fetched using the /api/history/ endpoint:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ http https://weather.monet.saao.ac.za/api/history/
+
+[
+    &quot;humid&quot;,
+    &quot;skytemp&quot;,
+    &quot;dewpoint&quot;,
+    &quot;windspeed&quot;,
+    &quot;rain&quot;,
+    &quot;press&quot;,
+    &quot;temp&quot;,
+    &quot;winddir&quot;
+]
+</pre></div>
+</div>
+<p>Finally, the actual history for one of these sensor types (for all stations) is available via /api/history/&lt;type&gt;/:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ http https://weather.monet.saao.ac.za/api/history/temp/
+
+[
+    {
+        &quot;code&quot;: &quot;average&quot;,
+        &quot;color&quot;: &quot;rgba(0, 0, 0, 0.1)&quot;,
+        &quot;data&quot;: [
+            {&quot;time&quot;: &quot;2020-02-13T10:50:00.011Z&quot;, &quot;value&quot;: 25.7011098488768},
+            {&quot;time&quot;: &quot;2020-02-13T10:45:00.012Z&quot;, &quot;value&quot;: 25.6358858386895},
+            [...]
+            {&quot;time&quot;: &quot;2020-02-12T10:55:00.015Z&quot;,&quot;value&quot;: 28.482568678953}
+        ],
+        &quot;name&quot;: &quot;Average values&quot;
+    },
+    {
+        &quot;code&quot;: &quot;lco&quot;,
+        &quot;color&quot;: &quot;rgba(0, 0, 0, 0.1)&quot;,
+        &quot;data&quot;: [
+            {&quot;time&quot;: &quot;2020-02-13T10:54:01Z&quot;, &quot;value&quot;: 27.0},
+            {&quot;time&quot;: &quot;2020-02-13T10:53:00Z&quot;, &quot;value&quot;: 26.9},
+            [...]
+            {&quot;time&quot;: &quot;2020-02-12T10:55:00Z&quot;, &quot;value&quot;: 28.2758620689655}
+        ],
+        &quot;name&quot;: &quot;MONET&quot;
+    }
+    [...]
+]
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -260,6 +415,12 @@ current list of sensor types is:</p>
 <li><a class="reference internal" href="#sensor-types">Sensor Types</a></li>
 <li><a class="reference internal" href="#stations">Stations</a></li>
 <li><a class="reference internal" href="#evaluators">Evaluators</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rest-api-reference">REST API Reference</a><ul>
+<li><a class="reference internal" href="#current-weather">Current weather</a></li>
+<li><a class="reference internal" href="#single-station-sensor">Single station/sensor</a></li>
+<li><a class="reference internal" href="#history">History</a></li>
 </ul>
 </li>
 </ul>

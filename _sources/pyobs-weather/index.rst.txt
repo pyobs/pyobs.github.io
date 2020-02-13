@@ -197,3 +197,163 @@ Evaluators take sensors and evaluate their values.
    :maxdepth: 2
 
    evaluators/index
+
+
+.. _weather REST API Reference:
+REST API Reference
+------------------
+
+All API endpoints return JSON data.
+
+Current weather
+^^^^^^^^^^^^^^^
+
+The /api/current/ endpoint returns the current values for all sensor types, as shown on the web page in the left column::
+
+    $ http https://weather.monet.saao.ac.za/api/current/
+
+    {
+        "good": false,
+        "sensors": {
+            "dewpoint": {"good": null, "value": -5.22835},
+            "humid": {"good": true, "value": 15.754024},
+            "press": {"good": null, "value": 824.888119047619},
+            "rain": {"good": true, "value": 0.0},
+            "skytemp": {"good": false, "value": -19.43},
+            "sunalt": {"good": false, "value": 71.0194850756101},
+            "temp": {"good": null, "value": 25.7139337142857},
+            "winddir": {"good": null, "value": 298.59207},
+            "windspeed": {"good": true, "value": 32.2115857142857}
+        },
+        "time": "2020-02-13T10:44:29.302Z"
+    }
+
+Single station/sensor
+^^^^^^^^^^^^^^^^^^^^^
+
+A list of weather stations can be retrieved via /api/stations/::
+
+    $ http https://weather.monet.saao.ac.za/api/stations/
+
+    [
+        {"code": "average", "name": "Average values"},
+        {"code": "current", "name": "Current values"},
+        {"code": "observer", "name": "Observer"},
+        {"code": "lco", "name": "LCO"},
+        {"code": "salt", "name": "SALT"},
+        {"code": "suth", "name": "Sutherland Weather"},
+        {"code": "monet_cur", "name": "MONET current"},
+        {"code": "monet", "name": "MONET"}
+    ]
+
+
+Using one of the codes returned by /api/stations/, all its respective sensor values can be requested from
+/api/stations/<station>/::
+
+    $ http https://weather.monet.saao.ac.za/api/stations/monet/
+
+    {
+        "code": "monet",
+        "name": "MONET",
+        "sensors": [
+            {
+                "code": "temp",
+                "name": "Temperature",
+                "time": "2020-02-13T10:45:00Z",
+                "value": 25.3448275862069
+            },
+            {
+                "code": "press",
+                "name": "Pressure",
+                "time": "2020-02-13T10:45:00Z",
+                "value": 824.786206896552
+            },
+            {
+                "code": "winddir",
+                "name": "Wind direction",
+                "time": "2020-02-13T10:45:00Z",
+                "value": 285.51724137931
+            },
+            {
+                "code": "humid",
+                "name": "Relative humidity",
+                "time": "2020-02-13T10:45:00Z",
+                "value": 16.8931034482759
+            },
+            {
+                "code": "rain",
+                "name": "Raining",
+                "time": "2020-02-13T10:45:00Z",
+                "value": 0.0
+            },
+            {
+                "code": "windspeed",
+                "name": "Wind speed",
+                "time": "2020-02-13T10:45:00Z",
+                "value": 35.0193103448276
+            }
+        ]
+    }
+
+Which also works just for single values using the code of a sensor at /api/stations/<station>/<sensor>/::
+
+    $ http https://weather.monet.saao.ac.za/api/stations/monet/windspeed/
+
+    {
+        "code": "windspeed",
+        "good": true,
+        "name": "Wind speed",
+        "since": "2020-02-05T19:00:06.769Z",
+        "time": "2020-02-13T10:50:00Z",
+        "unit": "km/h",
+        "value": 36.2358620689655
+    }
+
+
+History
+^^^^^^^
+
+A list of sensor types, for which historic data is available, can be fetched using the /api/history/ endpoint::
+
+    $ http https://weather.monet.saao.ac.za/api/history/
+
+    [
+        "humid",
+        "skytemp",
+        "dewpoint",
+        "windspeed",
+        "rain",
+        "press",
+        "temp",
+        "winddir"
+    ]
+
+Finally, the actual history for one of these sensor types (for all stations) is available via /api/history/<type>/::
+
+    $ http https://weather.monet.saao.ac.za/api/history/temp/
+
+    [
+        {
+            "code": "average",
+            "color": "rgba(0, 0, 0, 0.1)",
+            "data": [
+                {"time": "2020-02-13T10:50:00.011Z", "value": 25.7011098488768},
+                {"time": "2020-02-13T10:45:00.012Z", "value": 25.6358858386895},
+                [...]
+                {"time": "2020-02-12T10:55:00.015Z","value": 28.482568678953}
+            ],
+            "name": "Average values"
+        },
+        {
+            "code": "lco",
+            "color": "rgba(0, 0, 0, 0.1)",
+            "data": [
+                {"time": "2020-02-13T10:54:01Z", "value": 27.0},
+                {"time": "2020-02-13T10:53:00Z", "value": 26.9},
+                [...]
+                {"time": "2020-02-12T10:55:00Z", "value": 28.2758620689655}
+            ],
+            "name": "MONET"
+        }
+        [...]
+    ]
