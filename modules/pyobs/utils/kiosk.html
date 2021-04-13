@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>6.1.10.6. Kiosk &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="6.1.11. pyobs.modules.focus" href="../focus/index.html" />
+    <link rel="prev" title="6.1.10.5. Trigger" href="trigger.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">5. API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">6. Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">6.1. pyobs</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../filecache/index.html">6.1.1. pyobs.modules.filecache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../image/index.html">6.1.2. pyobs.modules.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../weather/index.html">6.1.3. pyobs.modules.weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../acquisition/index.html">6.1.4. pyobs.modules.acquisition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../robotic/index.html">6.1.5. pyobs.modules.robotic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../telescope/index.html">6.1.6. pyobs.modules.telescope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roof/index.html">6.1.7. pyobs.modules.roof</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flatfield/index.html">6.1.8. pyobs.modules.flatfield</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../camera/index.html">6.1.9. pyobs.modules.camera</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">6.1.10. pyobs.modules.utils</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="scriptrunner.html">6.1.10.1. ScriptRunner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="jobscheduler.html">6.1.10.2. JobScheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autonomouswarning.html">6.1.10.3. AutonomousWarning</a></li>
+<li class="toctree-l4"><a class="reference internal" href="telegram.html">6.1.10.4. Telegram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="trigger.html">6.1.10.5. Trigger</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">6.1.10.6. Kiosk</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../focus/index.html">6.1.11. pyobs.modules.focus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../test/index.html">6.1.12. pyobs.modules.test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guiding/index.html">6.1.13. pyobs.modules.guiding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../pyobs_fli/index.html">6.2. pyobs_fli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pyobs_sbig/index.html">6.3. pyobs_sbig</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html"><span class="section-number">6. </span>Modules</a> &raquo;</li>
+        
+          <li><a href="../index.html"><span class="section-number">6.1. </span>pyobs</a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">6.1.10. </span>pyobs.modules.utils</a> &raquo;</li>
+        
+      <li><span class="section-number">6.1.10.6. </span>Kiosk</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/modules/pyobs/utils/kiosk.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="kiosk">
+<h1><span class="section-number">6.1.10.6. </span>Kiosk<a class="headerlink" href="#kiosk" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pyobs.modules.utils.Kiosk">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.modules.utils.</span></code><code class="sig-name descname"><span class="pre">Kiosk</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pyobs.interfaces.ICamera.ICamera</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">37077</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/utils/kiosk.html#Kiosk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Kiosk" title="Permalink to this definition">¶</a></dt>
+<dd><p>A kiosk mode for a pyobs camera that takes images and published them via HTTP.</p>
+<dl class="py method">
+<dt id="pyobs.modules.utils.Kiosk.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pyobs.interfaces.ICamera.ICamera</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">37077</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/utils/kiosk.html#Kiosk.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Kiosk.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes file cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camera</strong> – Camera to use for kiosk mode.</p></li>
+<li><p><strong>port</strong> – Port for HTTP server.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.modules.utils.Kiosk.close">
+<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/utils/kiosk.html#Kiosk.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Kiosk.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close server.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.modules.utils.Kiosk.image">
+<code class="sig-name descname"><span class="pre">image</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/utils/kiosk.html#Kiosk.image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Kiosk.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return image data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.modules.utils.Kiosk.is_running">
+<code class="sig-name descname"><span class="pre">is_running</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../../../_modules/pyobs/modules/utils/kiosk.html#Kiosk.is_running"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Kiosk.is_running" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether kiosk mode is running.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.modules.utils.Kiosk.opened">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">opened</span></code><a class="headerlink" href="#pyobs.modules.utils.Kiosk.opened" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the server is started.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.modules.utils.Kiosk.start">
+<code class="sig-name descname"><span class="pre">start</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/utils/kiosk.html#Kiosk.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Kiosk.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start kiosk mode.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.modules.utils.Kiosk.stop">
+<code class="sig-name descname"><span class="pre">stop</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/utils/kiosk.html#Kiosk.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Kiosk.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop kiosk mode.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../focus/index.html" class="btn btn-neutral float-right" title="6.1.11. pyobs.modules.focus" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="trigger.html" class="btn btn-neutral float-left" title="6.1.10.5. Trigger" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

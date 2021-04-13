@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs_sbig.sbigfiltercamera &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs_sbig.sbigfiltercamera</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs_sbig.sbigfiltercamera</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">astropy.io</span> <span class="kn">import</span> <span class="n">fits</span>
+<span class="kn">from</span> <span class="nn">pyobs.mixins</span> <span class="kn">import</span> <span class="n">MotionStatusMixin</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">FilterChangedEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">IMotion</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.threads</span> <span class="kn">import</span> <span class="n">LockWithAbort</span>
+
+<span class="kn">from</span> <span class="nn">.sbigcamera</span> <span class="kn">import</span> <span class="n">SbigCamera</span>
+<span class="kn">from</span> <span class="nn">.sbigudrv</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SbigFilterCamera"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera">[docs]</a><span class="k">class</span> <span class="nc">SbigFilterCamera</span><span class="p">(</span><span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">SbigCamera</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A pyobs module for SBIG cameras.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SbigFilterCamera.__init__"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new SbigCamera.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filter_names: List of filter names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">SbigCamera</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># and filter names</span>
+        <span class="k">if</span> <span class="n">filter_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filter_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;10&#39;</span><span class="p">]</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">FilterWheelPosition</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filter_names</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">filter_names</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filter_names</span><span class="p">[</span><span class="n">FilterWheelPosition</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;UNKNOWN&#39;</span>
+
+        <span class="c1"># allow to abort motion (filter wheel)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock_motion</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort_motion</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+        <span class="c1"># current position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="n">FilterWheelPosition</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+        <span class="c1"># init mixins</span>
+        <span class="n">MotionStatusMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">motion_status_interfaces</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;IFilters&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="SbigFilterCamera.open"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If cannot connect to camera or set filter wheel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># open camera</span>
+        <span class="n">SbigCamera</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># init status of filter wheel</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">filter_wheel</span> <span class="o">!=</span> <span class="n">FilterWheelModel</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span>
+
+        <span class="c1"># subscribe to events</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">FilterChangedEvent</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Actually do the exposure, should be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: The requested exposure time in ms.</span>
+<span class="sd">            open_shutter: Whether or not to open the shutter.</span>
+<span class="sd">            abort_event: Event that gets triggered when exposure should be aborted.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The actual image.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If exposure was not successful.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># do expsure</span>
+        <span class="n">hdu</span> <span class="o">=</span> <span class="n">SbigCamera</span><span class="o">.</span><span class="n">_expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">)</span>
+
+        <span class="c1"># add filter to FITS headers</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">filter_wheel</span> <span class="o">!=</span> <span class="n">FilterWheelModel</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+            <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;FILTER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_filter</span><span class="p">(),</span> <span class="s1">&#39;Current filter&#39;</span><span class="p">)</span>
+
+        <span class="c1"># finished</span>
+        <span class="k">return</span> <span class="n">hdu</span>
+
+<div class="viewcode-block" id="SbigFilterCamera.set_filter"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.set_filter">[docs]</a>    <span class="k">def</span> <span class="nf">set_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the current filter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filter_name: Name of filter to set.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If binning could not be set.</span>
+<span class="sd">            NotImplementedError: If camera doesn&#39;t have a filter wheel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># do we have a filter wheel?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">filter_wheel</span> <span class="o">==</span> <span class="n">FilterWheelModel</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+        <span class="c1"># reverse dict and search for name</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="p">{</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_names</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="n">filter_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown filter: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filter_name</span><span class="p">)</span>
+
+        <span class="c1"># there already?</span>
+        <span class="n">position</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">get_filter_position_and_status</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">position</span> <span class="o">==</span> <span class="n">filters</span><span class="p">[</span><span class="n">filter_name</span><span class="p">]</span> <span class="ow">and</span> <span class="n">status</span> <span class="o">==</span> <span class="n">FilterWheelStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Filter changed.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># set status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span>
+
+        <span class="c1"># acquire lock</span>
+        <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_motion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_motion</span><span class="p">):</span>
+            <span class="c1"># set it</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Changing filter to </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">set_filter</span><span class="p">(</span><span class="n">filters</span><span class="p">[</span><span class="n">filter_name</span><span class="p">])</span>
+
+            <span class="c1"># wait for it</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="c1"># break, if wheel is idle and filter is set</span>
+                <span class="n">position</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">get_filter_position_and_status</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">position</span> <span class="o">==</span> <span class="n">filters</span><span class="p">[</span><span class="n">filter_name</span><span class="p">]</span> <span class="ow">and</span> <span class="n">status</span> <span class="o">==</span> <span class="n">FilterWheelStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+                <span class="c1"># abort?</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_motion</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Filter change aborted.&#39;</span><span class="p">)</span>
+                    <span class="k">return</span>
+
+            <span class="c1"># send event</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Filter changed.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">FilterChangedEvent</span><span class="p">(</span><span class="n">filter_name</span><span class="p">))</span>
+
+        <span class="c1"># set status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SbigFilterCamera.get_filter"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.get_filter">[docs]</a>    <span class="k">def</span> <span class="nf">get_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get currently set filter.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Name of currently set filter.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If filter could not be fetched.</span>
+<span class="sd">            NotImplementedError: If camera doesn&#39;t have a filter wheel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># do we have a filter wheel?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">filter_wheel</span> <span class="o">==</span> <span class="n">FilterWheelModel</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">get_filter_position_and_status</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># use existing position</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SbigFilterCamera.list_filters"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.list_filters">[docs]</a>    <span class="k">def</span> <span class="nf">list_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;List available filters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of available filters.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: If camera doesn&#39;t have a filter wheel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># do we have a filter wheel?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">filter_wheel</span> <span class="o">==</span> <span class="n">FilterWheelModel</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+        <span class="c1"># return names</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_names</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SbigFilterCamera&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,588 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.focus.projection &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.focus.projection</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.focus.projection</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">optimize</span><span class="p">,</span> <span class="n">ndimage</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.comm</span> <span class="kn">import</span> <span class="n">RemoteException</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IFocuser</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">IAutoFocus</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> <span class="n">IImageType</span>
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">FocusFoundEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">ImageType</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AutoFocusProjection"><a class="viewcode-back" href="../../../../modules/pyobs/focus/projection.html#pyobs.modules.focus.AutoFocusProjection">[docs]</a><span class="k">class</span> <span class="nc">AutoFocusProjection</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IAutoFocus</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Module for auto-focusing a telescope.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AutoFocusProjection.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/focus/projection.html#pyobs.modules.focus.AutoFocusProjection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">focuser</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">],</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">],</span> <span class="n">filters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">offset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new auto focus system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            focuser: Name of IFocuser.</span>
+<span class="sd">            camera: Name of ICamera.</span>
+<span class="sd">            filters: Name of IFilters, if any.</span>
+<span class="sd">            offset: If True, offsets are used instead of absolute focus values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># test import</span>
+        <span class="kn">import</span> <span class="nn">lmfit</span>
+
+        <span class="c1"># store focuser and camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_focuser</span> <span class="o">=</span> <span class="n">focuser</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="o">=</span> <span class="n">camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filters</span> <span class="o">=</span> <span class="n">filters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+        <span class="c1"># storage for data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>  <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="AutoFocusProjection.open"><a class="viewcode-back" href="../../../../modules/pyobs/focus/projection.html#pyobs.modules.focus.AutoFocusProjection.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># register event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">FocusFoundEvent</span><span class="p">)</span>
+
+        <span class="c1"># check focuser and camera</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_focuser</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Either camera or focuser do not exist or are not of correct type at the moment.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutoFocusProjection.auto_focus"><a class="viewcode-back" href="../../../../modules/pyobs/focus/projection.html#pyobs.modules.focus.AutoFocusProjection.auto_focus">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">600</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">auto_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Perform an auto-focus series.</span>
+
+<span class="sd">        This method performs an auto-focus series with &quot;count&quot; images on each side of the initial guess and the given</span>
+<span class="sd">        step size. With count=3, step=1 and guess=10, this takes images at the following focus values:</span>
+<span class="sd">        7, 8, 9, 10, 11, 12, 13</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            count: Number of images to take on each side of the initial guess. Should be an odd number.</span>
+<span class="sd">            step: Step size.</span>
+<span class="sd">            exposure_time: Exposure time for images.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of obtained best focus value and its uncertainty, or Nones if focus series failed.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundException: If image could not be downloaded.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Performing auto-focus...&#39;</span><span class="p">)</span>
+
+        <span class="c1"># get focuser</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting proxy for focuser...&#39;</span><span class="p">)</span>
+        <span class="n">focuser</span><span class="p">:</span> <span class="n">IFocuser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_focuser</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">)</span>
+
+        <span class="c1"># get camera</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting proxy for camera...&#39;</span><span class="p">)</span>
+        <span class="n">camera</span><span class="p">:</span> <span class="n">ICamera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">)</span>
+
+        <span class="c1"># get filter wheel and current filter</span>
+        <span class="n">filter_name</span> <span class="o">=</span> <span class="s1">&#39;unknown&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">filter_wheel</span><span class="p">:</span> <span class="n">IFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filters</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">)</span>
+                <span class="n">filter_name</span> <span class="o">=</span> <span class="n">filter_wheel</span><span class="o">.</span><span class="n">get_filter</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Filter module is not of type IFilters. Could not get filter.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># get focus as first guess</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span><span class="p">:</span>
+                <span class="n">guess</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Using focus offset of 0mm as initial guess.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">guess</span> <span class="o">=</span> <span class="n">focuser</span><span class="o">.</span><span class="n">get_focus</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Using current focus of </span><span class="si">%.2f</span><span class="s1">mm as initial guess.&#39;</span><span class="p">,</span> <span class="n">guess</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">RemoteException</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not fetch current focus value.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># define array of focus values to iterate</span>
+        <span class="n">focus_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">guess</span> <span class="o">-</span> <span class="n">count</span> <span class="o">*</span> <span class="n">step</span><span class="p">,</span> <span class="n">guess</span> <span class="o">+</span> <span class="n">count</span> <span class="o">*</span> <span class="n">step</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># define set_focus method</span>
+        <span class="n">set_focus</span> <span class="o">=</span> <span class="n">focuser</span><span class="o">.</span><span class="n">set_focus_offset</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="k">else</span> <span class="n">focuser</span><span class="o">.</span><span class="n">set_focus</span>
+
+        <span class="c1"># reset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+        <span class="c1"># loop focus values</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting focus series...&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">foc</span> <span class="ow">in</span> <span class="n">focus_values</span><span class="p">:</span>
+            <span class="c1"># set focus</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Changing focus to </span><span class="si">%.2f</span><span class="s1">mm...&#39;</span><span class="p">,</span> <span class="n">foc</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">InterruptedError</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">set_focus</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">foc</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">RemoteException</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not set new focus value.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># do exposure</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Taking picture...&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">InterruptedError</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">):</span>
+                    <span class="n">camera</span><span class="o">.</span><span class="n">set_exposure_time</span><span class="p">(</span><span class="n">exposure_time</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">IImageType</span><span class="p">):</span>
+                    <span class="n">camera</span><span class="o">.</span><span class="n">set_image_type</span><span class="p">(</span><span class="n">ImageType</span><span class="o">.</span><span class="n">FOCUS</span><span class="p">)</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">expose</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">RemoteException</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not take image.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># download image</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Downloading image...&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">read_image</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not download image.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># analyse</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Analysing picture...&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_analyse_image</span><span class="p">(</span><span class="n">foc</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="c1"># do nothing..</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not analyse image.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># fit focus</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">InterruptedError</span><span class="p">()</span>
+        <span class="n">focus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_focus</span><span class="p">()</span>
+
+        <span class="c1"># check</span>
+        <span class="k">if</span> <span class="n">focus</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Focus series failed.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># reset to initial values</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Resetting focus offset to initial guess of </span><span class="si">%.3f</span><span class="s1"> mm.&#39;</span><span class="p">,</span> <span class="n">guess</span><span class="p">)</span>
+                <span class="n">focuser</span><span class="o">.</span><span class="n">set_focus_offset</span><span class="p">(</span><span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Resetting focus to initial guess of </span><span class="si">%.3f</span><span class="s1"> mm.&#39;</span><span class="p">,</span> <span class="n">guess</span><span class="p">)</span>
+                <span class="n">focuser</span><span class="o">.</span><span class="n">set_focus</span><span class="p">(</span><span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+            <span class="c1"># raise error</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not find best focus.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># &quot;absolute&quot; will be the absolute focus value, i.e. focus+offset</span>
+        <span class="n">absolute</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># log and set focus</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting new focus offset of (</span><span class="si">%.3f</span><span class="s1">+-</span><span class="si">%.3f</span><span class="s1">) mm.&#39;</span><span class="p">,</span> <span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">focus</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">absolute</span> <span class="o">=</span> <span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">focuser</span><span class="o">.</span><span class="n">get_focus</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="n">focuser</span><span class="o">.</span><span class="n">set_focus_offset</span><span class="p">(</span><span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting new focus value of (</span><span class="si">%.3f</span><span class="s1">+-</span><span class="si">%.3f</span><span class="s1">) mm.&#39;</span><span class="p">,</span> <span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">focus</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">absolute</span> <span class="o">=</span> <span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">focuser</span><span class="o">.</span><span class="n">get_focus_offset</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="n">focuser</span><span class="o">.</span><span class="n">set_focus</span><span class="p">(</span><span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+        <span class="c1"># send event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">FocusFoundEvent</span><span class="p">(</span><span class="n">absolute</span><span class="p">,</span> <span class="n">focus</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_name</span><span class="p">))</span>
+
+        <span class="c1"># return result</span>
+        <span class="k">return</span> <span class="n">focus</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">focus</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="AutoFocusProjection.auto_focus_status"><a class="viewcode-back" href="../../../../modules/pyobs/focus/projection.html#pyobs.modules.focus.AutoFocusProjection.auto_focus_status">[docs]</a>    <span class="k">def</span> <span class="nf">auto_focus_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current status of auto focus.</span>
+
+<span class="sd">        Returned dictionary contains a list of focus/fwhm pairs in X and Y direction.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary with current status.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_lock</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s1">&#39;series&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+            <span class="p">}</span></div>
+
+<div class="viewcode-block" id="AutoFocusProjection.abort"><a class="viewcode-back" href="../../../../modules/pyobs/focus/projection.html#pyobs.modules.focus.AutoFocusProjection.abort">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abort current actions.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_analyse_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">focus</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">backsub</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xbad</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ybad</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># clean data</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">backsub</span><span class="o">=</span><span class="n">backsub</span><span class="p">,</span> <span class="n">xbad</span><span class="o">=</span><span class="n">xbad</span><span class="p">,</span> <span class="n">ybad</span><span class="o">=</span><span class="n">ybad</span><span class="p">)</span>
+
+        <span class="c1"># get projections</span>
+        <span class="n">xproj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># PROJECTIONS</span>
+        <span class="n">yproj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">nx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xproj</span><span class="p">)</span>
+        <span class="n">ny</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">yproj</span><span class="p">)</span>
+
+        <span class="c1"># remove background gradient</span>
+        <span class="n">xclean</span> <span class="o">=</span> <span class="n">xproj</span> <span class="o">-</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">uniform_filter1d</span><span class="p">(</span><span class="n">xproj</span><span class="p">,</span> <span class="n">nx</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">yclean</span> <span class="o">=</span> <span class="n">yproj</span> <span class="o">-</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">uniform_filter1d</span><span class="p">(</span><span class="n">yproj</span><span class="p">,</span> <span class="n">ny</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>
+
+        <span class="c1"># get window functions</span>
+        <span class="n">xwind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window_function</span><span class="p">(</span><span class="n">xclean</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">ywind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window_function</span><span class="p">(</span><span class="n">yclean</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># calculate correlation functions</span>
+        <span class="n">xavg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">xclean</span><span class="p">)</span>
+        <span class="n">yavg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">yclean</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">xwind</span> <span class="o">*</span> <span class="p">(</span><span class="n">xclean</span> <span class="o">-</span> <span class="n">xavg</span><span class="p">)</span> <span class="o">/</span> <span class="n">xavg</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">ywind</span> <span class="o">*</span> <span class="p">(</span><span class="n">yclean</span> <span class="o">-</span> <span class="n">yavg</span><span class="p">)</span> <span class="o">/</span> <span class="n">yavg</span>
+        <span class="n">xcorr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">correlate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+        <span class="n">ycorr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">correlate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+
+        <span class="c1"># filter out the peak (e.g. cosmics, ...)</span>
+        <span class="c1"># imx = np.argmax(xcorr)</span>
+        <span class="c1"># xcorr[imx] = 0.5 * (xcorr[imx - 1] + xcorr[imx + 1])</span>
+        <span class="c1"># imx = np.argmax(ycorr)</span>
+        <span class="c1"># ycorr[imx] = 0.5 * (ycorr[imx - 1] + ycorr[imx + 1])</span>
+
+        <span class="c1"># fit cc functions to get fwhm</span>
+        <span class="n">xfit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_correlation</span><span class="p">(</span><span class="n">xcorr</span><span class="p">)</span>
+        <span class="n">yfit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_correlation</span><span class="p">(</span><span class="n">ycorr</span><span class="p">)</span>
+
+        <span class="c1"># log it</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found x=</span><span class="si">%.1f</span><span class="s1">+-</span><span class="si">%.1f</span><span class="s1"> and y=</span><span class="si">%.1f</span><span class="s1">+-</span><span class="si">%.1f</span><span class="s1">.&#39;</span><span class="p">,</span>
+                     <span class="n">xfit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fwhm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">xfit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fwhm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
+                     <span class="n">yfit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fwhm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">yfit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fwhm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+
+        <span class="c1"># add to list</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;focus&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">focus</span><span class="p">),</span>
+                               <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">xfit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fwhm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="s1">&#39;xerr&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">xfit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fwhm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="p">),</span>
+                               <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">yfit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fwhm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="s1">&#39;yerr&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">yfit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;fwhm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="p">)})</span>
+
+    <span class="k">def</span> <span class="nf">_fit_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="c1"># get data</span>
+        <span class="n">focus</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;focus&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">]</span>
+        <span class="n">xfwhm</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">]</span>
+        <span class="n">xsig</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;xerr&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">]</span>
+        <span class="n">yfwhm</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">]</span>
+        <span class="n">ysig</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;yerr&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">]</span>
+
+        <span class="c1"># fit focus</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">xfoc</span><span class="p">,</span> <span class="n">xerr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_focus_curve</span><span class="p">(</span><span class="n">focus</span><span class="p">,</span> <span class="n">xfwhm</span><span class="p">,</span> <span class="n">xsig</span><span class="p">)</span>
+            <span class="n">yfoc</span><span class="p">,</span> <span class="n">yerr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_focus_curve</span><span class="p">(</span><span class="n">focus</span><span class="p">,</span> <span class="n">yfwhm</span><span class="p">,</span> <span class="n">ysig</span><span class="p">)</span>
+
+            <span class="c1"># weighted mean</span>
+            <span class="n">xerr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">xerr</span><span class="p">)</span>
+            <span class="n">yerr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">yerr</span><span class="p">)</span>
+            <span class="n">foc</span> <span class="o">=</span> <span class="p">(</span><span class="n">xfoc</span> <span class="o">/</span> <span class="n">xerr</span> <span class="o">+</span> <span class="n">yfoc</span> <span class="o">/</span> <span class="n">yerr</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">xerr</span> <span class="o">+</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">yerr</span><span class="p">)</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">xerr</span> <span class="o">+</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">yerr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not find best focus.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># get min and max foci</span>
+        <span class="n">min_focus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">focus</span><span class="p">)</span>
+        <span class="n">max_focus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">focus</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">foc</span> <span class="o">&lt;</span> <span class="n">min_focus</span> <span class="ow">or</span> <span class="n">foc</span> <span class="o">&gt;</span> <span class="n">max_focus</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;New focus out of bounds: </span><span class="si">{0:.3f}</span><span class="s2">+-</span><span class="si">{1:.3f}</span><span class="s2">mm.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">foc</span><span class="p">,</span> <span class="n">err</span><span class="p">))</span>
+
+        <span class="c1"># return it</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">foc</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_window_function</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a sine window function of the same size as some 1-D array &quot;arr&quot;.</span>
+<span class="sd">        Optionally, a zero border at the edges is added by &quot;scrunching&quot; the window.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ndata</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+        <span class="n">nwind</span> <span class="o">=</span> <span class="n">ndata</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">border</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ndata</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nwind</span><span class="p">):</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">border</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nwind</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">w</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_clean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">backsub</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xbad</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ybad</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes global slopes and fills up bad rows (ybad) or columns (xbad).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># REMOVE BAD COLUMNS AND ROWS</span>
+        <span class="k">if</span> <span class="n">xbad</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x1</span> <span class="o">=</span> <span class="n">xbad</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">x1</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x1</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">x2</span> <span class="o">&gt;=</span> <span class="n">nx</span><span class="p">:</span>
+                <span class="n">x2</span> <span class="o">=</span> <span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">x1</span> <span class="o">=</span> <span class="n">x2</span> <span class="o">-</span> <span class="mi">2</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ny</span><span class="p">):</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">xbad</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">x2</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">ybad</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">y1</span> <span class="o">=</span> <span class="n">ybad</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">y1</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">y1</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">y2</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">y2</span> <span class="o">&gt;=</span> <span class="n">ny</span><span class="p">:</span>
+                <span class="n">y2</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">y1</span> <span class="o">=</span> <span class="n">y2</span> <span class="o">-</span> <span class="mi">2</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nx</span><span class="p">):</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">ybad</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">y2</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="c1"># REMOVE GLOBAL SLOPES</span>
+        <span class="k">if</span> <span class="n">backsub</span><span class="p">:</span>
+            <span class="n">xsl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">ysl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">ny</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">xsl</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">xsl</span><span class="p">)</span>
+            <span class="n">ysl</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ysl</span><span class="p">)</span>
+            <span class="n">xslope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">xsl</span><span class="p">,</span> <span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">yslope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">ysl</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">data</span> <span class="o">-</span> <span class="n">xslope</span> <span class="o">-</span> <span class="n">yslope</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_fit_correlation</span><span class="p">(</span><span class="n">correl</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">GaussianModel</span>
+
+        <span class="c1"># create Gaussian model</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">()</span>
+
+        <span class="c1"># initial guess</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">correl</span><span class="p">))</span>
+        <span class="n">pars</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">correl</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mf">20.</span>
+
+        <span class="c1"># fit</span>
+        <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">correl</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_fit_focus_curve</span><span class="p">(</span><span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">y_err</span><span class="p">):</span>
+        <span class="c1"># initial guess</span>
+        <span class="n">ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">y_arr</span><span class="p">)</span>
+        <span class="n">ix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_arr</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">ic</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">x_arr</span><span class="p">[</span><span class="n">ic</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x_arr</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span>
+        <span class="n">slope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">y_arr</span><span class="p">[</span><span class="n">ic</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">ix</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="n">slope</span>
+
+        <span class="c1"># init</span>
+        <span class="n">p0</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span>
+
+        <span class="c1"># fit</span>
+        <span class="n">coeffs</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">optimize</span><span class="o">.</span><span class="n">curve_fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">xx</span><span class="p">,</span> <span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">cc</span><span class="p">:</span> <span class="n">bb</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">xx</span> <span class="o">-</span> <span class="n">cc</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">aa</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">),</span>
+                                         <span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">y_err</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">p0</span><span class="p">)</span>
+
+        <span class="c1"># return result</span>
+        <span class="k">return</span> <span class="n">coeffs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cov</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AutoFocusProjection&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

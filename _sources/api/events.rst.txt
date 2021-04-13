@@ -1,0 +1,100 @@
+Events
+======
+
+.. autoclass:: pyobs.events.Event
+
+BadWeatherEvent
+---------------
+
+.. autoclass:: pyobs.events.BadWeatherEvent
+
+ExposureStatusChangedEvent
+--------------------------
+
+.. autoclass:: pyobs.events.ExposureStatusChangedEvent
+
+FilterChangedEvent
+------------------
+
+.. autoclass:: pyobs.events.FilterChangedEvent
+
+FocusFoundEvent
+---------------
+
+.. autoclass:: pyobs.events.FocusFoundEvent
+
+GoodWeatherEvent
+----------------
+
+.. autoclass:: pyobs.events.GoodWeatherEvent
+
+InitializedEvent
+----------------
+
+.. autoclass:: pyobs.events.InitializedEvent
+
+LogEvent
+--------
+
+.. autoclass:: pyobs.events.LogEvent
+
+ModuleClosedEvent
+-----------------
+
+.. autoclass:: pyobs.events.ModuleClosedEvent
+
+ModuleOpenedEvent
+-----------------
+
+.. autoclass:: pyobs.events.ModuleOpenedEvent
+
+MotionStatusChangedEvent
+------------------------
+
+.. autoclass:: pyobs.events.MotionStatusChangedEvent
+
+NewImageEvent
+-------------
+
+.. autoclass:: pyobs.events.NewImageEvent
+
+RoofClosingEvent
+----------------
+
+.. autoclass:: pyobs.events.RoofClosingEvent
+
+RoofOpenedEvent
+---------------
+
+.. autoclass:: pyobs.events.RoofOpenedEvent
+
+TaskFinishedEvent
+-----------------
+
+.. autoclass:: pyobs.events.TaskFinishedEvent
+
+TaskStartedEvent
+----------------
+
+.. autoclass:: pyobs.events.TaskStartedEvent
+
+TelescopeMovingEvent
+--------------------
+
+.. autoclass:: pyobs.events.TelescopeMovingEvent
+
+TestEvent
+---------
+
+.. autoclass:: pyobs.events.TestEvent
+
+VariableChangedEvent
+--------------------
+
+.. autoclass:: pyobs.events.VariableChangedEvent
+
+VariablesUpdateEvent
+--------------------
+
+.. autoclass:: pyobs.events.VariablesUpdateEvent
+

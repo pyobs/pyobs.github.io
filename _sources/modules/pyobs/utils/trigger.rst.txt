@@ -1,0 +1,7 @@
+Trigger
+=======
+
+.. autoclass:: pyobs.modules.utils.Trigger
+    :members:
+    :special-members: __init__
+

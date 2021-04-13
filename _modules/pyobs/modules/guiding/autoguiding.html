@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.guiding.autoguiding &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.guiding.autoguiding</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.guiding.autoguiding</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">IImageType</span><span class="p">,</span> <span class="n">ICameraExposureTime</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseGuiding</span>
+<span class="kn">from</span> <span class="nn">...images.processors.exptime.star</span> <span class="kn">import</span> <span class="n">StarExpTimeEstimator</span>
+<span class="kn">from</span> <span class="nn">...images.processors.detection</span> <span class="kn">import</span> <span class="n">SepSourceDetection</span>
+<span class="kn">from</span> <span class="nn">...utils.enums</span> <span class="kn">import</span> <span class="n">ImageType</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AutoGuiding"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/autoguiding.html#pyobs.modules.guiding.AutoGuiding">[docs]</a><span class="k">class</span> <span class="nc">AutoGuiding</span><span class="p">(</span><span class="n">BaseGuiding</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An auto-guiding system.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AutoGuiding.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/autoguiding.html#pyobs.modules.guiding.AutoGuiding.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span>  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new auto guiding system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: Initial exposure time in seconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseGuiding</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_exposure_time</span> <span class="o">=</span> <span class="n">exposure_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source_detection</span> <span class="o">=</span> <span class="n">SepSourceDetection</span><span class="p">()</span>
+
+        <span class="c1"># add thread func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_auto_guiding</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutoGuiding.set_exposure_time"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/autoguiding.html#pyobs.modules.guiding.AutoGuiding.set_exposure_time">[docs]</a>    <span class="k">def</span> <span class="nf">set_exposure_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the exposure time for the auto-guider.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: Exposure time in secs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting exposure time to </span><span class="si">%d</span><span class="s1">s...&#39;</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_exposure_time</span> <span class="o">=</span> <span class="n">exposure_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loop_closed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_guiding_offset</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_auto_guiding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># exposure time estimator</span>
+        <span class="n">exp_time_estimator</span> <span class="o">=</span> <span class="n">StarExpTimeEstimator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_source_detection</span><span class="p">)</span>
+
+        <span class="c1"># run until closed</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># not running?</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># get camera</span>
+                <span class="n">camera</span><span class="p">:</span> <span class="n">ICamera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">)</span>
+
+                <span class="c1"># take image</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">):</span>
+                    <span class="c1"># set exposure time</span>
+                    <span class="n">exp_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_exposure_time</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Taking image with an exposure time of </span><span class="si">%.2f</span><span class="s1">s...&#39;</span><span class="p">,</span> <span class="n">exp_time</span><span class="p">)</span>
+                    <span class="n">camera</span><span class="o">.</span><span class="n">set_exposure_time</span><span class="p">(</span><span class="n">exp_time</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Taking image...&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">IImageType</span><span class="p">):</span>
+                    <span class="n">camera</span><span class="o">.</span><span class="n">set_image_type</span><span class="p">(</span><span class="n">ImageType</span><span class="o">.</span><span class="n">OBJECT</span><span class="p">)</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">broadcast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+                <span class="c1"># download image</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">read_image</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+                <span class="c1"># need to estimate exposure time?</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">exp_time_estimator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">new_exp_time</span> <span class="o">=</span> <span class="n">exp_time_estimator</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">new_exp_time</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">)</span>
+
+                <span class="c1"># process it</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Processing image...&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_process_image</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;An error occurred: &#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AutoGuiding&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

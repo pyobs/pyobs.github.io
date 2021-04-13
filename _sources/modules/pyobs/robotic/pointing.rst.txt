@@ -1,0 +1,7 @@
+PointingSeries
+==============
+
+.. autoclass:: pyobs.modules.robotic.PointingSeries
+    :members:
+    :special-members: __init__
+

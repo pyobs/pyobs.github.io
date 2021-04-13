@@ -1,0 +1,7 @@
+OnlineReduction
+===============
+
+.. autoclass:: pyobs.modules.image.OnlineReduction
+    :members:
+    :special-members: __init__
+

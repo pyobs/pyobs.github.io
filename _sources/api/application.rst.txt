@@ -1,0 +1,5 @@
+Application
+===========
+
+.. autoclass:: pyobs.application.Application
+    :members:

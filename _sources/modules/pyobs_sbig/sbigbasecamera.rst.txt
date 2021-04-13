@@ -1,0 +1,7 @@
+SbigBaseCamera
+==============
+
+.. autoclass:: pyobs_sbig.SbigBaseCamera
+    :members:
+    :special-members: __init__
+

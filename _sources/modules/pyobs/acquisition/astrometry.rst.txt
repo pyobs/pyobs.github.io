@@ -1,0 +1,7 @@
+AstrometryAcquisition
+=====================
+
+.. autoclass:: pyobs.modules.acquisition.AstrometryAcquisition
+    :members:
+    :special-members: __init__
+

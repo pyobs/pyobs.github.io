@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs_sbig.sbigbasecamera &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs_sbig.sbigbasecamera</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs_sbig.sbigbasecamera</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">astropy.io</span> <span class="kn">import</span> <span class="n">fits</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraWindow</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules.camera.basecamera</span> <span class="kn">import</span> <span class="n">BaseCamera</span>
+<span class="kn">from</span> <span class="nn">pyobs_sbig.sbigdriver</span> <span class="kn">import</span> <span class="n">SbigDriver</span>
+<span class="kn">from</span> <span class="nn">pyobs_sbig.sbigudrv</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SbigBaseCamera"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigbasecamera.html#pyobs_sbig.SbigBaseCamera">[docs]</a><span class="k">class</span> <span class="nc">SbigBaseCamera</span><span class="p">(</span><span class="n">BaseCamera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A pyobs module for SBIG cameras.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SbigBaseCamera.__init__"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigbasecamera.html#pyobs_sbig.SbigBaseCamera.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ActiveSensor</span><span class="p">]</span> <span class="o">=</span> <span class="n">ActiveSensor</span><span class="o">.</span><span class="n">IMAGING</span><span class="p">,</span> <span class="n">driver</span><span class="p">:</span> <span class="n">SbigDriver</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new SbigCamera.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sensor: Sensor to use, if camera has more than one.</span>
+<span class="sd">            driver: Driver to use, if any.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseCamera</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># create driver?</span>
+        <span class="k">if</span> <span class="n">driver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">(</span><span class="n">object_class</span><span class="o">=</span><span class="n">SbigDriver</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="n">driver</span>
+
+        <span class="c1"># active sensor</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sensor</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_sensor</span> <span class="o">=</span> <span class="n">ActiveSensor</span><span class="p">[</span><span class="n">sensor</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sensor</span><span class="p">,</span> <span class="n">ActiveSensor</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_sensor</span> <span class="o">=</span> <span class="n">sensor</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid sensor given.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># create image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_img</span> <span class="o">=</span> <span class="n">SBIGImg</span><span class="p">()</span>
+
+        <span class="c1"># window and binning</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_full_frame</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SbigBaseCamera.open"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigbasecamera.html#pyobs_sbig.SbigBaseCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If cannot connect to camera or set filter wheel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseCamera</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># get window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_frame</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SbigBaseCamera.get_full_frame"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigbasecamera.html#pyobs_sbig.SbigBaseCamera.get_full_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns full size of CCD.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with left, top, width, and height set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">full_frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_sensor</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SbigBaseCamera.get_window"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigbasecamera.html#pyobs_sbig.SbigBaseCamera.get_window">[docs]</a>    <span class="k">def</span> <span class="nf">get_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the camera window.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with left, top, width, and height set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window</span></div>
+
+<div class="viewcode-block" id="SbigBaseCamera.set_window"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigbasecamera.html#pyobs_sbig.SbigBaseCamera.set_window">[docs]</a>    <span class="k">def</span> <span class="nf">set_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">top</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the camera window.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            left: X offset of window.</span>
+<span class="sd">            top: Y offset of window.</span>
+<span class="sd">            width: Width of window.</span>
+<span class="sd">            height: Height of window.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting window to </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1"> at </span><span class="si">%d</span><span class="s1">,</span><span class="si">%d</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Actually do the exposure, should be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: The requested exposure time in ms.</span>
+<span class="sd">            open_shutter: Whether or not to open the shutter.</span>
+<span class="sd">            abort_event: Event that gets triggered when exposure should be aborted.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The actual image.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If exposure was not successful.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">#  binning</span>
+        <span class="n">binning</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span>
+
+        <span class="c1"># set window, CSBIGCam expects left/top also in binned coordinates, so divide by binning</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">binning</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">binning</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">binning</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="n">binning</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set window to </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2"> (binned </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">) at </span><span class="si">%d</span><span class="s2">,</span><span class="si">%d</span><span class="s2">.&quot;</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>
+        <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+        <span class="c1"># set exposing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">EXPOSING</span><span class="p">)</span>
+
+        <span class="c1"># get date obs</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting exposure with for </span><span class="si">%.2f</span><span class="s1"> seconds...&#39;</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">)</span>
+        <span class="n">date_obs</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># init image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_img</span><span class="o">.</span><span class="n">image_can_close</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># start exposure (can raise ValueError)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">start_exposure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_sensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_img</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span>
+                                    <span class="n">binning</span><span class="o">=</span><span class="n">binning</span><span class="p">)</span>
+
+        <span class="c1"># wait for it</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">has_exposure_finished</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_sensor</span><span class="p">):</span>
+            <span class="c1"># was aborted?</span>
+            <span class="k">if</span> <span class="n">abort_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># finish exposure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">end_exposure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_sensor</span><span class="p">)</span>
+
+        <span class="c1"># wait for readout</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Exposure finished, reading out...&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">READOUT</span><span class="p">)</span>
+
+        <span class="c1"># start readout (can raise ValueError)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">readout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_sensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_img</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">)</span>
+
+        <span class="c1"># finalize image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_img</span><span class="o">.</span><span class="n">image_can_close</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># download data</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_img</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="c1"># temp &amp; cooling</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">get_cooling</span><span class="p">()</span>
+
+        <span class="c1"># create FITS image and set header</span>
+        <span class="n">hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATE-OBS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">date_obs</span><span class="p">,</span> <span class="s1">&#39;Date and time of start of exposure&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;EXPTIME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">exposure_time</span><span class="p">,</span> <span class="s1">&#39;Exposure time [s]&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-TEMP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="s1">&#39;CCD temperature [C]&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-TSET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">setpoint</span><span class="p">,</span> <span class="s1">&#39;Cooler setpoint [C]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># binning</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;XBINNING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-BIN1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Binning factor used on X axis&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-BIN2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Binning factor used on Y axis&#39;</span><span class="p">)</span>
+
+        <span class="c1"># window</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Subframe origin on X axis&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Subframe origin on Y axis&#39;</span><span class="p">)</span>
+
+        <span class="c1"># statistics</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATAMIN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="s1">&#39;Minimum data value&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATAMAX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="s1">&#39;Maximum data value&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATAMEAN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="s1">&#39;Mean data value&#39;</span><span class="p">)</span>
+
+        <span class="c1"># biassec/trimsec</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_full_frame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_biassec_trimsec</span><span class="p">(</span><span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="o">*</span><span class="n">frame</span><span class="p">)</span>
+
+        <span class="c1"># return FITS image</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Readout finished.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hdu</span>
+
+    <span class="k">def</span> <span class="nf">_abort_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abort the running exposure. Should be implemented by derived class.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If an error occured.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SbigBaseCamera&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

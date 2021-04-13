@@ -1,0 +1,809 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.camera.basecamera &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.camera.basecamera</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.camera.basecamera</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">NamedTuple</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astropy.io</span> <span class="kn">import</span> <span class="n">fits</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.comm</span> <span class="kn">import</span> <span class="n">TimeoutException</span><span class="p">,</span> <span class="n">InvocationException</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">ImageType</span>
+<span class="kn">from</span> <span class="nn">pyobs.images</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.fits</span> <span class="kn">import</span> <span class="n">format_filename</span>
+
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">NewImageEvent</span><span class="p">,</span> <span class="n">ExposureStatusChangedEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">IAbortable</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> <span class="n">IImageType</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CameraException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">ExposureInfo</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Info about a running exposure.&quot;&quot;&quot;</span>
+    <span class="n">start</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span>
+    <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span>
+
+
+<span class="k">def</span> <span class="nf">calc_expose_timeout</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculates timeout for expose().&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">camera</span><span class="o">.</span><span class="n">get_exposure_time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">30</span>
+
+
+<div class="viewcode-block" id="BaseCamera"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera">[docs]</a><span class="k">class</span> <span class="nc">BaseCamera</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> <span class="n">IImageType</span><span class="p">,</span> <span class="n">IAbortable</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseCamera.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fits_headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">centre</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">rotation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">flip</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">filenames</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;/cache/pyobs-{DAY-OBS|date:}-{FRAMENUM|string:04d}-{IMAGETYP|type}00.fits.gz&#39;</span><span class="p">,</span>
+                 <span class="n">fits_namespaces</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a new BaseCamera.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fits_headers: Additional FITS headers.</span>
+<span class="sd">            centre: (x, y) tuple of camera centre.</span>
+<span class="sd">            rotation: Rotation east of north.</span>
+<span class="sd">            flip: Whether or not to flip the image along its first axis.</span>
+<span class="sd">            filenames: Template for file naming.</span>
+<span class="sd">            fits_namespaces: List of namespaces for FITS headers that this camera should request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># check</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;No comm module given, will not be able to signal new images!&#39;</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fits_headers</span> <span class="o">=</span> <span class="n">fits_headers</span> <span class="k">if</span> <span class="n">fits_headers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s1">&#39;OBSERVER&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fits_headers</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fits_headers</span><span class="p">[</span><span class="s1">&#39;OBSERVER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pyobs&#39;</span><span class="p">,</span> <span class="s1">&#39;Name of observer&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_centre</span> <span class="o">=</span> <span class="n">centre</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span> <span class="o">=</span> <span class="n">rotation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flip</span> <span class="o">=</span> <span class="n">flip</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span> <span class="o">=</span> <span class="n">filenames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fits_namespaces</span> <span class="o">=</span> <span class="n">fits_namespaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_type</span> <span class="o">=</span> <span class="n">ImageType</span><span class="o">.</span><span class="n">OBJECT</span>
+
+        <span class="c1"># init camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ExposureInfo</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">=</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span>
+
+        <span class="c1"># multi-threading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expose_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expose_abort</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+        <span class="c1"># night exposure number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="s1">&#39;/pyobs/modules/</span><span class="si">%s</span><span class="s1">/cache.yaml&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_num</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="BaseCamera.open"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># subscribe to events</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">NewImageEvent</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">ExposureStatusChangedEvent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCamera.set_exposure_time"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.set_exposure_time">[docs]</a>    <span class="k">def</span> <span class="nf">set_exposure_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the exposure time in seconds.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: Exposure time in seconds.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If exposure time could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting exposure time to </span><span class="si">%.5f</span><span class="s1">s...&#39;</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span> <span class="o">=</span> <span class="n">exposure_time</span></div>
+
+<div class="viewcode-block" id="BaseCamera.get_exposure_time"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_exposure_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the exposure time in seconds.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Exposure time in seconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span></div>
+
+<div class="viewcode-block" id="BaseCamera.set_image_type"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.set_image_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_image_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_type</span><span class="p">:</span> <span class="n">ImageType</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the image type.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image_type: New image type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting image type to </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">image_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_type</span> <span class="o">=</span> <span class="n">image_type</span></div>
+
+<div class="viewcode-block" id="BaseCamera.get_image_type"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_image_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the current image type.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Current image type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_type</span></div>
+
+    <span class="k">def</span> <span class="nf">_change_exposure_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change exposure status and send event,</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            status: New exposure status.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># send event, if it changed</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">!=</span> <span class="n">status</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">ExposureStatusChangedEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span><span class="p">,</span> <span class="n">status</span><span class="p">))</span>
+
+        <span class="c1"># set it</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">=</span> <span class="n">status</span>
+
+<div class="viewcode-block" id="BaseCamera.get_exposure_status"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_exposure_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the current status of the camera, which is one of &#39;idle&#39;, &#39;exposing&#39;, or &#39;readout&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Current status of camera.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span></div>
+
+<div class="viewcode-block" id="BaseCamera.get_exposure_time_left"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_exposure_time_left">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_time_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the remaining exposure time on the current exposure in seconds.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Remaining exposure time in seconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># if we&#39;re not exposing, there is nothing left</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.</span>
+
+        <span class="c1"># calculate difference between start of exposure and now, and return in ms</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="o">.</span><span class="n">exposure_time</span><span class="p">)</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">duration</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">diff</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BaseCamera.get_exposure_progress"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_exposure_progress">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the progress of the current exposure in percent.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Progress of the current exposure in percent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># if we&#39;re not exposing, there is no progress</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.</span>
+
+        <span class="c1"># calculate difference between start of exposure and now</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># zero exposure time?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="o">.</span><span class="n">exposure_time</span> <span class="o">==</span> <span class="mf">0.</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">==</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">READOUT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">100.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># return max of 100</span>
+            <span class="n">percentage</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">100.</span>
+            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">percentage</span><span class="p">,</span> <span class="mf">100.</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_add_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdr</span><span class="p">:</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add FITS header keywords to the given FITS header.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hdr: FITS header to add keywords to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># convenience function to return value of keyword</span>
+        <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">hdr</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">hdr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="c1"># we definitely need a DATE-OBS and IMAGETYP!!</span>
+        <span class="k">if</span> <span class="s1">&#39;DATE-OBS&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;No DATE-OBS found in FITS header, adding NO further information!&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="s1">&#39;IMAGETYP&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;No IMAGETYP found in FITS header, adding NO further information!&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># get date obs</span>
+        <span class="n">date_obs</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;DATE-OBS&#39;</span><span class="p">])</span>
+
+        <span class="c1"># UT1-UTC</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;UT1_UTC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">date_obs</span><span class="o">.</span><span class="n">delta_ut1_utc</span><span class="p">),</span> <span class="s1">&#39;UT1-UTC&#39;</span><span class="p">)</span>
+
+        <span class="c1"># basic stuff</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;EQUINOX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2000.</span><span class="p">,</span> <span class="s1">&#39;Equinox of celestial coordinate system&#39;</span><span class="p">)</span>
+
+        <span class="c1"># pixel size in world coordinates</span>
+        <span class="k">if</span> <span class="s1">&#39;DET-PIXL&#39;</span> <span class="ow">in</span> <span class="n">hdr</span> <span class="ow">and</span> <span class="s1">&#39;TEL-FOCL&#39;</span> <span class="ow">in</span> <span class="n">hdr</span> <span class="ow">and</span> <span class="s1">&#39;DET-BIN1&#39;</span> <span class="ow">in</span> <span class="n">hdr</span> <span class="ow">and</span> <span class="s1">&#39;DET-BIN2&#39;</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="mf">360.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="p">(</span><span class="s1">&#39;DET-PIXL&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">v</span><span class="p">(</span><span class="s1">&#39;TEL-FOCL&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CDELT1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">tmp</span> <span class="o">*</span> <span class="n">v</span><span class="p">(</span><span class="s1">&#39;DET-BIN1&#39;</span><span class="p">),</span> <span class="s1">&#39;Coordinate increment on x-axis [deg/px]&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CDELT2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">+</span><span class="n">tmp</span> <span class="o">*</span> <span class="n">v</span><span class="p">(</span><span class="s1">&#39;DET-BIN2&#39;</span><span class="p">),</span> <span class="s1">&#39;Coordinate increment on y-axis [deg/px]&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CUNIT1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;deg&#39;</span><span class="p">,</span> <span class="s1">&#39;Units of CRVAL1, CDELT1&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CUNIT2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;deg&#39;</span><span class="p">,</span> <span class="s1">&#39;Units of CRVAL2, CDELT2&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;WCSAXES&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Number of WCS axes&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not calculate CDELT1/CDELT2 (DET-PIXL/TEL-FOCL/DET-BIN1/DET-BIN2 missing).&#39;</span><span class="p">)</span>
+
+        <span class="c1"># do we have a location?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span>
+            <span class="c1"># add location of telescope</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;LONGITUD&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">lon</span><span class="o">.</span><span class="n">degree</span><span class="p">),</span> <span class="s1">&#39;Longitude of the telescope [deg E]&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;LATITUDE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">degree</span><span class="p">),</span> <span class="s1">&#39;Latitude of the telescope [deg N]&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HEIGHT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">height</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="s1">&#39;Altitude of the telescope [m]&#39;</span><span class="p">)</span>
+
+            <span class="c1"># add local sidereal time</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">observer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">lst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observer</span><span class="o">.</span><span class="n">local_sidereal_time</span><span class="p">(</span><span class="n">date_obs</span><span class="p">)</span>
+                <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;LST&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">lst</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">),</span> <span class="s1">&#39;Local sidereal time&#39;</span><span class="p">)</span>
+
+        <span class="c1"># date of night this observation is in</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;DAY-OBS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">date_obs</span><span class="o">.</span><span class="n">night_obs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observer</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span> <span class="s1">&#39;Night of observation&#39;</span><span class="p">)</span>
+
+        <span class="c1"># centre pixel</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_centre</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;DET-CPX1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;x-pixel on mechanical axis in unbinned image&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;DET-CPX2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_centre</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;y-pixel on mechanical axis in unbinned image&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not calculate DET-CPX1/DET-CPX2 (centre not given in config).&#39;</span><span class="p">)</span>
+
+        <span class="c1"># reference pixel in binned image</span>
+        <span class="k">if</span> <span class="s1">&#39;DET-CPX1&#39;</span> <span class="ow">in</span> <span class="n">hdr</span> <span class="ow">and</span> <span class="s1">&#39;DET-BIN1&#39;</span> <span class="ow">in</span> <span class="n">hdr</span> <span class="ow">and</span> <span class="s1">&#39;DET-CPX2&#39;</span> <span class="ow">in</span> <span class="n">hdr</span> <span class="ow">and</span> <span class="s1">&#39;DET-BIN2&#39;</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">:</span>
+            <span class="c1"># offset?</span>
+            <span class="n">off_x</span><span class="p">,</span> <span class="n">off_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="s1">&#39;XORGSUBF&#39;</span> <span class="ow">in</span> <span class="n">hdr</span> <span class="ow">and</span> <span class="s1">&#39;YORGSUBF&#39;</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">:</span>
+                <span class="n">off_x</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;XORGSUBF&#39;</span> <span class="ow">in</span> <span class="n">hdr</span> <span class="k">else</span> <span class="mf">0.</span>
+                <span class="n">off_y</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;YORGSUBF&#39;</span> <span class="ow">in</span> <span class="n">hdr</span> <span class="k">else</span> <span class="mf">0.</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CRPIX1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">v</span><span class="p">(</span><span class="s1">&#39;DET-CPX1&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">off_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">v</span><span class="p">(</span><span class="s1">&#39;DET-BIN1&#39;</span><span class="p">),</span> <span class="s1">&#39;Reference x-pixel position in binned image&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CRPIX2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">v</span><span class="p">(</span><span class="s1">&#39;DET-CPX2&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">off_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">v</span><span class="p">(</span><span class="s1">&#39;DET-BIN2&#39;</span><span class="p">),</span> <span class="s1">&#39;Reference y-pixel position in binned image&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not calculate CRPIX1/CRPIX2 &#39;</span>
+                            <span class="s1">&#39;(XORGSUBF/YORGSUBF/DET-CPX1/TEL-CPX2/DET-BIN1/DET-BIN2) missing.&#39;</span><span class="p">)</span>
+        <span class="c1"># only add all this stuff for OBJECT images</span>
+        <span class="k">if</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;IMAGETYP&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;dark&#39;</span><span class="p">,</span> <span class="s1">&#39;bias&#39;</span><span class="p">]:</span>
+            <span class="c1"># projection</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CTYPE1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;RA---TAN&#39;</span><span class="p">,</span> <span class="s1">&#39;RA in tangent plane projection&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CTYPE2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;DEC--TAN&#39;</span><span class="p">,</span> <span class="s1">&#39;Dec in tangent plane projection&#39;</span><span class="p">)</span>
+
+            <span class="c1"># PC matrix: rotation only, shift comes from CDELT1/2</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">theta_rad</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rotation</span><span class="p">)</span>
+                <span class="n">cos_theta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_rad</span><span class="p">)</span>
+                <span class="n">sin_theta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_rad</span><span class="p">)</span>
+                <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;PC1_1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">+</span><span class="n">cos_theta</span><span class="p">,</span> <span class="s1">&#39;Partial of first axis coordinate w.r.t. x&#39;</span><span class="p">)</span>
+                <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;PC1_2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">sin_theta</span><span class="p">,</span> <span class="s1">&#39;Partial of first axis coordinate w.r.t. y&#39;</span><span class="p">)</span>
+                <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;PC2_1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">+</span><span class="n">sin_theta</span><span class="p">,</span> <span class="s1">&#39;Partial of second axis coordinate w.r.t. x&#39;</span><span class="p">)</span>
+                <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;PC2_2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">+</span><span class="n">cos_theta</span><span class="p">,</span> <span class="s1">&#39;Partial of second axis coordinate w.r.t. y&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not calculate CD matrix (rotation or CDELT1/CDELT2 missing.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># add FRAMENUM</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_framenum</span><span class="p">(</span><span class="n">hdr</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_framenum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdr</span><span class="p">:</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add FRAMENUM keyword to header</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hdr: Header to read from and write into.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get night from header</span>
+        <span class="n">night</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;DAY-OBS&#39;</span><span class="p">]</span>
+
+        <span class="c1"># increase night exp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_num</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># do we have a cache?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># try to load it</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># load cache</span>
+                <span class="n">cache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">read_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">)</span>
+
+                <span class="c1"># get new number</span>
+                <span class="k">if</span> <span class="n">cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;framenum&#39;</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_frame_num</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="s1">&#39;framenum&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="c1"># if nights differ, reset count</span>
+                <span class="k">if</span> <span class="n">cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;night&#39;</span> <span class="ow">in</span> <span class="n">cache</span> <span class="ow">and</span> <span class="n">night</span> <span class="o">!=</span> <span class="n">cache</span><span class="p">[</span><span class="s1">&#39;night&#39;</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_frame_num</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                <span class="k">pass</span>
+
+            <span class="c1"># write file</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">write_yaml</span><span class="p">({</span><span class="s1">&#39;night&#39;</span><span class="p">:</span> <span class="n">night</span><span class="p">,</span> <span class="s1">&#39;framenum&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_num</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not write camera cache file.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># set it</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;FRAMENUM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_num</span>
+
+    <span class="k">def</span> <span class="nf">_expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Actually do the exposure, should be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: The requested exposure time in seconds.</span>
+<span class="sd">            open_shutter: Whether or not to open the shutter.</span>
+<span class="sd">            abort_event: Event that gets triggered when exposure should be aborted.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The actual image.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If exposure was not successful.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">__expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">image_type</span><span class="p">:</span> <span class="n">ImageType</span><span class="p">,</span> <span class="n">broadcast</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Image</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Wrapper for a single exposure.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: The requested exposure time in seconds.</span>
+<span class="sd">            open_shutter: Whether or not to open the shutter.</span>
+<span class="sd">            broadcast: Whether or not the new image should be broadcasted.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of the image itself and its filename.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If exposure was not successful.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fits_header_futures</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span>
+            <span class="c1"># get clients that provide fits headers</span>
+            <span class="n">clients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">clients_with_interface</span><span class="p">(</span><span class="n">IFitsHeaderProvider</span><span class="p">)</span>
+
+            <span class="c1"># create and run a threads in which the fits headers are fetched</span>
+            <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="n">clients</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Requesting FITS headers from </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+                <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s1">&#39;get_fits_headers&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fits_namespaces</span><span class="p">)</span>
+                <span class="n">fits_header_futures</span><span class="p">[</span><span class="n">client</span><span class="p">]</span> <span class="o">=</span> <span class="n">future</span>
+
+        <span class="c1"># open the shutter?</span>
+        <span class="n">open_shutter</span> <span class="o">=</span> <span class="n">image_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ImageType</span><span class="o">.</span><span class="n">BIAS</span><span class="p">,</span> <span class="n">ImageType</span><span class="o">.</span><span class="n">DARK</span><span class="p">]</span>
+
+        <span class="c1"># do the exposure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span> <span class="o">=</span> <span class="n">ExposureInfo</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span> <span class="n">exposure_time</span><span class="o">=</span><span class="n">exposure_time</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expose</span><span class="p">(</span><span class="n">exposure_time</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">,</span> <span class="n">abort_event</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">expose_abort</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c1"># exposure was not successful (aborted?), so reset everything</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">raise</span>
+
+        <span class="c1"># flip it?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flip</span><span class="p">:</span>
+            <span class="c1"># do we have three dimensions in array? need this for deciding which axis to flip</span>
+            <span class="n">is_3d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+
+            <span class="c1"># flip image and make contiguous again</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="n">is_3d</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="c1"># add HDU name</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;EXTNAME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;SCI&#39;</span>
+
+        <span class="c1"># add image type</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;IMAGETYP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_type</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="c1"># get fits headers from other clients</span>
+        <span class="k">for</span> <span class="n">client</span><span class="p">,</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">fits_header_futures</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># join thread</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Fetching FITS headers from </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">headers</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">TimeoutException</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Fetching FITS headers from </span><span class="si">%s</span><span class="s1"> timed out.&#39;</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">except</span> <span class="n">InvocationException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not fetch FITS headers from </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">get_message</span><span class="p">())</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># add them to fits file</span>
+            <span class="k">if</span> <span class="n">headers</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Adding additional FITS headers from </span><span class="si">%s</span><span class="s1">...&#39;</span> <span class="o">%</span> <span class="n">client</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">headers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="c1"># if value is not a string, it may be a list of value and comment</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+                        <span class="c1"># convert list to tuple</span>
+                        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="c1"># add static fits headers</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fits_headers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># add more fits headers</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding FITS headers...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_fits_headers</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
+
+        <span class="c1"># don&#39;t want to save?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="c1"># create a temporary filename</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">format_filename</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;ORIGNAME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;The original file name&#39;</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;FNAME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;FITS file file name&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot save image.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># upload file</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Uploading image to file server...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">write_image</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not upload image.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># broadcast image path</span>
+        <span class="k">if</span> <span class="n">broadcast</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Broadcasting image ID...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">NewImageEvent</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">image_type</span><span class="p">))</span>
+
+        <span class="c1"># return image and unique</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished image </span><span class="si">%s</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">filename</span>
+
+<div class="viewcode-block" id="BaseCamera.expose"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.expose">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="n">calc_expose_timeout</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broadcast</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Starts exposure and returns reference to image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: Exposure time in seconds.</span>
+<span class="sd">            broadcast: Broadcast existence of image.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Name of image that was taken.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># acquire lock</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Acquiring exclusive lock on camera...&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expose_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">blocking</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not acquire camera lock for expose().&#39;</span><span class="p">)</span>
+
+        <span class="c1"># make sure that we release the lock</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># are we exposing?</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">!=</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CameraException</span><span class="p">(</span><span class="s1">&#39;Cannot start new exposure because camera is not idle.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># expose</span>
+            <span class="n">image</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__expose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_type</span><span class="p">,</span> <span class="n">broadcast</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not take image.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Image has not been saved, so cannot be retrieved by filename.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># return filename</span>
+            <span class="k">return</span> <span class="n">filename</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># release lock</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Releasing exclusive lock on camera...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_expose_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_abort_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abort the running exposure. Should be implemented by derived class.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If an error occured.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="BaseCamera.abort"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.abort">[docs]</a>    <span class="k">def</span> <span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Aborts the current exposure and sequence.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Success or not.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># set abort event</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Aborting current image and sequence...&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_left</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expose_abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+        <span class="c1"># do camera-specific abort</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort_exposure</span><span class="p">()</span>
+
+        <span class="c1"># wait for lock and unset event</span>
+        <span class="n">acquired</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expose_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">blocking</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">5.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expose_abort</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">acquired</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_expose_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not abort exposure.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCamera.set_biassec_trimsec"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.set_biassec_trimsec">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_biassec_trimsec</span><span class="p">(</span><span class="n">hdr</span><span class="p">:</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="p">,</span> <span class="n">left</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">top</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates and sets the BIASSEC and TRIMSEC areas.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hdr:    FITS header (in/out)</span>
+<span class="sd">            left:   left edge of data area</span>
+<span class="sd">            top:    top edge of data area</span>
+<span class="sd">            width:  width of data area</span>
+<span class="sd">            height: height of data area</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get image area in unbinned coordinates</span>
+        <span class="n">img_left</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">]</span>
+        <span class="n">img_top</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">]</span>
+        <span class="n">img_width</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS1&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XBINNING&#39;</span><span class="p">]</span>
+        <span class="n">img_height</span> <span class="o">=</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">]</span>
+
+        <span class="c1"># get intersection</span>
+        <span class="n">is_left</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">img_left</span><span class="p">)</span>
+        <span class="n">is_right</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">width</span><span class="p">,</span> <span class="n">img_left</span><span class="o">+</span><span class="n">img_width</span><span class="p">)</span>
+        <span class="n">is_top</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">img_top</span><span class="p">)</span>
+        <span class="n">is_bottom</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">top</span><span class="o">+</span><span class="n">height</span><span class="p">,</span> <span class="n">img_top</span><span class="o">+</span><span class="n">img_height</span><span class="p">)</span>
+
+        <span class="c1"># for simplicity we allow prescan/overscan only in one dimension</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">is_left</span> <span class="ow">or</span> <span class="n">left</span><span class="o">+</span><span class="n">width</span> <span class="o">&gt;</span> <span class="n">is_right</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">is_top</span> <span class="ow">or</span> <span class="n">top</span><span class="o">+</span><span class="n">height</span> <span class="o">&gt;</span> <span class="n">is_bottom</span><span class="p">):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;BIASSEC/TRIMSEC can only be calculated with a prescan/overscan on one axis only.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># comments</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="s1">&#39;Bias overscan area [x1:x2,y1:y2] (binned)&#39;</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="s1">&#39;Image area [x1:x2,y1:y2] (binned)&#39;</span>
+
+        <span class="c1"># rectangle empty?</span>
+        <span class="k">if</span> <span class="n">is_right</span> <span class="o">&lt;=</span> <span class="n">is_left</span> <span class="ow">or</span> <span class="n">is_bottom</span> <span class="o">&lt;=</span> <span class="n">is_top</span><span class="p">:</span>
+            <span class="c1"># easy case, all is BIASSEC, no TRIMSEC at all</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;BIASSEC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;[1:</span><span class="si">%d</span><span class="s1">,1:</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS1&#39;</span><span class="p">],</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS2&#39;</span><span class="p">]),</span> <span class="n">c1</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># we got a TRIMSEC, calculate its binned and windowd coordinates</span>
+        <span class="n">is_left_binned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">is_left</span> <span class="o">-</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XBINNING&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">is_right_binned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">is_right</span> <span class="o">-</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XBINNING&#39;</span><span class="p">])</span>
+        <span class="n">is_top_binned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">is_top</span> <span class="o">-</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">is_bottom_binned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">is_bottom</span> <span class="o">-</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">])</span>
+
+        <span class="c1"># set it</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;TRIMSEC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;[</span><span class="si">%d</span><span class="s1">:</span><span class="si">%d</span><span class="s1">,</span><span class="si">%d</span><span class="s1">:</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">is_left_binned</span><span class="p">,</span> <span class="n">is_right_binned</span><span class="p">,</span> <span class="n">is_top_binned</span><span class="p">,</span> <span class="n">is_bottom_binned</span><span class="p">),</span> <span class="n">c2</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;DATASEC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;[</span><span class="si">%d</span><span class="s1">:</span><span class="si">%d</span><span class="s1">,</span><span class="si">%d</span><span class="s1">:</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">is_left_binned</span><span class="p">,</span> <span class="n">is_right_binned</span><span class="p">,</span> <span class="n">is_top_binned</span><span class="p">,</span> <span class="n">is_bottom_binned</span><span class="p">),</span> <span class="n">c2</span><span class="p">)</span>
+
+        <span class="c1"># now get BIASSEC -- whatever we do, we only take the last (!) one</span>
+        <span class="c1"># which axis?</span>
+        <span class="k">if</span> <span class="n">img_left</span><span class="o">+</span><span class="n">img_width</span> <span class="o">&gt;</span> <span class="n">left</span><span class="o">+</span><span class="n">width</span><span class="p">:</span>
+            <span class="n">left_binned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">is_right</span> <span class="o">-</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XBINNING&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;BIASSEC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;[</span><span class="si">%d</span><span class="s1">:</span><span class="si">%d</span><span class="s1">,1:</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">left_binned</span><span class="p">,</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS1&#39;</span><span class="p">],</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS2&#39;</span><span class="p">]),</span> <span class="n">c1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">img_left</span> <span class="o">&lt;</span> <span class="n">left</span><span class="p">:</span>
+            <span class="n">right_binned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">is_left</span> <span class="o">-</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;XBINNING&#39;</span><span class="p">])</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;BIASSEC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;[1:</span><span class="si">%d</span><span class="s1">,1:</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">right_binned</span><span class="p">,</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS2&#39;</span><span class="p">]),</span> <span class="n">c1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">img_top</span><span class="o">+</span><span class="n">img_height</span> <span class="o">&gt;</span> <span class="n">top</span><span class="o">+</span><span class="n">height</span><span class="p">:</span>
+            <span class="n">top_binned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">is_bottom</span> <span class="o">-</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;BIASSEC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;[1:</span><span class="si">%d</span><span class="s1">,</span><span class="si">%d</span><span class="s1">:</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS1&#39;</span><span class="p">],</span> <span class="n">top_binned</span><span class="p">,</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS2&#39;</span><span class="p">]),</span> <span class="n">c1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">img_top</span> <span class="o">&lt;</span> <span class="n">top</span><span class="p">:</span>
+            <span class="n">bottom_binned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">is_top</span> <span class="o">-</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">])</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;BIASSEC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;[1:</span><span class="si">%d</span><span class="s1">,1:</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS1&#39;</span><span class="p">],</span> <span class="n">bottom_binned</span><span class="p">),</span> <span class="n">c1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCamera.list_binnings"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.list_binnings">[docs]</a>    <span class="k">def</span> <span class="nf">list_binnings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;List available binnings.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of available binnings as (x, y) tuples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;The default implementation for list_binnings() in BaseCamera will be removed in future versions&#39;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BaseCamera&#39;</span><span class="p">,</span> <span class="s1">&#39;CameraException&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>5.8. Events &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. Modules" href="../modules/index.html" />
+    <link rel="prev" title="5.7. Interfaces" href="interfaces.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="application.html">5.1. Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comm.html">5.2. Comm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">5.3. Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module.html">5.4. Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object.html">5.5. Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vfs.html">5.6. Virtual File System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces.html">5.7. Interfaces</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.8. Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#badweatherevent">5.8.1. BadWeatherEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exposurestatuschangedevent">5.8.2. ExposureStatusChangedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filterchangedevent">5.8.3. FilterChangedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#focusfoundevent">5.8.4. FocusFoundEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#goodweatherevent">5.8.5. GoodWeatherEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initializedevent">5.8.6. InitializedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logevent">5.8.7. LogEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#moduleclosedevent">5.8.8. ModuleClosedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#moduleopenedevent">5.8.9. ModuleOpenedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#motionstatuschangedevent">5.8.10. MotionStatusChangedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#newimageevent">5.8.11. NewImageEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#roofclosingevent">5.8.12. RoofClosingEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#roofopenedevent">5.8.13. RoofOpenedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#taskfinishedevent">5.8.14. TaskFinishedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#taskstartedevent">5.8.15. TaskStartedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#telescopemovingevent">5.8.16. TelescopeMovingEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testevent">5.8.17. TestEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variablechangedevent">5.8.18. VariableChangedEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variablesupdateevent">5.8.19. VariablesUpdateEvent</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">5. </span>API</a> &raquo;</li>
+        
+      <li><span class="section-number">5.8. </span>Events</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/events.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="events">
+<h1><span class="section-number">5.8. </span>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pyobs.events.Event">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">Event</span></code><a class="reference internal" href="../_modules/pyobs/events/event.html#Event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.Event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="section" id="badweatherevent">
+<h2><span class="section-number">5.8.1. </span>BadWeatherEvent<a class="headerlink" href="#badweatherevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.BadWeatherEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">BadWeatherEvent</span></code><a class="reference internal" href="../_modules/pyobs/events/badweather.html#BadWeatherEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.BadWeatherEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="exposurestatuschangedevent">
+<h2><span class="section-number">5.8.2. </span>ExposureStatusChangedEvent<a class="headerlink" href="#exposurestatuschangedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.ExposureStatusChangedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">ExposureStatusChangedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyobs.interfaces.ICamera.ICamera.ExposureStatus</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyobs.interfaces.ICamera.ICamera.ExposureStatus</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/exposurestatuschanged.html#ExposureStatusChangedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.ExposureStatusChangedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="filterchangedevent">
+<h2><span class="section-number">5.8.3. </span>FilterChangedEvent<a class="headerlink" href="#filterchangedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.FilterChangedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">FilterChangedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/filterchanged.html#FilterChangedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.FilterChangedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="focusfoundevent">
+<h2><span class="section-number">5.8.4. </span>FocusFoundEvent<a class="headerlink" href="#focusfoundevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.FocusFoundEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">FocusFoundEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">focus</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/focusfound.html#FocusFoundEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.FocusFoundEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to be sent when a new best focus has been found, e.g. after a focus series.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="goodweatherevent">
+<h2><span class="section-number">5.8.5. </span>GoodWeatherEvent<a class="headerlink" href="#goodweatherevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.GoodWeatherEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">GoodWeatherEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyobs.utils.time.Time</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/goodweather.html#GoodWeatherEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.GoodWeatherEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="initializedevent">
+<h2><span class="section-number">5.8.6. </span>InitializedEvent<a class="headerlink" href="#initializedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.InitializedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">InitializedEvent</span></code><a class="reference internal" href="../_modules/pyobs/events/initialized.html#InitializedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.InitializedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="logevent">
+<h2><span class="section-number">5.8.7. </span>LogEvent<a class="headerlink" href="#logevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.LogEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">LogEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/log.html#LogEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.LogEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="moduleclosedevent">
+<h2><span class="section-number">5.8.8. </span>ModuleClosedEvent<a class="headerlink" href="#moduleclosedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.ModuleClosedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">ModuleClosedEvent</span></code><a class="reference internal" href="../_modules/pyobs/events/moduleclosed.html#ModuleClosedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.ModuleClosedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="moduleopenedevent">
+<h2><span class="section-number">5.8.9. </span>ModuleOpenedEvent<a class="headerlink" href="#moduleopenedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.ModuleOpenedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">ModuleOpenedEvent</span></code><a class="reference internal" href="../_modules/pyobs/events/moduleopened.html#ModuleOpenedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.ModuleOpenedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="motionstatuschangedevent">
+<h2><span class="section-number">5.8.10. </span>MotionStatusChangedEvent<a class="headerlink" href="#motionstatuschangedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.MotionStatusChangedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">MotionStatusChangedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyobs.interfaces.IMotion.IMotion.Status</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interfaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pyobs.interfaces.IMotion.IMotion.Status</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/motionstatuschanged.html#MotionStatusChangedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.MotionStatusChangedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="newimageevent">
+<h2><span class="section-number">5.8.11. </span>NewImageEvent<a class="headerlink" href="#newimageevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.NewImageEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">NewImageEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyobs.utils.enums.ImageType</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/newimage.html#NewImageEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.NewImageEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="roofclosingevent">
+<h2><span class="section-number">5.8.12. </span>RoofClosingEvent<a class="headerlink" href="#roofclosingevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.RoofClosingEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">RoofClosingEvent</span></code><a class="reference internal" href="../_modules/pyobs/events/roofclosing.html#RoofClosingEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.RoofClosingEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="roofopenedevent">
+<h2><span class="section-number">5.8.13. </span>RoofOpenedEvent<a class="headerlink" href="#roofopenedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.RoofOpenedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">RoofOpenedEvent</span></code><a class="reference internal" href="../_modules/pyobs/events/roofopened.html#RoofOpenedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.RoofOpenedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="taskfinishedevent">
+<h2><span class="section-number">5.8.14. </span>TaskFinishedEvent<a class="headerlink" href="#taskfinishedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.TaskFinishedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">TaskFinishedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/taskfinished.html#TaskFinishedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.TaskFinishedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="taskstartedevent">
+<h2><span class="section-number">5.8.15. </span>TaskStartedEvent<a class="headerlink" href="#taskstartedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.TaskStartedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">TaskStartedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyobs.utils.time.Time</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/taskstarted.html#TaskStartedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.TaskStartedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="telescopemovingevent">
+<h2><span class="section-number">5.8.16. </span>TelescopeMovingEvent<a class="headerlink" href="#telescopemovingevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.TelescopeMovingEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">TelescopeMovingEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">az</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/telescopemoving.html#TelescopeMovingEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.TelescopeMovingEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="testevent">
+<h2><span class="section-number">5.8.17. </span>TestEvent<a class="headerlink" href="#testevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.TestEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">TestEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/testevent.html#TestEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.TestEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="variablechangedevent">
+<h2><span class="section-number">5.8.18. </span>VariableChangedEvent<a class="headerlink" href="#variablechangedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.VariableChangedEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">VariableChangedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/variablechanged.html#VariableChangedEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.VariableChangedEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="variablesupdateevent">
+<h2><span class="section-number">5.8.19. </span>VariablesUpdateEvent<a class="headerlink" href="#variablesupdateevent" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.VariablesUpdateEvent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.events.</span></code><code class="sig-name descname"><span class="pre">VariablesUpdateEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/variablesupdate.html#VariablesUpdateEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.VariablesUpdateEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../modules/index.html" class="btn btn-neutral float-right" title="6. Modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="interfaces.html" class="btn btn-neutral float-left" title="5.7. Interfaces" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

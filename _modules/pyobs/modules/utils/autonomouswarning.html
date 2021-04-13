@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.utils.autonomouswarning &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.utils.autonomouswarning</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.utils.autonomouswarning</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">Event</span>
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IAutonomous</span>
+<span class="kn">from</span> <span class="nn">pyobs.object</span> <span class="kn">import</span> <span class="n">get_class_from_string</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AutonomousWarning"><a class="viewcode-back" href="../../../../modules/pyobs/utils/autonomouswarning.html#pyobs.modules.utils.AutonomousWarning">[docs]</a><span class="k">class</span> <span class="nc">AutonomousWarning</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A module that can plays a warning sound while an IAutonomous module is running.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AutonomousWarning.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/utils/autonomouswarning.html#pyobs.modules.utils.AutonomousWarning.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">warn_sound</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">warn_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">start_sound</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">started_sound</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">stop_sound</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">stopped_sound</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">player</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mpg123&#39;</span><span class="p">,</span> <span class="n">trigger_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new warning.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            warn_sound: Name of file to play.</span>
+<span class="sd">            warn_interval: Interval in seconds between sounds.</span>
+<span class="sd">            start_sound: Sound to play when starting systems.</span>
+<span class="sd">            started_sound: Sound to play when systems started.</span>
+<span class="sd">            stop_sound: Sound to play when stopping systems.</span>
+<span class="sd">            stopped_sound: Sound to play when systems stopped.</span>
+<span class="sd">            trigger_file: File, which triggers to switch on-off and vice versa, when created.</span>
+<span class="sd">                Will be deleted afterwards.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_warn_sound</span> <span class="o">=</span> <span class="n">warn_sound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_warn_interval</span> <span class="o">=</span> <span class="n">warn_interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_sound</span> <span class="o">=</span> <span class="n">start_sound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_started_sound</span> <span class="o">=</span> <span class="n">started_sound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop_sound</span> <span class="o">=</span> <span class="n">stop_sound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stopped_sound</span> <span class="o">=</span> <span class="n">stopped_sound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_file</span> <span class="o">=</span> <span class="n">trigger_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_player</span> <span class="o">=</span> <span class="n">player</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_autonomous</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># threads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heartbeat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_check_autonomous</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_check_trigger</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_play_sound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sound</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Play a sound.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sound: Sound file to play.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># no sound given?</span>
+        <span class="k">if</span> <span class="n">sound</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># play sound and set stderr to devnull to avoid warning</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="p">,</span> <span class="s1">&#39;-q&#39;</span><span class="p">,</span> <span class="n">sound</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_heartbeat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Play sound in given interval, if an autonomous module is running.&quot;&quot;&quot;</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># play sound</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autonomous</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_play_sound</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_warn_sound</span><span class="p">)</span>
+
+            <span class="c1"># sleep</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_warn_interval</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_autonomous</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks for autonomous modules.&quot;&quot;&quot;</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># check for autonomous modules</span>
+            <span class="n">autonomous</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">clients_with_interface</span><span class="p">(</span><span class="n">IAutonomous</span><span class="p">))</span>
+            <span class="n">is_auto</span> <span class="o">=</span> <span class="nb">any</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">.</span><span class="n">is_running</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">autonomous</span><span class="p">])</span>
+
+            <span class="c1"># did it change?</span>
+            <span class="k">if</span> <span class="n">is_auto</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autonomous</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Robotic systems </span><span class="si">%s</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="s1">&#39;started&#39;</span> <span class="k">if</span> <span class="n">is_auto</span> <span class="k">else</span> <span class="s1">&#39;stopped&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_play_sound</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_started_sound</span> <span class="k">if</span> <span class="n">is_auto</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stopped_sound</span><span class="p">)</span>
+
+            <span class="c1"># store it</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_autonomous</span> <span class="o">=</span> <span class="n">is_auto</span>
+
+            <span class="c1"># sleep a little</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks for trigger to start/stop autonomous modules.&quot;&quot;&quot;</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># does file exist?</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_trigger_file</span><span class="p">):</span>
+                <span class="c1"># check for autonomous modules</span>
+                <span class="n">autonomous</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">clients_with_interface</span><span class="p">(</span><span class="n">IAutonomous</span><span class="p">))</span>
+                <span class="n">is_auto</span> <span class="o">=</span> <span class="nb">any</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">.</span><span class="n">is_running</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">autonomous</span><span class="p">])</span>
+
+                <span class="c1"># play sound</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_play_sound</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_stop_sound</span> <span class="k">if</span> <span class="n">is_auto</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_sound</span><span class="p">)</span>
+
+                <span class="c1"># loop all modules</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> robotic systems:&#39;</span><span class="p">,</span> <span class="s1">&#39;Stopping&#39;</span> <span class="k">if</span> <span class="n">is_auto</span> <span class="k">else</span> <span class="s1">&#39;Starting&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">auto</span> <span class="ow">in</span> <span class="n">autonomous</span><span class="p">:</span>
+                    <span class="c1"># get proxy</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;  - </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">auto</span><span class="p">)</span>
+                    <span class="n">proxy</span><span class="p">:</span> <span class="n">IAutonomous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">[</span><span class="n">auto</span><span class="p">]</span>
+
+                    <span class="c1"># start/stop</span>
+                    <span class="k">if</span> <span class="n">is_auto</span><span class="p">:</span>
+                        <span class="n">proxy</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">proxy</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished.&#39;</span><span class="p">)</span>
+
+                <span class="c1"># remove file</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_trigger_file</span><span class="p">)</span>
+
+            <span class="c1"># sleep a little</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AutonomousWarning&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

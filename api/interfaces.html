@@ -1,0 +1,1518 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>5.7. Interfaces &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.8. Events" href="events.html" />
+    <link rel="prev" title="5.6. Virtual File System" href="vfs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="application.html">5.1. Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comm.html">5.2. Comm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">5.3. Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module.html">5.4. Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object.html">5.5. Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vfs.html">5.6. Virtual File System</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.7. Interfaces</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#iabortable">5.7.1. IAbortable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iacquisition">5.7.2. IAcquisition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ialtaz">5.7.3. IAltAz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ialtazoffsets">5.7.4. IAltAzOffsets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iautofocus">5.7.5. IAutoFocus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iautoguiding">5.7.6. IAutoGuiding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iautonomous">5.7.7. IAutonomous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#icalibrate">5.7.8. ICalibrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#icamera">5.7.9. ICamera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#icamerabinning">5.7.10. ICameraBinning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#icameraexposuretime">5.7.11. ICameraExposureTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#icamerawindow">5.7.12. ICameraWindow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iconfig">5.7.13. IConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#icooling">5.7.14. ICooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#icoordinatesquery">5.7.15. ICoordinatesQuery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#idome">5.7.16. IDome</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ifilters">5.7.17. IFilters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ifitsheaderprovider">5.7.18. IFitsHeaderProvider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iflatfield">5.7.19. IFlatField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ifocusmodel">5.7.20. IFocusModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ifocuser">5.7.21. IFocuser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iimageformat">5.7.22. IImageFormat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iimagetype">5.7.23. IImageType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ilatlon">5.7.24. ILatLon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imodule">5.7.25. IModule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imotion">5.7.26. IMotion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ipipeline">5.7.27. IPipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iradec">5.7.28. IRaDec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iradecoffsets">5.7.29. IRaDecOffsets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iready">5.7.30. IReady</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iroof">5.7.31. IRoof</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#irotation">5.7.32. IRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#irunnable">5.7.33. IRunnable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iscriptrunner">5.7.34. IScriptRunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#istoppable">5.7.35. IStoppable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#isynctarget">5.7.36. ISyncTarget</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#itelescope">5.7.37. ITelescope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#itemperatures">5.7.38. ITemperatures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iweather">5.7.39. IWeather</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">5.8. Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">5. </span>API</a> &raquo;</li>
+        
+      <li><span class="section-number">5.7. </span>Interfaces</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/interfaces.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="interfaces">
+<h1><span class="section-number">5.7. </span>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pyobs.interfaces.Interface">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">Interface</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/interface.html#Interface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.Interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all interfaces in pyobs.</p>
+</dd></dl>
+
+<div class="section" id="iabortable">
+<h2><span class="section-number">5.7.1. </span>IAbortable<a class="headerlink" href="#iabortable" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IAbortable">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAbortable</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAbortable.html#IAbortable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAbortable" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IAbortable.abort">
+<code class="sig-name descname"><span class="pre">abort</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IAbortable.html#IAbortable.abort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAbortable.abort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abort current actions.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iacquisition">
+<h2><span class="section-number">5.7.2. </span>IAcquisition<a class="headerlink" href="#iacquisition" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IAcquisition">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAcquisition</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAcquisition.html#IAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAcquisition" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IAcquisition.acquire_target">
+<code class="sig-name descname"><span class="pre">acquire_target</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exposure_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/interfaces/IAcquisition.html#IAcquisition.acquire_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAcquisition.acquire_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire target at given coordinates.</p>
+<p>If no RA/Dec are given, start from current position. Might not work for some implementations that require
+coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>exposure_time</strong> – Exposure time for acquisition in seconds.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary with entries for datetime, ra, dec, alt, az, and either off_ra, off_dec or off_alt, off_az.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError if target could not be acquired.</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ialtaz">
+<h2><span class="section-number">5.7.3. </span>IAltAz<a class="headerlink" href="#ialtaz" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IAltAz">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAltAz</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAz.html#IAltAz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base interface for everything that can move to Alt/Az coordinates.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.IAltAz.get_altaz">
+<code class="sig-name descname"><span class="pre">get_altaz</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAz.html#IAltAz.get_altaz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAz.get_altaz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current Alt and Az.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple of current Alt and Az in degrees.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IAltAz.move_altaz">
+<code class="sig-name descname"><span class="pre">move_altaz</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">az</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAz.html#IAltAz.move_altaz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAz.move_altaz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves to given coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alt</strong> – Alt in deg to move to.</p></li>
+<li><p><strong>az</strong> – Az in deg to move to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If device could not move.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ialtazoffsets">
+<h2><span class="section-number">5.7.4. </span>IAltAzOffsets<a class="headerlink" href="#ialtazoffsets" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IAltAzOffsets">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAltAzOffsets</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAzOffsets.html#IAltAzOffsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAzOffsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Telescopes on an altaz mount should also implement this interface.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.IAltAzOffsets.get_altaz_offsets">
+<code class="sig-name descname"><span class="pre">get_altaz_offsets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAzOffsets.html#IAltAzOffsets.get_altaz_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAzOffsets.get_altaz_offsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Alt/Az offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple with alt and az offsets.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IAltAzOffsets.set_altaz_offsets">
+<code class="sig-name descname"><span class="pre">set_altaz_offsets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dalt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daz</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAzOffsets.html#IAltAzOffsets.set_altaz_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAzOffsets.set_altaz_offsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move an Alt/Az offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dalt</strong> – Altitude offset in degrees.</p></li>
+<li><p><strong>daz</strong> – Azimuth offset in degrees.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If offset could not be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iautofocus">
+<h2><span class="section-number">5.7.5. </span>IAutoFocus<a class="headerlink" href="#iautofocus" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IAutoFocus">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAutoFocus</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAutoFocus.html#IAutoFocus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutoFocus" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IAutoFocus.auto_focus">
+<code class="sig-name descname"><span class="pre">auto_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exposure_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IAutoFocus.html#IAutoFocus.auto_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutoFocus.auto_focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an auto-focus series.</p>
+<p>This method performs an auto-focus series with “count” images on each side of the initial guess and the given
+step size. With count=3, step=1 and guess=10, this takes images at the following focus values:</p>
+<blockquote>
+<div><p>7, 8, 9, 10, 11, 12, 13</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>count</strong> – Number of images to take on each side of the initial guess. Should be an odd number.</p></li>
+<li><p><strong>step</strong> – Step size.</p></li>
+<li><p><strong>exposure_time</strong> – Exposure time for images.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of obtained best focus value and its uncertainty.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If focus could not be obtained.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IAutoFocus.auto_focus_status">
+<code class="sig-name descname"><span class="pre">auto_focus_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/interfaces/IAutoFocus.html#IAutoFocus.auto_focus_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutoFocus.auto_focus_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current status of auto focus.</p>
+<p>Returned dictionary contains a list of focus/fwhm pairs in X and Y direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with current status.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iautoguiding">
+<h2><span class="section-number">5.7.6. </span>IAutoGuiding<a class="headerlink" href="#iautoguiding" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IAutoGuiding">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAutoGuiding</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAutoGuiding.html#IAutoGuiding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutoGuiding" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IAutoGuiding.set_exposure_time">
+<code class="sig-name descname"><span class="pre">set_exposure_time</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exposure_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IAutoGuiding.html#IAutoGuiding.set_exposure_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutoGuiding.set_exposure_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the exposure time for the auto-guider.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>exposure_time</strong> – Exposure time in secs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iautonomous">
+<h2><span class="section-number">5.7.7. </span>IAutonomous<a class="headerlink" href="#iautonomous" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IAutonomous">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAutonomous</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAutonomous.html#IAutonomous"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutonomous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all modules that act autonomously.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="icalibrate">
+<h2><span class="section-number">5.7.8. </span>ICalibrate<a class="headerlink" href="#icalibrate" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ICalibrate">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICalibrate</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICalibrate.html#ICalibrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICalibrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for devices that can be calibrated.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.ICalibrate.calibrate">
+<code class="sig-name descname"><span class="pre">calibrate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICalibrate.html#ICalibrate.calibrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICalibrate.calibrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calibrate the device.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="icamera">
+<h2><span class="section-number">5.7.9. </span>ICamera<a class="headerlink" href="#icamera" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ICamera">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICamera</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICamera.html#ICamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic interface for all cameras.</p>
+<dl class="py class">
+<dt id="pyobs.interfaces.ICamera.ExposureStatus">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ExposureStatus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICamera.html#ICamera.ExposureStatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICamera.ExposureStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enumerator for camera status.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICamera.abort">
+<code class="sig-name descname"><span class="pre">abort</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICamera.html#ICamera.abort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICamera.abort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aborts the current exposure and sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If exposure could not be aborted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICamera.expose">
+<code class="sig-name descname"><span class="pre">expose</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">broadcast</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICamera.html#ICamera.expose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICamera.expose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts exposure and returns reference to image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>broadcast</strong> – Broadcast existence of image.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Name of image that was taken.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICamera.get_exposure_progress">
+<code class="sig-name descname"><span class="pre">get_exposure_progress</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICamera.html#ICamera.get_exposure_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICamera.get_exposure_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the progress of the current exposure in percent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Progress of the current exposure in percent.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICamera.get_exposure_status">
+<code class="sig-name descname"><span class="pre">get_exposure_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyobs.interfaces.ICamera.ICamera.ExposureStatus</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICamera.html#ICamera.get_exposure_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICamera.get_exposure_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current status of the camera, which is one of ‘idle’, ‘exposing’, or ‘readout’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Current status of camera.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="icamerabinning">
+<h2><span class="section-number">5.7.10. </span>ICameraBinning<a class="headerlink" href="#icamerabinning" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ICameraBinning">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICameraBinning</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraBinning.html#ICameraBinning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraBinning" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.ICameraBinning.get_binning">
+<code class="sig-name descname"><span class="pre">get_binning</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraBinning.html#ICameraBinning.get_binning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraBinning.get_binning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the camera binning.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple with x and y.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICameraBinning.list_binnings">
+<code class="sig-name descname"><span class="pre">list_binnings</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraBinning.html#ICameraBinning.list_binnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraBinning.list_binnings" title="Permalink to this definition">¶</a></dt>
+<dd><p>List available binnings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of available binnings as (x, y) tuples.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICameraBinning.set_binning">
+<code class="sig-name descname"><span class="pre">set_binning</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraBinning.html#ICameraBinning.set_binning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraBinning.set_binning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the camera binning.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – X binning.</p></li>
+<li><p><strong>y</strong> – Y binning.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If binning could not be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="icameraexposuretime">
+<h2><span class="section-number">5.7.11. </span>ICameraExposureTime<a class="headerlink" href="#icameraexposuretime" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ICameraExposureTime">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICameraExposureTime</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraExposureTime.html#ICameraExposureTime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraExposureTime" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.ICameraExposureTime.get_exposure_time">
+<code class="sig-name descname"><span class="pre">get_exposure_time</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraExposureTime.html#ICameraExposureTime.get_exposure_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraExposureTime.get_exposure_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the exposure time in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Exposure time in seconds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICameraExposureTime.get_exposure_time_left">
+<code class="sig-name descname"><span class="pre">get_exposure_time_left</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraExposureTime.html#ICameraExposureTime.get_exposure_time_left"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraExposureTime.get_exposure_time_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the remaining exposure time on the current exposure in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Remaining exposure time in seconds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICameraExposureTime.set_exposure_time">
+<code class="sig-name descname"><span class="pre">set_exposure_time</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exposure_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraExposureTime.html#ICameraExposureTime.set_exposure_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraExposureTime.set_exposure_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the exposure time in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>exposure_time</strong> – Exposure time in seconds.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If exposure time could not be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="icamerawindow">
+<h2><span class="section-number">5.7.12. </span>ICameraWindow<a class="headerlink" href="#icamerawindow" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ICameraWindow">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICameraWindow</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraWindow.html#ICameraWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraWindow" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.ICameraWindow.get_full_frame">
+<code class="sig-name descname"><span class="pre">get_full_frame</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraWindow.html#ICameraWindow.get_full_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraWindow.get_full_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns full size of CCD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple with left, top, width, and height set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICameraWindow.get_window">
+<code class="sig-name descname"><span class="pre">get_window</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraWindow.html#ICameraWindow.get_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraWindow.get_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the camera window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple with left, top, width, and height set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICameraWindow.set_window">
+<code class="sig-name descname"><span class="pre">set_window</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraWindow.html#ICameraWindow.set_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraWindow.set_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the camera window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> – X offset of window.</p></li>
+<li><p><strong>top</strong> – Y offset of window.</p></li>
+<li><p><strong>width</strong> – Width of window.</p></li>
+<li><p><strong>height</strong> – Height of window.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If window could not be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iconfig">
+<h2><span class="section-number">5.7.13. </span>IConfig<a class="headerlink" href="#iconfig" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IConfig">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IConfig</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IConfig.html#IConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for getting/setting values that were configured in the YAML file.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.IConfig.get_config_options">
+<code class="sig-name descname"><span class="pre">get_config_options</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IConfig.html#IConfig.get_config_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IConfig.get_config_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dict of all config options. First value is whether it has a getter, second is for the setter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict with config options</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IConfig.get_config_value">
+<code class="sig-name descname"><span class="pre">get_config_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Any</span><a class="reference internal" href="../_modules/pyobs/interfaces/IConfig.html#IConfig.get_config_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IConfig.get_config_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current value of config item with given name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – Name of config item.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Current value.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError if config item of given name does not exist.</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IConfig.set_config_value">
+<code class="sig-name descname"><span class="pre">set_config_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IConfig.html#IConfig.set_config_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IConfig.set_config_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets value of config item with given name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of config item.</p></li>
+<li><p><strong>value</strong> – New value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError if config item of given name does not exist</strong><strong> or </strong><strong>value is invalid.</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="icooling">
+<h2><span class="section-number">5.7.14. </span>ICooling<a class="headerlink" href="#icooling" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ICooling">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICooling</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICooling.html#ICooling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICooling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for all devices that allow for some kind of cooling.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.ICooling.get_cooling_status">
+<code class="sig-name descname"><span class="pre">get_cooling_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ICooling.html#ICooling.get_cooling_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICooling.get_cooling_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current status for the cooling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Enabled (bool):         Whether the cooling is enabled
+SetPoint (float):       Setpoint for the cooling in celsius.
+Power (float):          Current cooling power in percent or None.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tuple containing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ICooling.set_cooling">
+<code class="sig-name descname"><span class="pre">set_cooling</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICooling.html#ICooling.set_cooling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICooling.set_cooling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables/disables cooling and sets setpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>enabled</strong> – Enable or disable cooling.</p></li>
+<li><p><strong>setpoint</strong> – Setpoint in celsius for the cooling.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If cooling could not be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="icoordinatesquery">
+<h2><span class="section-number">5.7.15. </span>ICoordinatesQuery<a class="headerlink" href="#icoordinatesquery" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ICoordinatesQuery">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICoordinatesQuery</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICoordinatesQuery.html#ICoordinatesQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICoordinatesQuery" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.ICoordinatesQuery.query_coordinates_by_name">
+<code class="sig-name descname"><span class="pre">query_coordinates_by_name</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICoordinatesQuery.html#ICoordinatesQuery.query_coordinates_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICoordinatesQuery.query_coordinates_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries coordinates for an object with the given name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of object to query coordinates for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>name: Name of object</p></li>
+<li><p>ra: Right ascension [sexagesimal]</p></li>
+<li><p>ra_d: Right ascension [degrees]</p></li>
+<li><p>dec: Declination [sexagesimal]</p></li>
+<li><p>dec_d: Declination [degrees]</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(list) List of dictionaries with the following keys</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="idome">
+<h2><span class="section-number">5.7.16. </span>IDome<a class="headerlink" href="#idome" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IDome">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IDome</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IDome.html#IDome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IDome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base interface for all shelters with a rotating dome.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="ifilters">
+<h2><span class="section-number">5.7.17. </span>IFilters<a class="headerlink" href="#ifilters" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IFilters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFilters</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFilters.html#IFilters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFilters" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IFilters.get_filter">
+<code class="sig-name descname"><span class="pre">get_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFilters.html#IFilters.get_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFilters.get_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get currently set filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Name of currently set filter.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IFilters.list_filters">
+<code class="sig-name descname"><span class="pre">list_filters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IFilters.html#IFilters.list_filters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFilters.list_filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>List available filters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of available filters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IFilters.set_filter">
+<code class="sig-name descname"><span class="pre">set_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFilters.html#IFilters.set_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFilters.set_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the current filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filter_name</strong> – Name of filter to set.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If binning could not be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifitsheaderprovider">
+<h2><span class="section-number">5.7.18. </span>IFitsHeaderProvider<a class="headerlink" href="#ifitsheaderprovider" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IFitsHeaderProvider">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFitsHeaderProvider</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFitsHeaderProvider.html#IFitsHeaderProvider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFitsHeaderProvider" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IFitsHeaderProvider.get_fits_headers">
+<code class="sig-name descname"><span class="pre">get_fits_headers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IFitsHeaderProvider.html#IFitsHeaderProvider.get_fits_headers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFitsHeaderProvider.get_fits_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns FITS header for the current status of this module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>namespaces</strong> – If given, only return FITS headers for the given namespaces.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary containing FITS headers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iflatfield">
+<h2><span class="section-number">5.7.19. </span>IFlatField<a class="headerlink" href="#iflatfield" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IFlatField">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFlatField</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFlatField.html#IFlatField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFlatField" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IFlatField.flat_field">
+<code class="sig-name descname"><span class="pre">flat_field</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IFlatField.html#IFlatField.flat_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFlatField.flat_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do a series of flat fields in the given filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter_name</strong> – Name of filter</p></li>
+<li><p><strong>count</strong> – Number of images to take</p></li>
+<li><p><strong>binning</strong> – Binning to use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of images actually taken and total exposure time in ms</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IFlatField.flat_field_status">
+<code class="sig-name descname"><span class="pre">flat_field_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFlatField.html#IFlatField.flat_field_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFlatField.flat_field_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current status of auto focus.</p>
+<p>Returned dictionary contains a list of focus/fwhm pairs in X and Y direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with current status</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifocusmodel">
+<h2><span class="section-number">5.7.20. </span>IFocusModel<a class="headerlink" href="#ifocusmodel" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IFocusModel">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFocusModel</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFocusModel.html#IFocusModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocusModel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IFocusModel.get_optimal_focus">
+<code class="sig-name descname"><span class="pre">get_optimal_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFocusModel.html#IFocusModel.get_optimal_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocusModel.get_optimal_focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the optimal focus.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IFocusModel.set_optimal_focus">
+<code class="sig-name descname"><span class="pre">set_optimal_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFocusModel.html#IFocusModel.set_optimal_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocusModel.set_optimal_focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets optimal focus.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ifocuser">
+<h2><span class="section-number">5.7.21. </span>IFocuser<a class="headerlink" href="#ifocuser" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IFocuser">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFocuser</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFocuser.html#IFocuser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocuser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic focussing device with states corresponding to IMotionDevice.MotionState.</p>
+<dl class="simple">
+<dt>Other interfaces to be implemented:</dt><dd><p>(none)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyobs.interfaces.IFocuser.get_focus">
+<code class="sig-name descname"><span class="pre">get_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFocuser.html#IFocuser.get_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocuser.get_focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return current focus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Current focus.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IFocuser.get_focus_offset">
+<code class="sig-name descname"><span class="pre">get_focus_offset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFocuser.html#IFocuser.get_focus_offset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocuser.get_focus_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return current focus offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Current focus offset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IFocuser.set_focus">
+<code class="sig-name descname"><span class="pre">set_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">focus</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFocuser.html#IFocuser.set_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocuser.set_focus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets new focus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>focus</strong> – New focus value.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>InterruptedError</strong> – If focus was interrupted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IFocuser.set_focus_offset">
+<code class="sig-name descname"><span class="pre">set_focus_offset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFocuser.html#IFocuser.set_focus_offset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocuser.set_focus_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets focus offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>offset</strong> – New focus offset.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>InterruptedError</strong> – If focus was interrupted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iimageformat">
+<h2><span class="section-number">5.7.22. </span>IImageFormat<a class="headerlink" href="#iimageformat" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IImageFormat">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IImageFormat</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IImageFormat.html#IImageFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>For cameras supporting different image formats, e.g. INT16 or RGB24</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.IImageFormat.get_image_format">
+<code class="sig-name descname"><span class="pre">get_image_format</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyobs.utils.enums.ImageFormat</span><a class="reference internal" href="../_modules/pyobs/interfaces/IImageFormat.html#IImageFormat.get_image_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageFormat.get_image_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the camera image format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Current image format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IImageFormat.list_image_formats">
+<code class="sig-name descname"><span class="pre">list_image_formats</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IImageFormat.html#IImageFormat.list_image_formats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageFormat.list_image_formats" title="Permalink to this definition">¶</a></dt>
+<dd><p>List available image formats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of available image formats.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IImageFormat.set_image_format">
+<code class="sig-name descname"><span class="pre">set_image_format</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs.utils.enums.ImageFormat</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IImageFormat.html#IImageFormat.set_image_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageFormat.set_image_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the camera image format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>format</strong> – New image format.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If format could not be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iimagetype">
+<h2><span class="section-number">5.7.23. </span>IImageType<a class="headerlink" href="#iimagetype" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IImageType">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IImageType</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IImageType.html#IImageType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageType" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IImageType.get_image_type">
+<code class="sig-name descname"><span class="pre">get_image_type</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyobs.utils.enums.ImageType</span><a class="reference internal" href="../_modules/pyobs/interfaces/IImageType.html#IImageType.get_image_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageType.get_image_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current image type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Current image type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IImageType.set_image_type">
+<code class="sig-name descname"><span class="pre">set_image_type</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs.utils.enums.ImageType</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IImageType.html#IImageType.set_image_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageType.set_image_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the image type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>image_type</strong> – New image type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ilatlon">
+<h2><span class="section-number">5.7.24. </span>ILatLon<a class="headerlink" href="#ilatlon" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ILatLon">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ILatLon</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ILatLon.html#ILatLon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ILatLon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base interface for everything that can move to Lat/Lon coordinates.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.ILatLon.get_latlon">
+<code class="sig-name descname"><span class="pre">get_latlon</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ILatLon.html#ILatLon.get_latlon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ILatLon.get_latlon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current Latitude and Longitude.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple of current Latitude and Longitude in degrees.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.ILatLon.move_latlon">
+<code class="sig-name descname"><span class="pre">move_latlon</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ILatLon.html#ILatLon.move_latlon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ILatLon.move_latlon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves to given coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lat</strong> – Latitude in deg to move to.</p></li>
+<li><p><strong>lon</strong> – Longitude in deg to move to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If device could not move.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="imodule">
+<h2><span class="section-number">5.7.25. </span>IModule<a class="headerlink" href="#imodule" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IModule">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IModule</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IModule.html#IModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IModule" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IModule.label">
+<code class="sig-name descname"><span class="pre">label</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pyobs/interfaces/IModule.html#IModule.label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IModule.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns label of module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="imotion">
+<h2><span class="section-number">5.7.26. </span>IMotion<a class="headerlink" href="#imotion" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IMotion">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IMotion</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IMotion.html#IMotion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IMotion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic interface for all devices that move.</p>
+<p>There are no generic motion methods - these have to be defined in daughter
+interfaces.</p>
+<dl class="py class">
+<dt id="pyobs.interfaces.IMotion.Status">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IMotion.html#IMotion.Status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IMotion.Status" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Enumerator for moving device status:</dt><dd><ul class="simple">
+<li><p>PARKED means that the device needs to be initialized or positioned or
+moved (depending upon the device; some devices don’t need a formal
+initialization); presumedly, this is the safe “off” state.</p></li>
+<li><p>INITIALIZING means that the device is transitioning from a PARKED state
+to an active state but is not yet fully operable.</p></li>
+<li><p>unPARKED is either IDLE (operating but in no particular state) or
+POSITIONED (operating in a well-defined state)</p></li>
+<li><p>SLEWING means that the device is moving to some targeted state (e.g.
+to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
+<li><p>TRACKING means that the device is moving as commanded</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IMotion.get_motion_status">
+<code class="sig-name descname"><span class="pre">get_motion_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyobs.interfaces.IMotion.IMotion.Status</span><a class="reference internal" href="../_modules/pyobs/interfaces/IMotion.html#IMotion.get_motion_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IMotion.get_motion_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current motion status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device</strong> – Name of device to get status for, or None.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string from the Status enumerator.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IMotion.init">
+<code class="sig-name descname"><span class="pre">init</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IMotion.html#IMotion.init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IMotion.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If device could not be initialized.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IMotion.park">
+<code class="sig-name descname"><span class="pre">park</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IMotion.html#IMotion.park"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IMotion.park" title="Permalink to this definition">¶</a></dt>
+<dd><p>Park device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If device could not be parked.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IMotion.stop_motion">
+<code class="sig-name descname"><span class="pre">stop_motion</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IMotion.html#IMotion.stop_motion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IMotion.stop_motion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the motion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device</strong> – Name of device to stop, or None for all.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ipipeline">
+<h2><span class="section-number">5.7.27. </span>IPipeline<a class="headerlink" href="#ipipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IPipeline">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IPipeline</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IPipeline.html#IPipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IPipeline.reduce_range">
+<code class="sig-name descname"><span class="pre">reduce_range</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs.utils.time.Time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs.utils.time.Time</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IPipeline.html#IPipeline.reduce_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IPipeline.reduce_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduces all data within a given range of time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> – Start of time range.</p></li>
+<li><p><strong>end</strong> – End of time range.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iradec">
+<h2><span class="section-number">5.7.28. </span>IRaDec<a class="headerlink" href="#iradec" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IRaDec">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRaDec</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDec.html#IRaDec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base interface for everything that can move to RA/Dec coordinates.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.IRaDec.get_radec">
+<code class="sig-name descname"><span class="pre">get_radec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDec.html#IRaDec.get_radec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDec.get_radec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current RA and Dec.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple of current RA and Dec in degrees.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IRaDec.move_radec">
+<code class="sig-name descname"><span class="pre">move_radec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDec.html#IRaDec.move_radec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDec.move_radec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts tracking on given coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ra</strong> – RA in deg to track.</p></li>
+<li><p><strong>dec</strong> – Dec in deg to track.</p></li>
+<li><p><strong>track</strong> – Whether the device should start tracking on the given coordinates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If device could not track.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iradecoffsets">
+<h2><span class="section-number">5.7.29. </span>IRaDecOffsets<a class="headerlink" href="#iradecoffsets" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IRaDecOffsets">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRaDecOffsets</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDecOffsets.html#IRaDecOffsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDecOffsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for any device that supports offsets in RA/Dec.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.IRaDecOffsets.get_radec_offsets">
+<code class="sig-name descname"><span class="pre">get_radec_offsets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDecOffsets.html#IRaDecOffsets.get_radec_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDecOffsets.get_radec_offsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get RA/Dec offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple with RA and Dec offsets.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IRaDecOffsets.set_radec_offsets">
+<code class="sig-name descname"><span class="pre">set_radec_offsets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dra</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ddec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDecOffsets.html#IRaDecOffsets.set_radec_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDecOffsets.set_radec_offsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move an RA/Dec offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dra</strong> – RA offset in degrees.</p></li>
+<li><p><strong>ddec</strong> – Dec offset in degrees.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If offset could not be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iready">
+<h2><span class="section-number">5.7.30. </span>IReady<a class="headerlink" href="#iready" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IReady">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IReady</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IReady.html#IReady"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IReady" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for all devices that can be “not ready” for science and need to be initialized in some way.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.IReady.is_ready">
+<code class="sig-name descname"><span class="pre">is_ready</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/pyobs/interfaces/IReady.html#IReady.is_ready"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IReady.is_ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the device is “ready”, whatever that means for the specific device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Whether device is ready</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iroof">
+<h2><span class="section-number">5.7.31. </span>IRoof<a class="headerlink" href="#iroof" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IRoof">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRoof</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRoof.html#IRoof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRoof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base interface for all observatory enclosures.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="irotation">
+<h2><span class="section-number">5.7.32. </span>IRotation<a class="headerlink" href="#irotation" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IRotation">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRotation</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRotation.html#IRotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRotation" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IRotation.get_rotation">
+<code class="sig-name descname"><span class="pre">get_rotation</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/IRotation.html#IRotation.get_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRotation.get_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current rotation angle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IRotation.set_rotation">
+<code class="sig-name descname"><span class="pre">set_rotation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IRotation.html#IRotation.set_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRotation.set_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the rotation angle to the given value in degrees.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IRotation.track">
+<code class="sig-name descname"><span class="pre">track</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IRotation.html#IRotation.track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRotation.track" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tracks the position angle of a rotator for an alt-az telescope.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="irunnable">
+<h2><span class="section-number">5.7.33. </span>IRunnable<a class="headerlink" href="#irunnable" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IRunnable">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRunnable</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRunnable.html#IRunnable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRunnable" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IRunnable.run">
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IRunnable.html#IRunnable.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRunnable.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform module task</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iscriptrunner">
+<h2><span class="section-number">5.7.34. </span>IScriptRunner<a class="headerlink" href="#iscriptrunner" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IScriptRunner">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IScriptRunner</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IScriptRunner.html#IScriptRunner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IScriptRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for running a script.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.IScriptRunner.run_script">
+<code class="sig-name descname"><span class="pre">run_script</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IScriptRunner.html#IScriptRunner.run_script"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IScriptRunner.run_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the given script.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>script</strong> – Script to run.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="istoppable">
+<h2><span class="section-number">5.7.35. </span>IStoppable<a class="headerlink" href="#istoppable" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IStoppable">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IStoppable</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IStoppable.html#IStoppable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IStoppable" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="pyobs.interfaces.IStoppable.is_running">
+<code class="sig-name descname"><span class="pre">is_running</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/pyobs/interfaces/IStoppable.html#IStoppable.is_running"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IStoppable.is_running" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether a service is running.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IStoppable.start">
+<code class="sig-name descname"><span class="pre">start</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IStoppable.html#IStoppable.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IStoppable.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a service.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IStoppable.stop">
+<code class="sig-name descname"><span class="pre">stop</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IStoppable.html#IStoppable.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IStoppable.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops a service.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="isynctarget">
+<h2><span class="section-number">5.7.36. </span>ISyncTarget<a class="headerlink" href="#isynctarget" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ISyncTarget">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ISyncTarget</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ISyncTarget.html#ISyncTarget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ISyncTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for all devices that can be synchronized on a target.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.ISyncTarget.sync_target">
+<code class="sig-name descname"><span class="pre">sync_target</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ISyncTarget.html#ISyncTarget.sync_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ISyncTarget.sync_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Synchronize device on current target.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="itelescope">
+<h2><span class="section-number">5.7.37. </span>ITelescope<a class="headerlink" href="#itelescope" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ITelescope">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ITelescope</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ITelescope.html#ITelescope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ITelescope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic interface for an astronomical telescope.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="itemperatures">
+<h2><span class="section-number">5.7.38. </span>ITemperatures<a class="headerlink" href="#itemperatures" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.ITemperatures">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ITemperatures</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ITemperatures.html#ITemperatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ITemperatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for all devices that measure temperatures.</p>
+<dl class="py method">
+<dt id="pyobs.interfaces.ITemperatures.get_temperatures">
+<code class="sig-name descname"><span class="pre">get_temperatures</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/interfaces/ITemperatures.html#ITemperatures.get_temperatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ITemperatures.get_temperatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all temperatures measured by this module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict containing temperatures.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="iweather">
+<h2><span class="section-number">5.7.39. </span>IWeather<a class="headerlink" href="#iweather" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.interfaces.IWeather">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IWeather</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IWeather.html#IWeather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IWeather" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py class">
+<dt id="pyobs.interfaces.IWeather.Sensors">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Sensors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IWeather.html#IWeather.Sensors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IWeather.Sensors" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enumeration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IWeather.get_current_weather">
+<code class="sig-name descname"><span class="pre">get_current_weather</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/interfaces/IWeather.html#IWeather.get_current_weather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IWeather.get_current_weather" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current weather.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary containing entries for time, good, and sensor, with the latter being another dictionary
+with sensor information, which contain a value and a good flag.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IWeather.get_sensor_value">
+<code class="sig-name descname"><span class="pre">get_sensor_value</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">station</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs.interfaces.IWeather.IWeather.Sensors</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IWeather.html#IWeather.get_sensor_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IWeather.get_sensor_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return value for given sensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>station</strong> – Name of weather station to get value from.</p></li>
+<li><p><strong>sensor</strong> – Name of sensor to get value from.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of current value of given sensor or None and time of measurement or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IWeather.get_weather_status">
+<code class="sig-name descname"><span class="pre">get_weather_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/interfaces/IWeather.html#IWeather.get_weather_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IWeather.get_weather_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns status of object in form of a dictionary. See other interfaces for details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.interfaces.IWeather.is_weather_good">
+<code class="sig-name descname"><span class="pre">is_weather_good</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/pyobs/interfaces/IWeather.html#IWeather.is_weather_good"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IWeather.is_weather_good" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the weather is good to observe.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="events.html" class="btn btn-neutral float-right" title="5.8. Events" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="vfs.html" class="btn btn-neutral float-left" title="5.6. Virtual File System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+Interfaces
+==========
+
+.. autoclass:: pyobs.interfaces.Interface
+    :members:
+
+IAbortable
+----------
+
+.. autoclass:: pyobs.interfaces.IAbortable
+    :members:
+
+IAcquisition
+------------
+
+.. autoclass:: pyobs.interfaces.IAcquisition
+    :members:
+
+IAltAz
+------
+
+.. autoclass:: pyobs.interfaces.IAltAz
+    :members:
+
+IAltAzOffsets
+-------------
+
+.. autoclass:: pyobs.interfaces.IAltAzOffsets
+    :members:
+
+IAutoFocus
+----------
+
+.. autoclass:: pyobs.interfaces.IAutoFocus
+    :members:
+
+IAutoGuiding
+------------
+
+.. autoclass:: pyobs.interfaces.IAutoGuiding
+    :members:
+
+IAutonomous
+-----------
+
+.. autoclass:: pyobs.interfaces.IAutonomous
+    :members:
+
+ICalibrate
+----------
+
+.. autoclass:: pyobs.interfaces.ICalibrate
+    :members:
+
+ICamera
+-------
+
+.. autoclass:: pyobs.interfaces.ICamera
+    :members:
+
+ICameraBinning
+--------------
+
+.. autoclass:: pyobs.interfaces.ICameraBinning
+    :members:
+
+ICameraExposureTime
+-------------------
+
+.. autoclass:: pyobs.interfaces.ICameraExposureTime
+    :members:
+
+ICameraWindow
+-------------
+
+.. autoclass:: pyobs.interfaces.ICameraWindow
+    :members:
+
+IConfig
+-------
+
+.. autoclass:: pyobs.interfaces.IConfig
+    :members:
+
+ICooling
+--------
+
+.. autoclass:: pyobs.interfaces.ICooling
+    :members:
+
+ICoordinatesQuery
+-----------------
+
+.. autoclass:: pyobs.interfaces.ICoordinatesQuery
+    :members:
+
+IDome
+-----
+
+.. autoclass:: pyobs.interfaces.IDome
+    :members:
+
+IFilters
+--------
+
+.. autoclass:: pyobs.interfaces.IFilters
+    :members:
+
+IFitsHeaderProvider
+-------------------
+
+.. autoclass:: pyobs.interfaces.IFitsHeaderProvider
+    :members:
+
+IFlatField
+----------
+
+.. autoclass:: pyobs.interfaces.IFlatField
+    :members:
+
+IFocusModel
+-----------
+
+.. autoclass:: pyobs.interfaces.IFocusModel
+    :members:
+
+IFocuser
+--------
+
+.. autoclass:: pyobs.interfaces.IFocuser
+    :members:
+
+IImageFormat
+------------
+
+.. autoclass:: pyobs.interfaces.IImageFormat
+    :members:
+
+IImageType
+----------
+
+.. autoclass:: pyobs.interfaces.IImageType
+    :members:
+
+ILatLon
+-------
+
+.. autoclass:: pyobs.interfaces.ILatLon
+    :members:
+
+IModule
+-------
+
+.. autoclass:: pyobs.interfaces.IModule
+    :members:
+
+IMotion
+-------
+
+.. autoclass:: pyobs.interfaces.IMotion
+    :members:
+
+IPipeline
+---------
+
+.. autoclass:: pyobs.interfaces.IPipeline
+    :members:
+
+IRaDec
+------
+
+.. autoclass:: pyobs.interfaces.IRaDec
+    :members:
+
+IRaDecOffsets
+-------------
+
+.. autoclass:: pyobs.interfaces.IRaDecOffsets
+    :members:
+
+IReady
+------
+
+.. autoclass:: pyobs.interfaces.IReady
+    :members:
+
+IRoof
+-----
+
+.. autoclass:: pyobs.interfaces.IRoof
+    :members:
+
+IRotation
+---------
+
+.. autoclass:: pyobs.interfaces.IRotation
+    :members:
+
+IRunnable
+---------
+
+.. autoclass:: pyobs.interfaces.IRunnable
+    :members:
+
+IScriptRunner
+-------------
+
+.. autoclass:: pyobs.interfaces.IScriptRunner
+    :members:
+
+IStoppable
+----------
+
+.. autoclass:: pyobs.interfaces.IStoppable
+    :members:
+
+ISyncTarget
+-----------
+
+.. autoclass:: pyobs.interfaces.ISyncTarget
+    :members:
+
+ITelescope
+----------
+
+.. autoclass:: pyobs.interfaces.ITelescope
+    :members:
+
+ITemperatures
+-------------
+
+.. autoclass:: pyobs.interfaces.ITemperatures
+    :members:
+
+IWeather
+--------
+
+.. autoclass:: pyobs.interfaces.IWeather
+    :members:
+

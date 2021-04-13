@@ -1,0 +1,550 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.comm.comm &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.comm.comm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.comm.comm</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="kn">import</span> <span class="nn">pyobs.interfaces</span>
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">Event</span><span class="p">,</span> <span class="n">LogEvent</span><span class="p">,</span> <span class="n">ModuleOpenedEvent</span><span class="p">,</span> <span class="n">ModuleClosedEvent</span>
+<span class="kn">from</span> <span class="nn">.proxy</span> <span class="kn">import</span> <span class="n">Proxy</span>
+<span class="kn">from</span> <span class="nn">.sharedvariablecache</span> <span class="kn">import</span> <span class="n">SharedVariableCache</span>
+<span class="kn">from</span> <span class="nn">.commlogging</span> <span class="kn">import</span> <span class="n">CommLoggingHandler</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Comm"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm">[docs]</a><span class="k">class</span> <span class="nc">Comm</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all Comm modules in pyobs.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache_proxies</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a comm module.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Proxy</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_module</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_queue</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache_proxies</span> <span class="o">=</span> <span class="n">cache_proxies</span>
+
+        <span class="c1"># cache for shared variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">SharedVariableCache</span><span class="p">(</span><span class="n">comm</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># add handler to global logger</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">CommLoggingHandler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+
+        <span class="c1"># logging thread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_closing</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logging_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_logging</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module</span>
+
+    <span class="nd">@module</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
+        <span class="c1"># if we have a _set_module method, call it</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_set_module&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+
+        <span class="c1"># store module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_module</span> <span class="o">=</span> <span class="n">module</span>
+
+<div class="viewcode-block" id="Comm.open"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+
+        <span class="c1"># start logging thread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logging_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1"># open variables cache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+
+        <span class="c1"># some events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">ModuleClosedEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_disconnected</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Comm.close"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close module.&quot;&quot;&quot;</span>
+
+        <span class="c1"># close thread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_closing</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logging_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="c1"># close variables cache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_full_client_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns full name for given client.</span>
+
+<span class="sd">        Some Comm modules may use short names for their clients. This methods returns the full name</span>
+<span class="sd">        for a given short name.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: Short name to get full name for.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Full name for given client.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># this base class doesn&#39;t have short names</span>
+        <span class="k">return</span> <span class="n">name</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Proxy</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get a proxy to the given client.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client: Name of client.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Proxy class for given client.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># return module, if &quot;main&quot; is requested</span>
+        <span class="k">if</span> <span class="n">client</span> <span class="o">==</span> <span class="s1">&#39;main&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span>
+        <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># if client doesn&#39;t exist or we disabled caching, fetch a new proxy</span>
+        <span class="k">if</span> <span class="n">client</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache_proxies</span><span class="p">:</span>
+            <span class="c1"># get interfaces</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">interfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_interfaces</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="c1"># create new proxy</span>
+            <span class="n">proxy</span> <span class="o">=</span> <span class="n">Proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">interfaces</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span><span class="p">[</span><span class="n">client</span><span class="p">]</span> <span class="o">=</span> <span class="n">proxy</span>
+
+        <span class="c1"># return proxy</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span><span class="p">[</span><span class="n">client</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Comm.proxy"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.proxy">[docs]</a>    <span class="k">def</span> <span class="nf">proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_or_object</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">],</span> <span class="n">obj_type</span><span class="p">:</span> <span class="n">Type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns object directly if it is of given type. Otherwise get proxy of client with given name and check type.</span>
+
+<span class="sd">        If name_or_object is an object:</span>
+<span class="sd">            - If it is of type (or derived), return object.</span>
+<span class="sd">            - Otherwise raise exception.</span>
+<span class="sd">        If name_name_or_object is string:</span>
+<span class="sd">            - Create proxy from name and raise exception, if it doesn&#39;t exist.</span>
+<span class="sd">            - Check type and raise exception if wrong.</span>
+<span class="sd">            - Return object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name_or_object: Name of object or object itself.</span>
+<span class="sd">            obj_type: Expected class of object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Object or proxy to object.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If proxy does not exist or wrong type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">obj_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name_or_object</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">):</span>
+            <span class="c1"># return directly</span>
+            <span class="k">return</span> <span class="n">name_or_object</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name_or_object</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># get proxy</span>
+            <span class="n">proxy</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">name_or_object</span><span class="p">]</span>
+
+            <span class="c1"># check it</span>
+            <span class="k">if</span> <span class="n">proxy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not create proxy for given name &quot;</span><span class="si">%s</span><span class="s1">&quot;.&#39;</span> <span class="o">%</span> <span class="n">name_or_object</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">obj_type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">proxy</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Proxy obtained from given name &quot;</span><span class="si">%s</span><span class="s1">&quot; is not of requested type &quot;</span><span class="si">%s</span><span class="s1">&quot;.&#39;</span> <span class="o">%</span>
+                                 <span class="p">(</span><span class="n">name_or_object</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># completely wrong...</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Given parameter is neither a name nor an object of requested type &quot;</span><span class="si">%s</span><span class="s1">&quot;.&#39;</span> <span class="o">%</span> <span class="n">obj_type</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_client_disconnected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">ModuleClosedEvent</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when a client disconnects.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: Disconnect event.</span>
+<span class="sd">            sender: Name of client that disconnected.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># if a client disconnects, we remove its proxy</span>
+        <span class="k">if</span> <span class="n">sender</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span><span class="p">[</span><span class="n">sender</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Name of this client.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">clients</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns list of currently connected clients.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (list) List of currently connected clients.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="Comm.clients_with_interface"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.clients_with_interface">[docs]</a>    <span class="k">def</span> <span class="nf">clients_with_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns list of currently connected clients that implement the given interface.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            interface: Interface to search for.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (list) List of currently connected clients that implement the given interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_supports_interface</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">interface</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Comm.get_interfaces"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.get_interfaces">[docs]</a>    <span class="k">def</span> <span class="nf">get_interfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns list of interfaces for given client.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client: Name of client.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of supported interfaces.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            IndexError, if client cannot be found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+    <span class="k">def</span> <span class="nf">_supports_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">interface</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Checks, whether the given client supports the given interface.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client: Client to check.</span>
+<span class="sd">            interface: Interface to check.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Whether or not interface is supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_interface_names_to_classes</span><span class="p">(</span><span class="n">interfaces</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Converts a list of interface names to interface classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            interfaces: List of interface names.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of interface classes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get interface classes</span>
+        <span class="n">inspection</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">pyobs</span><span class="o">.</span><span class="n">interfaces</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">)</span>
+
+        <span class="c1"># loop interfaces</span>
+        <span class="n">interface_classes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">interface_name</span> <span class="ow">in</span> <span class="n">interfaces</span><span class="p">:</span>
+            <span class="c1"># loop all classes</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">cls_name</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">inspection</span><span class="p">:</span>
+                <span class="c1"># class needs to face same name and implement Interface</span>
+                <span class="k">if</span> <span class="n">interface_name</span> <span class="o">==</span> <span class="n">cls_name</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">Interface</span><span class="p">):</span>
+                    <span class="c1"># found it!</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="c1"># then add it to the list of all interfaces</span>
+                    <span class="n">interface_classes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+                    <span class="c1"># there can only be one...</span>
+                    <span class="k">break</span>
+
+            <span class="c1"># not found?</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not find interface &quot;</span><span class="si">%s</span><span class="s1">&quot; for client.&#39;</span><span class="p">,</span> <span class="n">interface_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">interface_classes</span>
+
+<div class="viewcode-block" id="Comm.add_command_handler"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.add_command_handler">[docs]</a>    <span class="k">def</span> <span class="nf">add_command_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a command handler.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            command (str): Name of command to handle.</span>
+<span class="sd">            handler: Method that handles the command</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Comm.del_command_handler"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.del_command_handler">[docs]</a>    <span class="k">def</span> <span class="nf">del_command_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete a command handler.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            command: Name of command to handle.</span>
+<span class="sd">            handler: Method that handles the command</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Comm.send_text_message"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.send_text_message">[docs]</a>    <span class="k">def</span> <span class="nf">send_text_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a text message to another client.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client: ID of client to send message to.</span>
+<span class="sd">            msg: Message to send.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Comm.execute"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Execute a given method on a remote client.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client: ID of client.</span>
+<span class="sd">            method: Method to call.</span>
+<span class="sd">            *args: List of parameters for given method.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Passes through return from method call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+    <span class="k">def</span> <span class="nf">_logging</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Background thread for handling the logging.&quot;&quot;&quot;</span>
+
+        <span class="c1"># run until closing</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># do we have a message in the queue?</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_queue</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+                <span class="c1"># get item and send it</span>
+                <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+
+            <span class="c1"># sleep a little</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Comm.log_message"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.log_message">[docs]</a>    <span class="k">def</span> <span class="nf">log_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="n">LogEvent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a log message to other clients.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entry (LogEvent): Log event to send.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Comm.send_event"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.send_event">[docs]</a>    <span class="k">def</span> <span class="nf">send_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send an event to other clients.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event (Event): Event to send</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Comm.register_event"><a class="viewcode-back" href="../../../api/comm.html#pyobs.comm.Comm.register_event">[docs]</a>    <span class="k">def</span> <span class="nf">register_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_class</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Register an event type. If a handler is given, we also receive those events, otherwise we just</span>
+<span class="sd">        send them.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event_class: Class of event to register.</span>
+<span class="sd">            handler: Event handler method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Comm&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

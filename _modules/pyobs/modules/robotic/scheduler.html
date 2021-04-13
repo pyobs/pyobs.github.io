@@ -1,0 +1,508 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.robotic.scheduler &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.robotic.scheduler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.robotic.scheduler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">astroplan</span> <span class="kn">import</span> <span class="n">AtNightConstraint</span><span class="p">,</span> <span class="n">Transitioner</span><span class="p">,</span> <span class="n">SequentialScheduler</span><span class="p">,</span> <span class="n">Schedule</span><span class="p">,</span> <span class="n">TimeConstraint</span><span class="p">,</span> <span class="n">ObservingBlock</span><span class="p">,</span> \
+    <span class="n">PriorityScheduler</span>
+<span class="kn">from</span> <span class="nn">astropy.time</span> <span class="kn">import</span> <span class="n">TimeDelta</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.events.taskfinished</span> <span class="kn">import</span> <span class="n">TaskFinishedEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs.events.taskstarted</span> <span class="kn">import</span> <span class="n">TaskStartedEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">GoodWeatherEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IStoppable</span><span class="p">,</span> <span class="n">IRunnable</span>
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span><span class="p">,</span> <span class="n">get_object</span>
+<span class="kn">from</span> <span class="nn">pyobs.robotic</span> <span class="kn">import</span> <span class="n">TaskArchive</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Scheduler"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/scheduler.html#pyobs.modules.robotic.Scheduler">[docs]</a><span class="k">class</span> <span class="nc">Scheduler</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IStoppable</span><span class="p">,</span> <span class="n">IRunnable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Scheduler.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Scheduler.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/scheduler.html#pyobs.modules.robotic.Scheduler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tasks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">TaskArchive</span><span class="p">],</span> <span class="n">schedule_range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">safety_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
+                 <span class="n">twilight</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;astronomical&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new scheduler.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            scheduler: Scheduler to use</span>
+<span class="sd">            schedule_range: Number of hours to schedule into the future</span>
+<span class="sd">            safety_time: If no ETA for next task to start exists (from current task, weather became good, etc), use</span>
+<span class="sd">                         this time in seconds to make sure that we don&#39;t schedule for a time when the scheduler is</span>
+<span class="sd">                         still running</span>
+<span class="sd">            twilight: astronomical or nautical</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># get scheduler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_task_archive</span> <span class="o">=</span> <span class="n">get_object</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">TaskArchive</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_range</span> <span class="o">=</span> <span class="n">schedule_range</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_safety_time</span> <span class="o">=</span> <span class="n">safety_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span> <span class="o">=</span> <span class="n">twilight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_update_done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_need_update</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># time to start next schedule from</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_start</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># ID of currently running task</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_task_id</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_blocks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ObservingBlock</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># update thread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_thread</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_thread</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Scheduler.open"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/scheduler.html#pyobs.modules.robotic.Scheduler.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># subscribe to events</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">TaskStartedEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_on_task_started</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">TaskFinishedEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_on_task_finished</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">GoodWeatherEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_on_good_weather</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Scheduler.start"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/scheduler.html#pyobs.modules.robotic.Scheduler.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start scheduler.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Scheduler.stop"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/scheduler.html#pyobs.modules.robotic.Scheduler.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop scheduler.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Scheduler.is_running"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/scheduler.html#pyobs.modules.robotic.Scheduler.is_running">[docs]</a>    <span class="k">def</span> <span class="nf">is_running</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Whether scheduler is running.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_running</span></div>
+
+    <span class="k">def</span> <span class="nf">_update_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># time of last change in blocks</span>
+        <span class="n">last_change</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># run forever</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># not running?</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># got new time of last change?</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_archive</span><span class="o">.</span><span class="n">last_changed</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">last_change</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">last_change</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">:</span>
+                <span class="c1"># get schedulable blocks and sort them</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found update in schedulable block, downloading them...&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_blocks</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_task_archive</span><span class="o">.</span><span class="n">get_schedulable_blocks</span><span class="p">(),</span>
+                                      <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">configuration</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Downloaded </span><span class="si">%d</span><span class="s1"> schedulable block(s).&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_blocks</span><span class="p">))</span>
+
+                <span class="c1"># schedule update</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Triggering scheduler run...&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_need_update</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="c1"># remember now</span>
+                <span class="n">last_change</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_initial_update_done</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># sleep a little</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_schedule_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># run forever</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># need update?</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_need_update</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_update_done</span><span class="p">:</span>
+                <span class="c1"># reset need for update</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_need_update</span> <span class="o">=</span> <span class="kc">False</span>
+
+                <span class="c1"># run scheduler in separate process and wait for it</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule</span><span class="p">)</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+            <span class="c1"># sleep a little</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Actually do the scheduling, usually run in a separate process.&quot;&quot;&quot;</span>
+
+        <span class="c1"># only global constraint is the night</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span> <span class="o">==</span> <span class="s1">&#39;astronomical&#39;</span><span class="p">:</span>
+            <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">AtNightConstraint</span><span class="o">.</span><span class="n">twilight_astronomical</span><span class="p">()]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span> <span class="o">==</span> <span class="s1">&#39;nautical&#39;</span><span class="p">:</span>
+            <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">AtNightConstraint</span><span class="o">.</span><span class="n">twilight_nautical</span><span class="p">()]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown twilight type.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># make shallow copies of all blocks and loop them</span>
+        <span class="n">copied_blocks</span> <span class="o">=</span> <span class="p">[</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_blocks</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">copied_blocks</span><span class="p">:</span>
+            <span class="c1"># astroplan&#39;s PriorityScheduler expects lower priorities to be more important, so calculate</span>
+            <span class="c1"># 1000 - priority</span>
+            <span class="n">block</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="mf">1000.</span> <span class="o">-</span> <span class="n">block</span><span class="o">.</span><span class="n">priority</span>
+            <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">priority</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">block</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># it also doesn&#39;t match the requested observing windows exactly, so we make them a little smaller.</span>
+            <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span> <span class="n">TimeConstraint</span><span class="p">):</span>
+                    <span class="n">constraint</span><span class="o">.</span><span class="n">min</span> <span class="o">+=</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">second</span>
+                    <span class="n">constraint</span><span class="o">.</span><span class="n">max</span> <span class="o">-=</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">second</span>
+
+        <span class="c1"># get start time for scheduler</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_start</span>
+        <span class="n">now_plus_safety</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_safety_time</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">second</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">now_plus_safety</span><span class="p">:</span>
+            <span class="c1"># if no ETA exists or is in the past, use safety time</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">now_plus_safety</span>
+
+        <span class="c1"># get running scheduled block, if any</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_task_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;No running block found.&#39;</span><span class="p">)</span>
+            <span class="n">running_task</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># get running task from archive</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Trying to find running block in current schedule...&#39;</span><span class="p">)</span>
+            <span class="n">now</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_archive</span><span class="o">.</span><span class="n">get_pending_tasks</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="n">include_running</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_task_id</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+                <span class="n">running_task</span> <span class="o">=</span> <span class="n">tasks</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_task_id</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Running block not found in last schedule.&#39;</span><span class="p">)</span>
+                <span class="n">running_task</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># if start is before end time of currently running block, change that</span>
+        <span class="k">if</span> <span class="n">running_task</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found running block that ends at </span><span class="si">%s</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">running_task</span><span class="o">.</span><span class="n">end</span><span class="p">)</span>
+
+            <span class="c1"># get block end plus some safety</span>
+            <span class="n">block_end</span> <span class="o">=</span> <span class="n">running_task</span><span class="o">.</span><span class="n">end</span> <span class="o">+</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">second</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">block_end</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">block_end</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Start time would be within currently running block, shifting to </span><span class="si">%s</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">start</span><span class="o">.</span><span class="n">isot</span><span class="p">)</span>
+
+        <span class="c1"># calculate end time</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">TimeDelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_range</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hour</span><span class="p">)</span>
+
+        <span class="c1"># remove currently running block and filter by start time</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">configuration</span><span class="p">[</span><span class="s1">&#39;request&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_task_id</span><span class="p">,</span> <span class="n">copied_blocks</span><span class="p">):</span>
+            <span class="n">time_constraint_found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># loop all constraints</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">TimeConstraint</span><span class="p">):</span>
+                    <span class="c1"># we found a time constraint</span>
+                    <span class="n">time_constraint_found</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="c1"># does the window start before the end of the scheduling range?</span>
+                    <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">min</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+                        <span class="c1"># yes, store block and break loop</span>
+                        <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+                        <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># loop has finished without breaking</span>
+                <span class="c1"># if no time constraint has been found, we still take the block</span>
+                <span class="k">if</span> <span class="n">time_constraint_found</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="c1"># if need new update, skip here</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_need_update</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Not running scheduler, since update was requested.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># no blocks found?</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;No blocks left for scheduling.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_task_archive</span><span class="o">.</span><span class="n">update_schedule</span><span class="p">([],</span> <span class="n">start</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># log it</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Calculating schedule for </span><span class="si">%d</span><span class="s1"> schedulable block(s) starting at </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">),</span> <span class="n">start</span><span class="p">)</span>
+
+        <span class="c1"># we don&#39;t need any transitions</span>
+        <span class="n">transitioner</span> <span class="o">=</span> <span class="n">Transitioner</span><span class="p">()</span>
+
+        <span class="c1"># create scheduler</span>
+        <span class="n">scheduler</span> <span class="o">=</span> <span class="n">PriorityScheduler</span><span class="p">(</span><span class="n">constraints</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">observer</span><span class="p">,</span> <span class="n">transitioner</span><span class="o">=</span><span class="n">transitioner</span><span class="p">)</span>
+
+        <span class="c1"># run scheduler</span>
+        <span class="n">time_range</span> <span class="o">=</span> <span class="n">Schedule</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+        <span class="n">schedule</span> <span class="o">=</span> <span class="n">scheduler</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">time_range</span><span class="p">)</span>
+
+        <span class="c1"># if need new update, skip here</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_need_update</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Not using scheduler results, since update was requested.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># update</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_task_archive</span><span class="o">.</span><span class="n">update_schedule</span><span class="p">(</span><span class="n">schedule</span><span class="o">.</span><span class="n">scheduled_blocks</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">schedule</span><span class="o">.</span><span class="n">scheduled_blocks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished calculating schedule for </span><span class="si">%d</span><span class="s1"> block(s):&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">schedule</span><span class="o">.</span><span class="n">scheduled_blocks</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">block</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">schedule</span><span class="o">.</span><span class="n">scheduled_blocks</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;  #</span><span class="si">%d</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%s</span><span class="s1"> (</span><span class="si">%.1f</span><span class="s1">)&#39;</span><span class="p">,</span>
+                         <span class="n">block</span><span class="o">.</span><span class="n">configuration</span><span class="p">[</span><span class="s1">&#39;request&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+                         <span class="n">block</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">),</span>
+                         <span class="n">block</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">),</span>
+                         <span class="n">block</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished calculating schedule for 0 blocks.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Scheduler.run"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/scheduler.html#pyobs.modules.robotic.Scheduler.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Trigger a re-schedule.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_need_update</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+    <span class="k">def</span> <span class="nf">_on_task_started</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">TaskStartedEvent</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Re-schedule when task has started and we can predict its end.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The task started event.</span>
+<span class="sd">            sender: Who sent it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get ETA in minutes</span>
+        <span class="n">eta</span> <span class="o">=</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">eta</span> <span class="o">-</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">sec</span> <span class="o">/</span> <span class="mi">60</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Received task started event with ETA of </span><span class="si">%.0f</span><span class="s1"> minutes, triggering new scheduler run...&#39;</span><span class="p">,</span> <span class="n">eta</span><span class="p">)</span>
+
+        <span class="c1"># set it</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_need_update</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_start</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">eta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_task_id</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">id</span>
+
+    <span class="k">def</span> <span class="nf">_on_task_finished</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">TaskFinishedEvent</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset current task, when it has finished.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The task finished event.</span>
+<span class="sd">            sender: Who sent it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_task_id</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_on_good_weather</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">GoodWeatherEvent</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Re-schedule on incoming good weather event.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The good weather event.</span>
+<span class="sd">            sender: Who sent it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get ETA in minutes</span>
+        <span class="n">eta</span> <span class="o">=</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">eta</span> <span class="o">-</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">sec</span> <span class="o">/</span> <span class="mi">60</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Received good weather event with ETA of </span><span class="si">%.0f</span><span class="s1"> minutes, triggering new scheduler run...&#39;</span><span class="p">,</span> <span class="n">eta</span><span class="p">)</span>
+
+        <span class="c1"># set it</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_need_update</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_start</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">eta</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Scheduler&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

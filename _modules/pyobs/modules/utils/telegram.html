@@ -1,0 +1,671 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.utils.telegram &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.utils.telegram</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.utils.telegram</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">Parameter</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">telegram</span> <span class="kn">import</span> <span class="n">InlineKeyboardButton</span><span class="p">,</span> <span class="n">InlineKeyboardMarkup</span><span class="p">,</span> <span class="n">Update</span>
+<span class="kn">from</span> <span class="nn">telegram.ext</span> <span class="kn">import</span> <span class="n">CallbackQueryHandler</span><span class="p">,</span> <span class="n">CallbackContext</span>
+
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">LogEvent</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TelegramUserState</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">IDLE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">AUTH</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">EXEC_MODULE</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">EXEC_METHOD</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">EXEC_PARAMS</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="mi">5</span>
+
+
+<div class="viewcode-block" id="Telegram"><a class="viewcode-back" href="../../../../modules/pyobs/utils/telegram.html#pyobs.modules.utils.Telegram">[docs]</a><span class="k">class</span> <span class="nc">Telegram</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A telegram bot.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Telegram.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/utils/telegram.html#pyobs.modules.utils.Telegram.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">allow_new_users</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new bot.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token: The telegram API token.</span>
+<span class="sd">            password: Password for users to log in.</span>
+<span class="sd">            allow_new_users: Whether new users are allowed to connect.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_new_users</span> <span class="o">=</span> <span class="n">allow_new_users</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updater</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># get log levels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_levels</span> <span class="o">=</span> <span class="p">{</span><span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Level&#39;</span><span class="p">)}</span></div>
+
+<div class="viewcode-block" id="Telegram.open"><a class="viewcode-back" href="../../../../modules/pyobs/utils/telegram.html#pyobs.modules.utils.Telegram.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">telegram.ext</span> <span class="kn">import</span> <span class="n">CommandHandler</span><span class="p">,</span> <span class="n">MessageHandler</span><span class="p">,</span> <span class="n">Filters</span><span class="p">,</span> <span class="n">Updater</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># get dispatcher</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updater</span> <span class="o">=</span> <span class="n">Updater</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="p">)</span>
+        <span class="n">dispatcher</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updater</span><span class="o">.</span><span class="n">dispatcher</span>
+
+        <span class="c1"># add command handler</span>
+        <span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">CommandHandler</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command_start</span><span class="p">))</span>
+        <span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">CommandHandler</span><span class="p">(</span><span class="s1">&#39;exec&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command_exec</span><span class="p">))</span>
+        <span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">CommandHandler</span><span class="p">(</span><span class="s1">&#39;modules&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command_modules</span><span class="p">))</span>
+        <span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">CommandHandler</span><span class="p">(</span><span class="s1">&#39;loglevel&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command_loglevel</span><span class="p">))</span>
+
+        <span class="c1"># add text handler</span>
+        <span class="n">echo_handler</span> <span class="o">=</span> <span class="n">MessageHandler</span><span class="p">(</span><span class="n">Filters</span><span class="o">.</span><span class="n">text</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">Filters</span><span class="o">.</span><span class="n">command</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_message</span><span class="p">)</span>
+        <span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">echo_handler</span><span class="p">)</span>
+
+        <span class="c1"># add callback handler for buttons</span>
+        <span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">CallbackQueryHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle_buttons</span><span class="p">))</span>
+
+        <span class="c1"># load storage file</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dispatcher</span><span class="o">.</span><span class="n">bot_data</span><span class="p">[</span><span class="s1">&#39;storage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">read_yaml</span><span class="p">(</span><span class="s1">&#39;/pyobs/telegram.yaml&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">dispatcher</span><span class="o">.</span><span class="n">bot_data</span><span class="p">[</span><span class="s1">&#39;storage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># start polling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updater</span><span class="o">.</span><span class="n">start_polling</span><span class="p">()</span>
+
+        <span class="c1"># listen to log events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">LogEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_log_entry</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Telegram.close"><a class="viewcode-back" href="../../../../modules/pyobs/utils/telegram.html#pyobs.modules.utils.Telegram.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close module.&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># stop telegram</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updater</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_save_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save storage file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">write_yaml</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">bot_data</span><span class="p">[</span><span class="s1">&#39;storage&#39;</span><span class="p">],</span> <span class="s1">&#39;/pyobs/telegram.yaml&#39;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_user_authorized</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Is user authorized?</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">            user_id: ID of user.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Whether user is known and authorized to give commands.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">bot_data</span><span class="p">[</span><span class="s1">&#39;storage&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s1">&#39;users&#39;</span> <span class="ow">in</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">user_id</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_store_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Store new user in auth database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">            user_id: ID of user.</span>
+<span class="sd">            name: Name of user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># add user</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">bot_data</span><span class="p">[</span><span class="s1">&#39;storage&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;users&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+            <span class="n">s</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">s</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">][</span><span class="n">user_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s1">&#39;loglevel&#39;</span><span class="p">:</span> <span class="kc">None</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_storage</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_command_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="p">:</span> <span class="n">Update</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle /start command.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            update: Message to process.</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># is user already known?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_user_authorized</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+            <span class="c1"># welcome him back</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                                     <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Welcome back </span><span class="si">%s</span><span class="s1">!&#39;</span> <span class="o">%</span> <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">first_name</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># do we allow for new users?</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allow_new_users</span><span class="p">:</span>
+                <span class="c1"># go to AUTH state</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                                         <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Password?&quot;</span><span class="p">)</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">AUTH</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># show message</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                                         <span class="n">text</span><span class="o">=</span><span class="s2">&quot;No new users allowed in the system.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_command_exec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="p">:</span> <span class="n">Update</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle /exec command.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            update: Message to process.</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># not logged in?</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_user_authorized</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Not logged in, use /start.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># create buttons for all modules</span>
+        <span class="n">keyboard</span> <span class="o">=</span> <span class="p">[[</span><span class="n">InlineKeyboardButton</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="n">c</span><span class="p">)]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">clients</span><span class="p">]</span> <span class="o">+</span> \
+                   <span class="p">[[</span><span class="n">InlineKeyboardButton</span><span class="p">(</span><span class="s1">&#39;Cancel&#39;</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="s1">&#39;cancel&#39;</span><span class="p">)]]</span>
+        <span class="n">reply_markup</span> <span class="o">=</span> <span class="n">InlineKeyboardMarkup</span><span class="p">(</span><span class="n">keyboard</span><span class="p">)</span>
+        <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">reply_text</span><span class="p">(</span><span class="s1">&#39;Please choose module:&#39;</span><span class="p">,</span> <span class="n">reply_markup</span><span class="o">=</span><span class="n">reply_markup</span><span class="p">)</span>
+
+        <span class="c1"># go to EXEC_MODULE state</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">EXEC_MODULE</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_reset_state</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset state.&quot;&quot;&quot;</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">IDLE</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;exec_query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_handle_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="p">:</span> <span class="n">Update</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle click on buttons.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            update: Message to process.</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get query</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">update</span><span class="o">.</span><span class="n">callback_query</span>
+
+        <span class="c1"># not logged in?</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_user_authorized</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">query</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+            <span class="n">query</span><span class="o">.</span><span class="n">edit_message_text</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">&#39;Not logged in, use /start.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># CallbackQueries need to be answered, even if no notification to the user is needed</span>
+        <span class="c1"># Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery</span>
+        <span class="n">query</span><span class="o">.</span><span class="n">answer</span><span class="p">()</span>
+
+        <span class="c1"># cancel?</span>
+        <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="s1">&#39;cancel&#39;</span><span class="p">:</span>
+            <span class="c1"># reset state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset_state</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+            <span class="c1"># remove markup</span>
+            <span class="n">query</span><span class="o">.</span><span class="n">edit_message_text</span><span class="p">(</span><span class="s1">&#39;Canceled.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># what state are we in?</span>
+        <span class="k">if</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">EXEC_MODULE</span><span class="p">:</span>
+            <span class="c1"># get proxy for selected module</span>
+            <span class="n">proxy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="c1"># show buttons for all modules</span>
+            <span class="n">keyboard</span> <span class="o">=</span> <span class="p">[[</span><span class="n">InlineKeyboardButton</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">m</span><span class="p">))]</span>
+                        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">proxy</span><span class="o">.</span><span class="n">method_names</span><span class="p">]</span> <span class="o">+</span> \
+                       <span class="p">[[</span><span class="n">InlineKeyboardButton</span><span class="p">(</span><span class="s1">&#39;Cancel&#39;</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="s1">&#39;cancel&#39;</span><span class="p">)]]</span>
+            <span class="n">reply_markup</span> <span class="o">=</span> <span class="n">InlineKeyboardMarkup</span><span class="p">(</span><span class="n">keyboard</span><span class="p">)</span>
+            <span class="n">query</span><span class="o">.</span><span class="n">edit_message_text</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">&#39;Chose method in </span><span class="si">%s</span><span class="s1">:&#39;</span> <span class="o">%</span> <span class="n">query</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">query</span><span class="o">.</span><span class="n">edit_message_reply_markup</span><span class="p">(</span><span class="n">reply_markup</span><span class="p">)</span>
+
+            <span class="c1"># change to EXEC_MEHOD state</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">EXEC_METHOD</span>
+
+        <span class="k">elif</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">EXEC_METHOD</span><span class="p">:</span>
+            <span class="c1"># init command</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;exec_query_message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">update</span><span class="o">.</span><span class="n">callback_query</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">message_id</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;exec_query_chat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">update</span><span class="o">.</span><span class="n">callback_query</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">chat_id</span>
+
+            <span class="c1"># show buttons for all methods</span>
+            <span class="n">keyboard</span> <span class="o">=</span> <span class="p">[[</span><span class="n">InlineKeyboardButton</span><span class="p">(</span><span class="s1">&#39;Cancel&#39;</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="s1">&#39;cancel&#39;</span><span class="p">)]]</span>
+            <span class="n">reply_markup</span> <span class="o">=</span> <span class="n">InlineKeyboardMarkup</span><span class="p">(</span><span class="n">keyboard</span><span class="p">)</span>
+            <span class="n">query</span><span class="o">.</span><span class="n">edit_message_text</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">&#39;Executing </span><span class="si">%s</span><span class="s1">...&#39;</span> <span class="o">%</span> <span class="n">query</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">query</span><span class="o">.</span><span class="n">edit_message_reply_markup</span><span class="p">(</span><span class="n">reply_markup</span><span class="p">)</span>
+
+            <span class="c1"># go to EXEC_PARAMS state</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">EXEC_PARAMS</span>
+
+            <span class="c1"># see whether this command runs without parameters</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle_params</span><span class="p">(</span><span class="n">update</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">LOG_LEVEL</span><span class="p">:</span>
+            <span class="c1"># set log level</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">bot_data</span><span class="p">[</span><span class="s1">&#39;storage&#39;</span><span class="p">]</span>
+            <span class="n">s</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">][</span><span class="n">query</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="s1">&#39;loglevel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_save_storage</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+            <span class="c1"># change to IDLE state</span>
+            <span class="n">query</span><span class="o">.</span><span class="n">edit_message_text</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">&#39;Changed log level to </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">query</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">IDLE</span>
+
+    <span class="k">def</span> <span class="nf">_handle_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="p">:</span> <span class="n">Update</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle input of params when in EXEC_PARAMS state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            update: Message to process.</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># wrong state?</span>
+        <span class="k">if</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">EXEC_PARAMS</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># get proxy and method signature</span>
+        <span class="n">module</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">proxy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+        <span class="n">signature</span> <span class="o">=</span> <span class="n">proxy</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+
+        <span class="c1"># get list of parameters</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                  <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;self&#39;</span><span class="p">,</span> <span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">]]</span>
+
+        <span class="c1"># append param, if new one was received</span>
+        <span class="k">if</span> <span class="n">update</span><span class="o">.</span><span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># get type of new parameter</span>
+            <span class="n">param_type</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">annotation</span>
+
+            <span class="c1"># cast it</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">param_type</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+            <span class="c1"># append it</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># got enough params?</span>
+        <span class="n">nparams</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">nparams</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+            <span class="c1"># ID for command?</span>
+            <span class="k">if</span> <span class="s1">&#39;ncalls&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">:</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;ncalls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;ncalls&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">call_id</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;ncalls&#39;</span><span class="p">]</span>
+
+            <span class="c1"># remove cancel button, and show command</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Executing </span><span class="si">%s</span><span class="s1">...&#39;</span> <span class="o">%</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">edit_message_text</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+                                          <span class="n">message_id</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;exec_query_message&#39;</span><span class="p">],</span>
+                                          <span class="n">chat_id</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;exec_query_chat&#39;</span><span class="p">])</span>
+
+            <span class="c1"># send message</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span> <span class="o">+</span> \
+                      <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;&quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">p</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                                 <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]])</span> <span class="o">+</span> \
+                      <span class="s1">&#39;)&#39;</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Executing #</span><span class="si">%d</span><span class="s1">:</span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">call_id</span><span class="p">,</span> <span class="n">command</span><span class="p">))</span>
+
+            <span class="c1"># start call</span>
+            <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_method</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">call_id</span><span class="p">,</span>
+                                                   <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">],</span>
+                                                   <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+            <span class="c1"># reset</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset_state</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># no, print next one</span>
+            <span class="n">next_param</span><span class="p">:</span> <span class="n">Parameter</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">nparams</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># format it</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Value for &#39;</span> <span class="o">+</span> <span class="n">next_param</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="n">next_param</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">+=</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="n">next_param</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="k">if</span> <span class="n">next_param</span><span class="o">.</span><span class="n">default</span> <span class="o">!=</span> <span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">+=</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">next_param</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
+            <span class="n">message</span> <span class="o">+=</span> <span class="s1">&#39;?&#39;</span>
+
+            <span class="c1"># send it</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_call_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">,</span> <span class="n">chat_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">call_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                     <span class="n">params</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">            chat_id: Telegram chat ID.</span>
+<span class="sd">            call_id: ID of command.</span>
+<span class="sd">            method: Method to call as &lt;module&gt;.&lt;method&gt;</span>
+<span class="sd">            params: List of parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># get proxy</span>
+        <span class="n">module</span><span class="p">,</span> <span class="n">method_name</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">proxy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+
+        <span class="c1"># call it</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+        <span class="c1"># set message</span>
+        <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Finished #</span><span class="si">%d</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">call_id</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># format message</span>
+            <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span> <span class="k">as</span> <span class="n">sio</span><span class="p">:</span>
+                <span class="c1"># format response</span>
+                <span class="n">pprint</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">sio</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Finished #</span><span class="si">%d</span><span class="s1">:</span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">call_id</span><span class="p">,</span> <span class="n">sio</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+
+        <span class="c1"># send reply</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">chat_id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_process_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="p">:</span> <span class="n">Update</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle normal text messages, e.g. for login or method parameters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            update: Telegram message.</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># what state is user in?</span>
+        <span class="k">if</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">AUTH</span><span class="p">:</span>
+            <span class="c1"># AUTH, so we expect a password. Is it valid?</span>
+            <span class="k">if</span> <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_password</span><span class="p">:</span>
+                <span class="c1"># Yes, successful AUTH</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;AUTH successful.&#39;</span><span class="p">)</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">IDLE</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_store_user</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">first_name</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;AUTH failed, try again.&#39;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">EXEC_PARAMS</span><span class="p">:</span>
+            <span class="c1"># we&#39;re expecting params, so handle them</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle_params</span><span class="p">(</span><span class="n">update</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_command_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="p">:</span> <span class="n">Update</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle /modules command that shows list of modules.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            update: Message to process.</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># not logged in?</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_user_authorized</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Not logged in, use /start.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># list all modules</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Available modules:</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;- &#39;</span> <span class="o">+</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">clients</span><span class="p">])</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_command_loglevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="p">:</span> <span class="n">Update</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">CallbackContext</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle /loglevel command that sets the log level</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            update: Message to process.</span>
+<span class="sd">            context: Telegram context.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># not logged in?</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_user_authorized</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">effective_chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Not logged in, use /start.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># set state</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">user_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TelegramUserState</span><span class="o">.</span><span class="n">LOG_LEVEL</span>
+
+        <span class="c1"># get current level</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">bot_data</span><span class="p">[</span><span class="s1">&#39;storage&#39;</span><span class="p">]</span>
+        <span class="n">current_level</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">][</span><span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">from_user</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="s1">&#39;loglevel&#39;</span><span class="p">]</span>
+
+        <span class="c1"># create buttons for all log levels</span>
+        <span class="n">keyboard</span> <span class="o">=</span> <span class="p">[[</span><span class="n">InlineKeyboardButton</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="n">level</span><span class="p">)]</span> <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_levels</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span> <span class="o">+</span> \
+                   <span class="p">[[</span><span class="n">InlineKeyboardButton</span><span class="p">(</span><span class="s1">&#39;Cancel&#39;</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="s1">&#39;cancel&#39;</span><span class="p">)]]</span>
+        <span class="n">reply_markup</span> <span class="o">=</span> <span class="n">InlineKeyboardMarkup</span><span class="p">(</span><span class="n">keyboard</span><span class="p">)</span>
+        <span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">reply_text</span><span class="p">(</span><span class="s1">&#39;Current log level: </span><span class="si">%s</span><span class="se">\n</span><span class="s1">Please choose new log level:&#39;</span> <span class="o">%</span> <span class="n">current_level</span><span class="p">,</span>
+                                  <span class="n">reply_markup</span><span class="o">=</span><span class="n">reply_markup</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_process_log_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="n">LogEvent</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Process a new log entry.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entry: The log event.</span>
+<span class="sd">            sender: Name of sender.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get numerical value for log level</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_levels</span><span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">level</span><span class="p">]</span>
+
+        <span class="c1"># build log message</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;(</span><span class="si">%s</span><span class="s1">) </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">level</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="c1"># get storage</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updater</span><span class="o">.</span><span class="n">dispatcher</span><span class="o">.</span><span class="n">bot_data</span><span class="p">[</span><span class="s1">&#39;storage&#39;</span><span class="p">]</span>
+
+        <span class="c1"># loop users</span>
+        <span class="k">for</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># get user log level</span>
+            <span class="n">user_level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_levels</span><span class="p">[</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;loglevel&#39;</span><span class="p">]]</span> <span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;loglevel&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_levels</span> <span class="k">else</span> <span class="mi">100</span>
+
+            <span class="c1"># is it larger than the log entry level?</span>
+            <span class="k">if</span> <span class="n">level</span> <span class="o">&gt;=</span> <span class="n">user_level</span><span class="p">:</span>
+                <span class="c1"># send message</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_updater</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">chat_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">message</span><span class="p">)</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Telegram&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

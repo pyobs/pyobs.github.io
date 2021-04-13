@@ -1,0 +1,7 @@
+AutoGuiding
+===========
+
+.. autoclass:: pyobs.modules.guiding.AutoGuiding
+    :members:
+    :special-members: __init__
+

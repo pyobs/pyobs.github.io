@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.weather.weather &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.weather.weather</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.weather.weather</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">BadWeatherEvent</span><span class="p">,</span> <span class="n">GoodWeatherEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IWeather</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span>
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="n">FITS_HEADERS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">TEMPERATURE</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-TEMP&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient temperature average during exposure, C&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">HUMIDITY</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-HUMID&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient rel. humidity average, %&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">PRESSURE</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-PRESS&#39;</span><span class="p">,</span> <span class="s1">&#39;Average atmospheric pressure, hPa&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">WINDDIR</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-AZ&#39;</span><span class="p">,</span> <span class="s1">&#39;Average wind direction, not corrected for overlap, deg&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">WINDSPEED</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-WIND&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient average wind speed, km/h&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">RAIN</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-PREC&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient precipitation [0/1]&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">SKYTEMP</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-SKY&#39;</span><span class="p">,</span> <span class="s1">&#39;Average sky temperature, C&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">DEWPOINT</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-TDEW&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient dewpoint average during expsoure, C&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">PARTICLES</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-DUST&#39;</span><span class="p">,</span> <span class="s1">&#39;Average particle count during exposure, ppcm&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="Weather"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather">[docs]</a><span class="k">class</span> <span class="nc">Weather</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IWeather</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Connection to pyobs-weather.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Weather.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">system_init_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new pyobs-weather connector.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url: URL to weather station</span>
+<span class="sd">            system_init_time: Time in seconds the full system needs to initialize</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># store and create session</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_system_init_time</span> <span class="o">=</span> <span class="n">system_init_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
+
+        <span class="c1"># current status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_good</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># whole status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_status_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+
+        <span class="c1"># add thread func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Weather.open"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># subscribe to events</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">BadWeatherEvent</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">GoodWeatherEvent</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update weather info.&quot;&quot;&quot;</span>
+
+        <span class="c1"># loop forever</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># new is_good status</span>
+            <span class="n">is_good</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># fetch status</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="s1">&#39;api/current/&#39;</span><span class="p">),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not connect to weather station.&#39;</span><span class="p">)</span>
+
+                <span class="c1"># to json</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+                <span class="k">if</span> <span class="s1">&#39;good&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Good parameter not found in response from weather station.&#39;</span><span class="p">)</span>
+
+                <span class="c1"># store it</span>
+                <span class="n">is_good</span> <span class="o">=</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;good&#39;</span><span class="p">]</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status_lock</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="o">=</span> <span class="n">status</span>
+
+            <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># on error, we&#39;re always bad</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Request failed: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="n">is_good</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># did status change?</span>
+            <span class="k">if</span> <span class="n">is_good</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_good</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">is_good</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">((</span><span class="s1">&#39;Weather is now good.&#39;</span><span class="p">))</span>
+                    <span class="n">eta</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_system_init_time</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">second</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">GoodWeatherEvent</span><span class="p">(</span><span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Weather is now bad.&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">BadWeatherEvent</span><span class="p">())</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_is_good</span> <span class="o">=</span> <span class="n">is_good</span>
+
+            <span class="c1"># sleep a little</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">60</span> <span class="k">if</span> <span class="n">error</span> <span class="k">else</span> <span class="mi">5</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Weather.get_weather_status"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.get_weather_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_weather_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns status of object in form of a dictionary. See other interfaces for details.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Weather.is_weather_good"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.is_weather_good">[docs]</a>    <span class="k">def</span> <span class="nf">is_weather_good</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Whether the weather is good to observe.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_good</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_good</span></div>
+
+<div class="viewcode-block" id="Weather.get_current_weather"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.get_current_weather">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_weather</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current weather.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary containing entries for time, good, and sensor, with the latter being another dictionary</span>
+<span class="sd">            with sensor information, which contain a value and a good flag.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status_lock</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span></div>
+
+<div class="viewcode-block" id="Weather.get_sensor_value"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.get_sensor_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_sensor_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">station</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sensor</span><span class="p">:</span> <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return value for given sensor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            station: Name of weather station to get value from.</span>
+<span class="sd">            sensor: Name of sensor to get value from.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of current value of given sensor or None and time of measurement or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># do request</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="s1">&#39;api/stations/</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">/&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">sensor</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not connect to weather station.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># to json</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status</span> <span class="ow">or</span> <span class="s1">&#39;value&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Time and/or value parameters not found in response from weather station.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># return time and value</span>
+        <span class="k">return</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Weather.get_fits_headers"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.get_fits_headers">[docs]</a>    <span class="k">def</span> <span class="nf">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns FITS header for the current status of this module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            namespaces: If given, only return FITS headers for the given namespaces.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary containing FITS headers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># copy status</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status_lock</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="p">)</span>
+
+        <span class="c1"># got sensors?</span>
+        <span class="k">if</span> <span class="s1">&#39;sensors&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;No sensor data found in status.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="n">sensors</span> <span class="o">=</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;sensors&#39;</span><span class="p">]</span>
+
+        <span class="c1"># loop sensor types</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">sensor_type</span> <span class="ow">in</span> <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="p">:</span>
+            <span class="c1"># got a value for this type?</span>
+            <span class="k">if</span> <span class="n">sensor_type</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="n">sensors</span><span class="p">:</span>
+                <span class="c1"># get value</span>
+                <span class="k">if</span> <span class="s1">&#39;value&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sensors</span><span class="p">[</span><span class="n">sensor_type</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">sensors</span><span class="p">[</span><span class="n">sensor_type</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+
+                <span class="c1"># get header keyword, comment and data type</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">FITS_HEADERS</span><span class="p">[</span><span class="n">sensor_type</span><span class="p">]</span>
+
+                <span class="c1"># set it</span>
+                <span class="n">header</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dtype</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">comment</span><span class="p">)</span>
+
+        <span class="c1"># finished</span>
+        <span class="k">return</span> <span class="n">header</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Weather&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

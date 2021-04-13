@@ -1,0 +1,7 @@
+ScriptRunner
+============
+
+.. autoclass:: pyobs.modules.utils.ScriptRunner
+    :members:
+    :special-members: __init__
+

@@ -1,0 +1,478 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs_fli.flicamera &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs_fli.flicamera</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs_fli.flicamera</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">astropy.io</span> <span class="kn">import</span> <span class="n">fits</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">ICooling</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules.camera.basecamera</span> <span class="kn">import</span> <span class="n">BaseCamera</span>
+<span class="kn">from</span> <span class="nn">pyobs_fli.flidriver</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FliCamera"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera">[docs]</a><span class="k">class</span> <span class="nc">FliCamera</span><span class="p">(</span><span class="n">BaseCamera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">ICooling</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A pyobs module for FLI cameras.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FliCamera.__init__"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new FliCamera.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            setpoint: Cooling temperature setpoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseCamera</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span> <span class="o">=</span> <span class="n">setpoint</span>
+
+        <span class="c1"># window and binning</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="FliCamera.open"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">BaseCamera</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># list devices</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">FliDriver</span><span class="o">.</span><span class="n">list_devices</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No camera found.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># open first one</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Opening connection to &quot;</span><span class="si">%s</span><span class="s1">&quot; at </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">d</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="n">FliDriver</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not open FLI camera: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+        <span class="c1"># get window and binning from camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">get_window_binning</span><span class="p">()</span>
+
+        <span class="c1"># set cooling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_cooling</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FliCamera.close"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the module.&quot;&quot;&quot;</span>
+        <span class="n">BaseCamera</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># not open?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># close connection</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="FliCamera.get_full_frame"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.get_full_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns full size of CCD.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with left, top, width, and height set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">get_full_frame</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FliCamera.get_window"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.get_window">[docs]</a>    <span class="k">def</span> <span class="nf">get_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the camera window.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with left, top, width, and height set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window</span></div>
+
+<div class="viewcode-block" id="FliCamera.get_binning"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.get_binning">[docs]</a>    <span class="k">def</span> <span class="nf">get_binning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the camera binning.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with x and y.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span></div>
+
+<div class="viewcode-block" id="FliCamera.set_window"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.set_window">[docs]</a>    <span class="k">def</span> <span class="nf">set_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">top</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the camera window.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            left: X offset of window.</span>
+<span class="sd">            top: Y offset of window.</span>
+<span class="sd">            width: Width of window.</span>
+<span class="sd">            height: Height of window.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If binning could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting window to </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1"> at </span><span class="si">%d</span><span class="s1">,</span><span class="si">%d</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FliCamera.set_binning"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.set_binning">[docs]</a>    <span class="k">def</span> <span class="nf">set_binning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the camera binning.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: X binning.</span>
+<span class="sd">            y: Y binning.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If binning could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting binning to </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Actually do the exposure, should be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: The requested exposure time in ms.</span>
+<span class="sd">            open_shutter: Whether or not to open the shutter.</span>
+<span class="sd">            abort_event: Event that gets triggered when exposure should be aborted.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The actual image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># set binning</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set binning to </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">set_binning</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">)</span>
+
+        <span class="c1"># set window, divide width/height by binning, from libfli:</span>
+        <span class="c1"># &quot;Note that the given lower-right coordinate must take into account the horizontal and</span>
+        <span class="c1"># vertical bin factor settings, but the upper-left coordinate is absolute.&quot;</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set window to </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2"> (binned </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">) at </span><span class="si">%d</span><span class="s2">,</span><span class="si">%d</span><span class="s2">.&quot;</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">set_window</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+        <span class="c1"># set some stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">EXPOSING</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">init_exposure</span><span class="p">(</span><span class="n">open_shutter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">set_exposure_time</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">exposure_time</span><span class="p">))</span>
+
+        <span class="c1"># get date obs</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting exposure with </span><span class="si">%s</span><span class="s1"> shutter for </span><span class="si">%.2f</span><span class="s1"> seconds...&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;open&#39;</span> <span class="k">if</span> <span class="n">open_shutter</span> <span class="k">else</span> <span class="s1">&#39;closed&#39;</span><span class="p">,</span> <span class="n">exposure_time</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">)</span>
+        <span class="n">date_obs</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># do exposure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">start_exposure</span><span class="p">()</span>
+
+        <span class="c1"># wait for exposure to finish</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># aborted?</span>
+            <span class="k">if</span> <span class="n">abort_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Aborted exposure.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># is exposure finished?</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">is_exposing</span><span class="p">():</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># sleep a little</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+
+        <span class="c1"># readout</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Exposure finished, reading out...&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">READOUT</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+            <span class="n">img</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">grab_row</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+
+        <span class="c1"># create FITS image and set header</span>
+        <span class="n">hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATE-OBS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">date_obs</span><span class="p">,</span> <span class="s1">&#39;Date and time of start of exposure&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;EXPTIME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">exposure_time</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">,</span> <span class="s1">&#39;Exposure time [s]&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-TEMP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">get_temp</span><span class="p">(</span><span class="n">FliTemperature</span><span class="o">.</span><span class="n">CCD</span><span class="p">),</span> <span class="s1">&#39;CCD temperature [C]&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-COOL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">get_cooler_power</span><span class="p">(),</span> <span class="s1">&#39;Cooler power [percent]&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-TSET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span><span class="p">,</span> <span class="s1">&#39;Cooler setpoint [C]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># instrument and detector</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;INSTRUME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;Name of instrument&#39;</span><span class="p">)</span>
+
+        <span class="c1"># binning</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;XBINNING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-BIN1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Binning factor used on X axis&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-BIN2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Binning factor used on Y axis&#39;</span><span class="p">)</span>
+
+        <span class="c1"># window</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Subframe origin on X axis&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Subframe origin on Y axis&#39;</span><span class="p">)</span>
+
+        <span class="c1"># statistics</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATAMIN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">img</span><span class="p">)),</span> <span class="s1">&#39;Minimum data value&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATAMAX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">img</span><span class="p">)),</span> <span class="s1">&#39;Maximum data value&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATAMEAN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">img</span><span class="p">)),</span> <span class="s1">&#39;Mean data value&#39;</span><span class="p">)</span>
+
+        <span class="c1"># biassec/trimsec</span>
+        <span class="n">full</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">get_visible_frame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_biassec_trimsec</span><span class="p">(</span><span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="o">*</span><span class="n">full</span><span class="p">)</span>
+
+        <span class="c1"># return FITS image</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Readout finished.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hdu</span>
+
+    <span class="k">def</span> <span class="nf">_abort_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abort the running exposure. Should be implemented by derived class.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If an error occured.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">cancel_exposure</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">=</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span>
+
+<div class="viewcode-block" id="FliCamera.get_cooling_status"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.get_cooling_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_cooling_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the current status for the cooling.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple containing:</span>
+<span class="sd">                Enabled (bool):         Whether the cooling is enabled</span>
+<span class="sd">                SetPoint (float):       Setpoint for the cooling in celsius.</span>
+<span class="sd">                Power (float):          Current cooling power in percent or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">enabled</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">get_cooler_power</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FliCamera.get_temperatures"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.get_temperatures">[docs]</a>    <span class="k">def</span> <span class="nf">get_temperatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns all temperatures measured by this module.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict containing temperatures.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;CCD&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">get_temp</span><span class="p">(</span><span class="n">FliTemperature</span><span class="o">.</span><span class="n">CCD</span><span class="p">),</span>
+            <span class="s1">&#39;Base&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">get_temp</span><span class="p">(</span><span class="n">FliTemperature</span><span class="o">.</span><span class="n">BASE</span><span class="p">)</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="FliCamera.set_cooling"><a class="viewcode-back" href="../../modules/pyobs_fli/flicamera.html#pyobs_fli.FliCamera.set_cooling">[docs]</a>    <span class="k">def</span> <span class="nf">set_cooling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enables/disables cooling and sets setpoint.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            enabled: Enable or disable cooling.</span>
+<span class="sd">            setpoint: Setpoint in celsius for the cooling.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If cooling could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># log</span>
+        <span class="k">if</span> <span class="n">enabled</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Enabling cooling with a setpoint of </span><span class="si">%.2f</span><span class="s1">°C...&#39;</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Disabling cooling and setting setpoint to 20°C...&#39;</span><span class="p">)</span>
+
+        <span class="c1"># if not enabled, set setpoint to None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span> <span class="o">=</span> <span class="n">setpoint</span> <span class="k">if</span> <span class="n">enabled</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># set setpoint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">set_temperature</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">setpoint</span><span class="p">)</span> <span class="k">if</span> <span class="n">setpoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">20.</span><span class="p">)</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FliCamera&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

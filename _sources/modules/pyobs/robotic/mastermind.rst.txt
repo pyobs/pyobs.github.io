@@ -1,0 +1,7 @@
+Mastermind
+==========
+
+.. autoclass:: pyobs.modules.robotic.Mastermind
+    :members:
+    :special-members: __init__
+

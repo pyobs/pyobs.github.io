@@ -1,0 +1,460 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.camera.dummycamera &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.camera.dummycamera</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.camera.dummycamera</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">RLock</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">astropy.io</span> <span class="kn">import</span> <span class="n">fits</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">ICooling</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules.camera.basecamera</span> <span class="kn">import</span> <span class="n">BaseCamera</span>
+<span class="kn">from</span> <span class="nn">pyobs.images</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CoolingStatus</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">set_point</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.</span>
+    <span class="n">power</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">80.</span>
+    <span class="n">temperatures</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;CCD&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;Back&#39;</span><span class="p">:</span> <span class="mf">3.14</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="DummyCamera"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera">[docs]</a><span class="k">class</span> <span class="nc">DummyCamera</span><span class="p">(</span><span class="n">BaseCamera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">ICooling</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A dummy camera for testing.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DummyCamera.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readout_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">world</span><span class="p">:</span> <span class="s1">&#39;SimWorld&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a new dummy cammera.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            readout_time: Readout time in seconds.</span>
+<span class="sd">            sim: Dictionary with config for image simulator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseCamera</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add thread func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cooling_thread</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readout_time</span> <span class="o">=</span> <span class="n">readout_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span> <span class="o">=</span> <span class="n">sim</span> <span class="k">if</span> <span class="n">sim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s1">&#39;images&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># simulated world</span>
+        <span class="kn">from</span> <span class="nn">pyobs.utils.simulation.world</span> <span class="kn">import</span> <span class="n">SimCamera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_world</span> <span class="o">=</span> <span class="n">world</span> <span class="k">if</span> <span class="n">world</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">({</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;pyobs.utils.simulation.world.SimWorld&#39;</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">:</span> <span class="n">SimCamera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_world</span><span class="o">.</span><span class="n">camera</span>
+
+        <span class="c1"># init camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span> <span class="o">=</span> <span class="n">CoolingStatus</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposing</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># locks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coolingLock</span> <span class="o">=</span> <span class="n">RLock</span><span class="p">()</span>
+
+        <span class="c1"># simulator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sim_images</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">_cooling_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coolingLock</span><span class="p">:</span>
+                <span class="c1"># adjust temperature</span>
+                <span class="n">temps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">temperatures</span>
+                <span class="n">temps</span><span class="p">[</span><span class="s1">&#39;CCD&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">temperatures</span><span class="p">[</span><span class="s1">&#39;CCD&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">set_point</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.05</span>
+
+                <span class="c1"># cooling power</span>
+                <span class="n">power</span> <span class="o">=</span> <span class="p">(</span><span class="mf">60.</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">temperatures</span><span class="p">[</span><span class="s1">&#39;CCD&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">70.</span> <span class="o">*</span> <span class="mf">100.</span>
+
+                <span class="c1"># create new object</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span> <span class="o">=</span> <span class="n">CoolingStatus</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">enabled</span><span class="p">,</span> <span class="n">set_point</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">set_point</span><span class="p">,</span>
+                                              <span class="n">power</span><span class="o">=</span><span class="n">power</span><span class="p">,</span> <span class="n">temperatures</span><span class="o">=</span><span class="n">temps</span><span class="p">)</span>
+
+            <span class="c1"># sleep for 1 second</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DummyCamera.get_full_frame"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera.get_full_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns full size of CCD.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with left, top, width, and height set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">full_frame</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exp_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Actually get (i.e. simulate) the image.&quot;&quot;&quot;</span>
+
+        <span class="c1"># random image or pre-defined?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim_images</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim_images</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sim_images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Image</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">exp_time</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">image</span>
+
+    <span class="k">def</span> <span class="nf">_expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Actually do the exposure, should be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: The requested exposure time in seconds.</span>
+<span class="sd">            open_shutter: Whether or not to open the shutter.</span>
+<span class="sd">            abort_event: Event that gets triggered when exposure should be aborted.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The actual image.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If exposure was not successful.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># do exposure</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting exposure with </span><span class="si">{0:s}</span><span class="s1"> shutter...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;open&#39;</span> <span class="k">if</span> <span class="n">open_shutter</span> <span class="k">else</span> <span class="s1">&#39;closed&#39;</span><span class="p">))</span>
+        <span class="n">date_obs</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">EXPOSING</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposing</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">abort_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposing</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_exposing</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Exposure was aborted.&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">exposure_time</span> <span class="o">/</span> <span class="n">steps</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposing</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># readout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">READOUT</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_readout_time</span><span class="p">)</span>
+
+        <span class="c1"># get image</span>
+        <span class="n">hdu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_image</span><span class="p">(</span><span class="n">exposure_time</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">)</span>
+
+        <span class="c1"># add headers</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;EXPTIME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exposure_time</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATE-OBS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">date_obs</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;XBINNING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-BIN1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">binning</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Binning factor used on X axis&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-BIN2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">binning</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Binning factor used on Y axis&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Subframe origin on X axis&#39;</span><span class="p">)</span>
+        <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Subframe origin on Y axis&#39;</span><span class="p">)</span>
+
+        <span class="c1"># biassec/trimsec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_biassec_trimsec</span><span class="p">(</span><span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">full_frame</span><span class="p">)</span>
+
+        <span class="c1"># finished</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Exposure finished.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hdu</span>
+
+    <span class="k">def</span> <span class="nf">_abort_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abort the running exposure. Should be implemented by derived class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Success or not.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposing</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="DummyCamera.get_window"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera.get_window">[docs]</a>    <span class="k">def</span> <span class="nf">get_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the camera window.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with left, top, width, and height set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">window</span></div>
+
+<div class="viewcode-block" id="DummyCamera.set_window"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera.set_window">[docs]</a>    <span class="k">def</span> <span class="nf">set_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">top</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the camera window.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            left: X offset of window.</span>
+<span class="sd">            top: Y offset of window.</span>
+<span class="sd">            width: Width of window.</span>
+<span class="sd">            height: Height of window.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If binning could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set window to </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2"> at </span><span class="si">%d</span><span class="s2">,</span><span class="si">%d</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">left</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DummyCamera.get_binning"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera.get_binning">[docs]</a>    <span class="k">def</span> <span class="nf">get_binning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the camera binning.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with x and y.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">binning</span></div>
+
+<div class="viewcode-block" id="DummyCamera.set_binning"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera.set_binning">[docs]</a>    <span class="k">def</span> <span class="nf">set_binning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the camera binning.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: X binning.</span>
+<span class="sd">            y: Y binning.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If binning could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set binning to </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">binning</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DummyCamera.set_cooling"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera.set_cooling">[docs]</a>    <span class="k">def</span> <span class="nf">set_cooling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enables/disables cooling and sets setpoint.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            enabled: Enable or disable cooling.</span>
+<span class="sd">            setpoint: Setpoint in celsius for the cooling.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If cooling could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># log</span>
+        <span class="k">if</span> <span class="n">enabled</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Enabling cooling with a setpoint of </span><span class="si">%.2f</span><span class="s1">°C.&#39;</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Disabling cooling.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># set</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coolingLock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span> <span class="o">=</span> <span class="n">CoolingStatus</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="n">enabled</span><span class="p">,</span> <span class="n">set_point</span><span class="o">=</span><span class="n">setpoint</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">power</span><span class="p">,</span>
+                                          <span class="n">temperatures</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">temperatures</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DummyCamera.get_cooling_status"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera.get_cooling_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_cooling_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the current status for the cooling.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple containing:</span>
+<span class="sd">                Enabled (bool):         Whether the cooling is enabled</span>
+<span class="sd">                SetPoint (float):       Setpoint for the cooling in celsius.</span>
+<span class="sd">                Power (float):          Current cooling power in percent or None.</span>
+<span class="sd">                Temperatures (dict):    Dictionary of sensor name/value pairs with temperatures</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coolingLock</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">enabled</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">set_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">power</span></div>
+
+<div class="viewcode-block" id="DummyCamera.get_temperatures"><a class="viewcode-back" href="../../../../modules/pyobs/camera/dummycamera.html#pyobs.modules.camera.DummyCamera.get_temperatures">[docs]</a>    <span class="k">def</span> <span class="nf">get_temperatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns all temperatures measured by this module.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict containing temperatures.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">temperatures</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_config_readout_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readout_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set readout time.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readout_time</span> <span class="o">=</span> <span class="n">readout_time</span>
+
+    <span class="k">def</span> <span class="nf">_get_config_readout_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns readout time.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readout_time</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DummyCamera&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,8 +1,10 @@
-Acquisition
-===========
+pyobs.modules.acquisition
+=========================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   brighteststar
+   astrometry
+   base
+

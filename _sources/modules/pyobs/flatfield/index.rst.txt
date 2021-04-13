@@ -1,9 +1,11 @@
-Flat-Fielding
-=============
+pyobs.modules.flatfield
+=======================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   flatfield
+   pointing
    scheduler
+   flatfield
+

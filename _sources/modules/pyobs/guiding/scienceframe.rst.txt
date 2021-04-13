@@ -1,5 +1,7 @@
-ScienceFrameAutoGuider
-======================
+ScienceFrameAutoGuiding
+=======================
 
-.. autoclass:: pyobs.modules.guiding.ScienceFrameAutoGuider
+.. autoclass:: pyobs.modules.guiding.ScienceFrameAutoGuiding
     :members:
+    :special-members: __init__
+

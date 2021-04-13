@@ -1,5 +1,5 @@
-Telescope
-=========
+pyobs.modules.telescope
+=======================
 
 .. toctree::
    :maxdepth: 2
@@ -7,3 +7,4 @@ Telescope
 
    basetelescope
    dummytelescope
+

@@ -1,0 +1,7 @@
+BaseAcquisition
+===============
+
+.. autoclass:: pyobs.modules.acquisition.BaseAcquisition
+    :members:
+    :special-members: __init__
+

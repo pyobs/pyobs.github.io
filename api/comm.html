@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>5.2. Comm &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.3. Environment" href="environment.html" />
+    <link rel="prev" title="5.1. Application" href="application.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="application.html">5.1. Application</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.2. Comm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">5.3. Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module.html">5.4. Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object.html">5.5. Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vfs.html">5.6. Virtual File System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces.html">5.7. Interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">5.8. Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">5. </span>API</a> &raquo;</li>
+        
+      <li><span class="section-number">5.2. </span>Comm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/comm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="comm">
+<h1><span class="section-number">5.2. </span>Comm<a class="headerlink" href="#comm" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pyobs.comm.Comm">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.comm.</span></code><code class="sig-name descname"><span class="pre">Comm</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_proxies</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all Comm modules in pyobs.</p>
+<dl class="py method">
+<dt id="pyobs.comm.Comm.add_command_handler">
+<code class="sig-name descname"><span class="pre">add_command_handler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.add_command_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.add_command_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a command handler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> (<em>str</em>) – Name of command to handle.</p></li>
+<li><p><strong>handler</strong> – Method that handles the command</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.clients">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">clients</span></code><a class="headerlink" href="#pyobs.comm.Comm.clients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of currently connected clients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(list) List of currently connected clients.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.clients_with_interface">
+<code class="sig-name descname"><span class="pre">clients_with_interface</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.clients_with_interface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.clients_with_interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of currently connected clients that implement the given interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interface</strong> – Interface to search for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(list) List of currently connected clients that implement the given interface.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.close">
+<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.del_command_handler">
+<code class="sig-name descname"><span class="pre">del_command_handler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.del_command_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.del_command_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a command handler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> – Name of command to handle.</p></li>
+<li><p><strong>handler</strong> – Method that handles the command</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.execute">
+<code class="sig-name descname"><span class="pre">execute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Any</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a given method on a remote client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> – ID of client.</p></li>
+<li><p><strong>method</strong> – Method to call.</p></li>
+<li><p><strong>*args</strong> – List of parameters for given method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Passes through return from method call.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.get_interfaces">
+<code class="sig-name descname"><span class="pre">get_interfaces</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.get_interfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.get_interfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of interfaces for given client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>client</strong> – Name of client.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of supported interfaces.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>IndexError</strong><strong>, </strong><strong>if client cannot be found.</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.log_message">
+<code class="sig-name descname"><span class="pre">log_message</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs.events.log.LogEvent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.log_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.log_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a log message to other clients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>entry</strong> (<em>LogEvent</em>) – Log event to send.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.name">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">name</span></code><a class="headerlink" href="#pyobs.comm.Comm.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of this client.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.open">
+<code class="sig-name descname"><span class="pre">open</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.proxy">
+<code class="sig-name descname"><span class="pre">proxy</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_or_object</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.proxy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.proxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns object directly if it is of given type. Otherwise get proxy of client with given name and check type.</p>
+<dl class="simple">
+<dt>If name_or_object is an object:</dt><dd><ul class="simple">
+<li><p>If it is of type (or derived), return object.</p></li>
+<li><p>Otherwise raise exception.</p></li>
+</ul>
+</dd>
+<dt>If name_name_or_object is string:</dt><dd><ul class="simple">
+<li><p>Create proxy from name and raise exception, if it doesn’t exist.</p></li>
+<li><p>Check type and raise exception if wrong.</p></li>
+<li><p>Return object.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name_or_object</strong> – Name of object or object itself.</p></li>
+<li><p><strong>obj_type</strong> – Expected class of object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Object or proxy to object.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If proxy does not exist or wrong type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.register_event">
+<code class="sig-name descname"><span class="pre">register_event</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.register_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.register_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register an event type. If a handler is given, we also receive those events, otherwise we just
+send them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_class</strong> – Class of event to register.</p></li>
+<li><p><strong>handler</strong> – Event handler method.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.send_event">
+<code class="sig-name descname"><span class="pre">send_event</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs.events.event.Event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.send_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.send_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an event to other clients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>Event</em>) – Event to send</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.send_text_message">
+<code class="sig-name descname"><span class="pre">send_text_message</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.send_text_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.send_text_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a text message to another client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> – ID of client to send message to.</p></li>
+<li><p><strong>msg</strong> – Message to send.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="environment.html" class="btn btn-neutral float-right" title="5.3. Environment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="application.html" class="btn btn-neutral float-left" title="5.1. Application" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

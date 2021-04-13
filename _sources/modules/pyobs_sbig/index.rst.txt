@@ -5,4 +5,9 @@ pyobs_sbig
    :maxdepth: 2
    :caption: Contents:
 
+   sbigbasecamera
    sbigcamera
+   sbig6303e
+   sbigtracker
+   sbigfiltercamera
+

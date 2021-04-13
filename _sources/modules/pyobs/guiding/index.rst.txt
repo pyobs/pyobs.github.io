@@ -1,9 +1,11 @@
-Auto-guiding
-============
+pyobs.modules.guiding
+=====================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   autoguider
+   autoguiding
+   base
    scienceframe
+

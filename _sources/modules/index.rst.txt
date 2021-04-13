@@ -3,18 +3,19 @@ Modules
 
 .. toctree::
    :maxdepth: 3
-   :caption: pyobs-core repository:
+   :caption: pyobs repository:
 
    pyobs/index
 
 .. toctree::
-   :maxdepth: 2
-   :caption: pyobs-fli repository:
+   :maxdepth: 3
+   :caption: pyobs_fli repository:
 
    pyobs_fli/index
 
 .. toctree::
-   :maxdepth: 2
-   :caption: pyobs-sbig repository:
+   :maxdepth: 3
+   :caption: pyobs_sbig repository:
 
    pyobs_sbig/index
+

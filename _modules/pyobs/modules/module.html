@@ -1,0 +1,577 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.module &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.module</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">py_expression_eval</span> <span class="kn">import</span> <span class="n">Parser</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.comm.dummy</span> <span class="kn">import</span> <span class="n">DummyComm</span>
+<span class="kn">from</span> <span class="nn">pyobs.object</span> <span class="kn">import</span> <span class="n">Object</span>
+<span class="kn">from</span> <span class="nn">pyobs.comm</span> <span class="kn">import</span> <span class="n">Comm</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IModule</span><span class="p">,</span> <span class="n">IConfig</span>
+<span class="kn">from</span> <span class="nn">pyobs.object</span> <span class="kn">import</span> <span class="n">get_object</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.types</span> <span class="kn">import</span> <span class="n">cast_response_to_simple</span><span class="p">,</span> <span class="n">cast_bound_arguments_to_real</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">timeout</span><span class="p">(</span><span class="n">func_timeout</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Decorates a method with information about timeout for an async HTTP call.</span>
+
+<span class="sd">    :param func_timeout:  Integer or string that specifies the timeout.</span>
+<span class="sd">                          If string, it is parsed using the variables in kwargs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">timeout_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_timeout</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="c1"># define variables as non-local</span>
+            <span class="k">nonlocal</span> <span class="n">func_timeout</span><span class="p">,</span> <span class="n">func</span>
+
+            <span class="c1"># init to 0 second</span>
+            <span class="n">to</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># do we have a timeout?</span>
+            <span class="k">if</span> <span class="n">func_timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># what is it?</span>
+                <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">func_timeout</span><span class="p">):</span>
+                    <span class="c1"># this is a method, does it have a timeout on it&#39;s own? then use it</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">func_timeout</span><span class="p">,</span> <span class="s1">&#39;timeout&#39;</span><span class="p">):</span>
+                            <span class="c1"># call timeout method, only works if this has the same parameters</span>
+                            <span class="n">to</span> <span class="o">=</span> <span class="n">func_timeout</span><span class="o">.</span><span class="n">timeout</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># call method directly</span>
+                            <span class="n">to</span> <span class="o">=</span> <span class="n">func_timeout</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Could not call timeout method.&#39;</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func_timeout</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="c1"># this is a string with a function, so evaluate it</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">parser</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">()</span>
+                        <span class="n">to</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">func_timeout</span><span class="p">)</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not find timeout &quot;</span><span class="si">%s</span><span class="s1">&quot; in list of parameters.&#39;</span><span class="p">,</span> <span class="n">func_timeout</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># it&#39;s a number, add timeout directly</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">to</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">func_timeout</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Could not convert timeout to float.&#39;</span><span class="p">)</span>
+                        <span class="n">to</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># return it</span>
+            <span class="k">return</span> <span class="n">to</span>
+
+        <span class="c1"># decorate method</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="n">_timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span>
+
+    <span class="k">return</span> <span class="n">timeout_decorator</span>
+
+
+<div class="viewcode-block" id="Module"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module">[docs]</a><span class="k">class</span> <span class="nc">Module</span><span class="p">(</span><span class="n">Object</span><span class="p">,</span> <span class="n">IModule</span><span class="p">,</span> <span class="n">IConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all pyobs modules.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">comm</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Comm</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new pyobs module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: Name of module. If None, ID from comm object is used.</span>
+<span class="sd">            label: Label for module. If None, name is used.</span>
+<span class="sd">            comm: Comm object to use</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Object</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># get list of client interfaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interfaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_methods</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Signature</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_interfaces_and_methods</span><span class="p">()</span>
+
+        <span class="c1"># get configuration options, i.e. all parameters from c&#39;tor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_config_options</span><span class="p">()</span>
+
+        <span class="c1"># comm object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span> <span class="n">Comm</span>
+        <span class="k">if</span> <span class="n">comm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">DummyComm</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span> <span class="n">Comm</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">comm</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Creating comm object...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">get_object</span><span class="p">(</span><span class="n">comm</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid Comm object&#39;</span><span class="p">)</span>
+
+        <span class="c1"># name and label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">label</span> <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+<div class="viewcode-block" id="Module.open"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">Object</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># open comm</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># open it and connect module</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Module.close"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close module.&quot;&quot;&quot;</span>
+        <span class="n">Object</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># close comm</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Closing connection to server...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Module.proxy"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.proxy">[docs]</a>    <span class="k">def</span> <span class="nf">proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_or_object</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">],</span> <span class="n">obj_type</span><span class="p">:</span> <span class="n">Type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns object directly if it is of given type. Otherwise get proxy of client with given name and check type.</span>
+
+<span class="sd">        If name_or_object is an object:</span>
+<span class="sd">            - If it is of type (or derived), return object.</span>
+<span class="sd">            - Otherwise raise exception.</span>
+<span class="sd">        If name_name_or_object is string:</span>
+<span class="sd">            - Create proxy from name and raise exception, if it doesn&#39;t exist.</span>
+<span class="sd">            - Check type and raise exception if wrong.</span>
+<span class="sd">            - Return object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name_or_object: Name of object or object itself.</span>
+<span class="sd">            obj_type: Expected class of object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Object or proxy to object.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If proxy does not exist or wrong type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="n">name_or_object</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Module.main"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.main">[docs]</a>    <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Main loop for application.&quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Module.name"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.name">[docs]</a>    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns name of module.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span></div>
+
+<div class="viewcode-block" id="Module.label"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.label">[docs]</a>    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns label of module.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span></div>
+
+<div class="viewcode-block" id="Module.implements"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.implements">[docs]</a>    <span class="k">def</span> <span class="nf">implements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;checks, whether this object implements a given interface&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">interface</span><span class="o">.</span><span class="n">implemented_by</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">interfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List of implemented interfaces.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interfaces</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">methods</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List of methods.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_methods</span>
+
+    <span class="k">def</span> <span class="nf">_get_interfaces_and_methods</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List interfaces and methods of this module.&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">pyobs.interfaces</span>
+
+        <span class="c1"># get interfaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interfaces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_methods</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">interface</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">pyobs</span><span class="o">.</span><span class="n">interfaces</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">):</span>
+            <span class="c1"># is module a sub-class of that class that inherits from Interface?</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">interface</span><span class="p">,</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">Interface</span><span class="p">):</span>
+                <span class="c1"># we ignore the interface &quot;Interface&quot;</span>
+                <span class="k">if</span> <span class="n">interface</span> <span class="o">==</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">Interface</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># add interface</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_interfaces</span> <span class="o">+=</span> <span class="p">[</span><span class="n">interface</span><span class="p">]</span>
+
+                <span class="c1"># loop methods of that interface</span>
+                <span class="k">for</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">interface</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">):</span>
+                    <span class="c1"># get method and signature</span>
+                    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
+                    <span class="n">signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+
+                    <span class="c1"># fill dict of name-&gt;(method, signature)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_methods</span><span class="p">[</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">signature</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Module.quit"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.quit">[docs]</a>    <span class="k">def</span> <span class="nf">quit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Quit module.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Module.execute"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Execute a local method safely with type conversion</span>
+
+<span class="sd">        All incoming variables in args and kwargs must be of simple type (i.e. int, float, str, bool, tuple) and will</span>
+<span class="sd">        be converted to the requested type automatically. All outgoing variables are converted to simple types</span>
+<span class="sd">        automatically as well.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            method: Name of method to execute.</span>
+<span class="sd">            *args: Parameters for method.</span>
+<span class="sd">            **kwargs: Parameters for method.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Response from method call.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            KeyError: If method does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get method and signature (may raise KeyError)</span>
+        <span class="n">func</span><span class="p">,</span> <span class="n">signature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">methods</span><span class="p">[</span><span class="n">method</span><span class="p">]</span>
+
+        <span class="c1"># bind parameters</span>
+        <span class="n">ba</span> <span class="o">=</span> <span class="n">signature</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ba</span><span class="o">.</span><span class="n">apply_defaults</span><span class="p">()</span>
+
+        <span class="c1"># cast to types requested by method</span>
+        <span class="n">cast_bound_arguments_to_real</span><span class="p">(</span><span class="n">ba</span><span class="p">,</span> <span class="n">signature</span><span class="p">)</span>
+
+        <span class="c1"># get additional args and kwargs and delete from ba</span>
+        <span class="n">func_args</span> <span class="o">=</span> <span class="n">ba</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span>
+        <span class="n">func_kwargs</span> <span class="o">=</span> <span class="n">ba</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">ba</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">ba</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
+
+        <span class="c1"># call method</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">func_args</span><span class="p">,</span> <span class="o">**</span><span class="n">ba</span><span class="o">.</span><span class="n">arguments</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">)</span>
+
+        <span class="c1"># finished</span>
+        <span class="k">return</span> <span class="n">cast_response_to_simple</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_config_options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a dictionary with config options.&quot;&quot;&quot;</span>
+
+        <span class="c1"># init dict of options and types</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># loop super classes</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="c1"># ignore Object and Module</span>
+            <span class="k">if</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Object</span><span class="p">,</span> <span class="n">Module</span><span class="p">]:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># get signature</span>
+            <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+                <span class="c1"># ignore self, args, kwargs</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;self&#39;</span><span class="p">,</span> <span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># check for getter and setter</span>
+                <span class="n">getter</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_get_config_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">setter</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_set_config_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">opts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">getter</span><span class="p">,</span> <span class="n">setter</span><span class="p">)</span>
+
+        <span class="c1"># finished</span>
+        <span class="k">return</span> <span class="n">opts</span>
+
+<div class="viewcode-block" id="Module.get_config_options"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.get_config_options">[docs]</a>    <span class="k">def</span> <span class="nf">get_config_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns dict of all config options. First value is whether it has a getter, second is for the setter.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict with config options</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_options</span></div>
+
+<div class="viewcode-block" id="Module.get_config_value"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.get_config_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_config_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current value of config item with given name.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: Name of config item.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Current value.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError if config item of given name does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># valid parameter?</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_options</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid parameter </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_options</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Parameter </span><span class="si">%s</span><span class="s1"> is not remotely accessible.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># get getter method and call it</span>
+        <span class="n">getter</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_get_config_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">getter</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Module.set_config_value"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.Module.set_config_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_config_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets value of config item with given name.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: Name of config item.</span>
+<span class="sd">            value: New value.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError if config item of given name does not exist or value is invalid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># valid parameter?</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_options</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid parameter </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_options</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Parameter </span><span class="si">%s</span><span class="s1"> is not remotely settable.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># get setter and call it</span>
+        <span class="n">setter</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_set_config_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">setter</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MultiModule"><a class="viewcode-back" href="../../../api/module.html#pyobs.modules.MultiModule">[docs]</a><span class="k">class</span> <span class="nc">MultiModule</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrapper for running multiple modules in a single process.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modules</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Module</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]],</span> <span class="n">shared</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new pyobs multi module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            modules: Dictionary with modules.</span>
+<span class="sd">            shared: Shared objects between modules.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;multi&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># create shared objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shared</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">shared</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">shared</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># if obj is an object definition, create it, otherwise just set it</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_shared</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="c1"># create modules</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">modules</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># what is it?</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">Module</span><span class="p">):</span>
+                <span class="c1"># it&#39;s a module already, store it</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">mod</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="c1"># dictionary, create it</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_shared</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">modules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Checks, whether this multi-module contains a module of given name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Module</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns module of given name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Module&#39;</span><span class="p">,</span> <span class="s1">&#39;MultiModule&#39;</span><span class="p">,</span> <span class="s1">&#39;timeout&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,59 +1,205 @@
 
-<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8" />
-    <title>AutoFocusProjection &#8212; pyobs  documentation</title>
-    <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>6.1.11.2. AutoFocusProjection &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Auto-guiding" href="../guiding/index.html" />
-    <link rel="prev" title="AutoFocusSeries" href="focusseries.html" />
+    <link rel="next" title="6.1.11.3. FocusModel" href="focusmodel.html" />
+    <link rel="prev" title="6.1.11.1. AutoFocusSeries" href="focusseries.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
-  </head><body>
+          
+            <a href="../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">5. API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">6. Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">6.1. pyobs</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../filecache/index.html">6.1.1. pyobs.modules.filecache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../image/index.html">6.1.2. pyobs.modules.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../weather/index.html">6.1.3. pyobs.modules.weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../acquisition/index.html">6.1.4. pyobs.modules.acquisition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../robotic/index.html">6.1.5. pyobs.modules.robotic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../telescope/index.html">6.1.6. pyobs.modules.telescope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roof/index.html">6.1.7. pyobs.modules.roof</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flatfield/index.html">6.1.8. pyobs.modules.flatfield</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../camera/index.html">6.1.9. pyobs.modules.camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/index.html">6.1.10. pyobs.modules.utils</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">6.1.11. pyobs.modules.focus</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="focusseries.html">6.1.11.1. AutoFocusSeries</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">6.1.11.2. AutoFocusProjection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="focusmodel.html">6.1.11.3. FocusModel</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../test/index.html">6.1.12. pyobs.modules.test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guiding/index.html">6.1.13. pyobs.modules.guiding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../pyobs_fli/index.html">6.2. pyobs_fli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pyobs_sbig/index.html">6.3. pyobs_sbig</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html"><span class="section-number">6. </span>Modules</a> &raquo;</li>
+        
+          <li><a href="../index.html"><span class="section-number">6.1. </span>pyobs</a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">6.1.11. </span>pyobs.modules.focus</a> &raquo;</li>
+        
+      <li><span class="section-number">6.1.11.2. </span>AutoFocusProjection</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/modules/pyobs/focus/projection.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
   
-  
-
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../guiding/index.html" title="Auto-guiding"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="focusseries.html" title="AutoFocusSeries"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../index.html" >pyobs</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Auto-focus</a> &#187;</li> 
-      </ul>
-    </div>  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="autofocusprojection">
-<h1>AutoFocusProjection<a class="headerlink" href="#autofocusprojection" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<h1><span class="section-number">6.1.11.2. </span>AutoFocusProjection<a class="headerlink" href="#autofocusprojection" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
 <dt id="pyobs.modules.focus.AutoFocusProjection">
-<em class="property">class </em><code class="sig-prename descclassname">pyobs.modules.focus.</code><code class="sig-name descname">AutoFocusProjection</code><span class="sig-paren">(</span><em class="sig-param">focuser: Union[str, pyobs.interfaces.IFocuser.IFocuser], camera: Union[str, pyobs.interfaces.ICamera.ICamera], filters: Union[str, pyobs.interfaces.IFilters.IFilters], offset: bool = False, *args, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.modules.focus.</span></code><code class="sig-name descname"><span class="pre">AutoFocusProjection</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">focuser</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pyobs.interfaces.IFocuser.IFocuser</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pyobs.interfaces.ICamera.ICamera</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pyobs.interfaces.IFilters.IFilters</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/focus/projection.html#AutoFocusProjection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Module for auto-focusing a telescope.</p>
-<p>Initialize a new auto focus system.</p>
+<dl class="py method">
+<dt id="pyobs.modules.focus.AutoFocusProjection.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">focuser</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pyobs.interfaces.IFocuser.IFocuser</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pyobs.interfaces.ICamera.ICamera</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pyobs.interfaces.IFilters.IFilters</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/focus/projection.html#AutoFocusProjection.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new auto focus system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -64,21 +210,21 @@
 </ul>
 </dd>
 </dl>
-<dl class="method">
+</dd></dl>
+
+<dl class="py method">
 <dt id="pyobs.modules.focus.AutoFocusProjection.abort">
-<code class="sig-name descname">abort</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.abort" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">abort</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/focus/projection.html#AutoFocusProjection.abort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.abort" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abort current actions.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs.modules.focus.AutoFocusProjection.auto_focus">
-<code class="sig-name descname">auto_focus</code><span class="sig-paren">(</span><em class="sig-param">count: int</em>, <em class="sig-param">step: float</em>, <em class="sig-param">exposure_time: int</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs) -&gt; (&lt;class 'float'&gt;</em>, <em class="sig-param">&lt;class 'float'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.auto_focus" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">auto_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exposure_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../../_modules/pyobs/modules/focus/projection.html#AutoFocusProjection.auto_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.auto_focus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform an auto-focus series.</p>
 <p>This method performs an auto-focus series with “count” images on each side of the initial guess and the given
-step size. With count=3, step=1 and guess=10, this takes images at the following focus values:</p>
-<blockquote>
-<div><p>7, 8, 9, 10, 11, 12, 13</p>
-</div></blockquote>
+step size. With count=3, step=1 and guess=10, this takes images at the following focus values:
+7, 8, 9, 10, 11, 12, 13</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -88,20 +234,17 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tuple of obtained best focus value and its uncertainty.</p>
+<dd class="field-even"><p>Tuple of obtained best focus value and its uncertainty, or Nones if focus series failed.</p>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ValueError</strong> – If focus could not be obtained.</p></li>
-<li><p><strong>FileNotFoundException</strong> – If image could not be downloaded.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>FileNotFoundException</strong> – If image could not be downloaded.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs.modules.focus.AutoFocusProjection.auto_focus_status">
-<code class="sig-name descname">auto_focus_status</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.auto_focus_status" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">auto_focus_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../../../_modules/pyobs/modules/focus/projection.html#AutoFocusProjection.auto_focus_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.auto_focus_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns current status of auto focus.</p>
 <p>Returned dictionary contains a list of focus/fwhm pairs in X and Y direction.</p>
 <dl class="field-list simple">
@@ -111,15 +254,9 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyobs.modules.focus.AutoFocusProjection.close">
-<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close module.</p>
-</dd></dl>
-
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs.modules.focus.AutoFocusProjection.open">
-<code class="sig-name descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.open" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">open</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyobs/modules/focus/projection.html#AutoFocusProjection.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.open" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open module</p>
 </dd></dl>
 
@@ -128,48 +265,51 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 </div>
 
 
+           </div>
+           
           </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="focusmodel.html" class="btn btn-neutral float-right" title="6.1.11.3. FocusModel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="focusseries.html" class="btn btn-neutral float-left" title="6.1.11.1. AutoFocusSeries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
-<ul>
-  <li><a href="../../../index.html">Documentation index</a><ul>
-  <li><a href="../../index.html">Modules</a><ul>
-  <li><a href="../index.html">pyobs</a><ul>
-  <li><a href="index.html">Auto-focus</a><ul>
-      <li>Previous: <a href="focusseries.html" title="previous chapter">AutoFocusSeries</a></li>
-      <li>Next: <a href="../guiding/index.html" title="next chapter">Auto-guiding</a></li>
-  </ul></li>
-  </ul></li>
-  </ul></li>
-  </ul></li>
-</ul>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../../_sources/modules/pyobs/focus/projection.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-  <div class="footer">
-    &copy; Copyright 2020, Tim-Oliver Husser.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+
+    </section>
+
   </div>
   
-  </body>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
 </html>

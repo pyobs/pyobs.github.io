@@ -1,5 +1,5 @@
-Camera
-======
+pyobs.modules.camera
+====================
 
 .. toctree::
    :maxdepth: 2
@@ -7,3 +7,4 @@ Camera
 
    basecamera
    dummycamera
+

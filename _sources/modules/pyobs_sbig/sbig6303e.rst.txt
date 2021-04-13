@@ -1,0 +1,7 @@
+Sbig6303eCamera
+===============
+
+.. autoclass:: pyobs_sbig.Sbig6303eCamera
+    :members:
+    :special-members: __init__
+

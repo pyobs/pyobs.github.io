@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.acquisition.base &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.acquisition.base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.acquisition.base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="kn">import</span> <span class="n">SkyCoord</span><span class="p">,</span> <span class="n">AltAz</span>
+<span class="kn">from</span> <span class="nn">astropy.wcs</span> <span class="kn">import</span> <span class="n">WCS</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">IAcquisition</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">,</span> <span class="n">IAltAzOffsets</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> \
+    <span class="n">IImageType</span>
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.mixins</span> <span class="kn">import</span> <span class="n">CameraSettingsMixin</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">ImageType</span>
+<span class="kn">from</span> <span class="nn">pyobs.images</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">pyobs.images.processors</span> <span class="kn">import</span> <span class="n">SoftBin</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.publisher</span> <span class="kn">import</span> <span class="n">CsvPublisher</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BaseAcquisition"><a class="viewcode-back" href="../../../../modules/pyobs/acquisition/base.html#pyobs.modules.acquisition.BaseAcquisition">[docs]</a><span class="k">class</span> <span class="nc">BaseAcquisition</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">CameraSettingsMixin</span><span class="p">,</span> <span class="n">IAcquisition</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for telescope acquisition.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BaseAcquisition.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/acquisition/base.html#pyobs.modules.acquisition.BaseAcquisition.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">telescope</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">],</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">],</span>
+                 <span class="n">target_pixel</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">max_offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">120</span><span class="p">,</span> <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">soft_bin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new base acquisition.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            telescope: Name of ITelescope.</span>
+<span class="sd">            camera: Name of ICamera.</span>
+<span class="sd">            target_pixel: (x, y) tuple of pixel that the star should be positioned on. If None, center of image is used.</span>
+<span class="sd">            attempts: Number of attempts before giving up.</span>
+<span class="sd">            tolerance: Tolerance in position to reach in arcsec.</span>
+<span class="sd">            max_offset: Maximum offset to move in arcsec.</span>
+<span class="sd">            log_file: Name of file to write log to.</span>
+<span class="sd">            soft_bin: Factor to the images with before processing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># store telescope and camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span> <span class="o">=</span> <span class="n">telescope</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="o">=</span> <span class="n">camera</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target_pixel</span> <span class="o">=</span> <span class="n">target_pixel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_attempts</span> <span class="o">=</span> <span class="n">attempts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_offset</span> <span class="o">=</span> <span class="n">max_offset</span>
+
+        <span class="c1"># init log file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="o">=</span> <span class="n">CsvPublisher</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
+
+        <span class="c1"># binning</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_soft_bin</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">soft_bin</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">SoftBin</span><span class="p">(</span><span class="n">binning</span><span class="o">=</span><span class="n">soft_bin</span><span class="p">)</span>
+
+        <span class="c1"># init camera settings mixin</span>
+        <span class="n">CameraSettingsMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseAcquisition.open"><a class="viewcode-back" href="../../../../modules/pyobs/acquisition/base.html#pyobs.modules.acquisition.BaseAcquisition.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># check telescope and camera</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Either camera or telescope do not exist or are not of correct type at the moment.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseAcquisition.acquire_target"><a class="viewcode-back" href="../../../../modules/pyobs/acquisition/base.html#pyobs.modules.acquisition.BaseAcquisition.acquire_target">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">acquire_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Acquire target at given coordinates.</span>
+
+<span class="sd">        If no RA/Dec are given, start from current position. Might not work for some implementations that require</span>
+<span class="sd">        coordinates.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: Exposure time for acquisition in secs.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary with entries for datetime, ra, dec, alt, az, and either off_ra, off_dec or off_alt, off_az.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError if target could not be acquired.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get telescope</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting proxy for telescope...&#39;</span><span class="p">)</span>
+        <span class="n">telescope</span><span class="p">:</span> <span class="n">ITelescope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">)</span>
+
+        <span class="c1"># get camera</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting proxy for camera...&#39;</span><span class="p">)</span>
+        <span class="n">camera</span><span class="p">:</span> <span class="n">ICamera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">)</span>
+
+        <span class="c1"># do camera settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_do_camera_settings</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
+
+        <span class="c1"># try given number of attempts</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_attempts</span><span class="p">):</span>
+            <span class="c1"># set exposure time and image type and take image</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">):</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Exposing image for </span><span class="si">%.1f</span><span class="s1"> seconds...&#39;</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">)</span>
+                <span class="n">camera</span><span class="o">.</span><span class="n">set_exposure_time</span><span class="p">(</span><span class="n">exposure_time</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Exposing image...&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">IImageType</span><span class="p">):</span>
+                <span class="n">camera</span><span class="o">.</span><span class="n">set_image_type</span><span class="p">(</span><span class="n">ImageType</span><span class="o">.</span><span class="n">ACQUISITION</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">expose</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+            <span class="c1"># download image</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Downloading image...&#39;</span><span class="p">)</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">read_image</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+            <span class="c1"># bin?</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_soft_bin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_soft_bin</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+            <span class="c1"># get target pixel</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_pixel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">cy</span><span class="p">,</span> <span class="n">cx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_pixel</span>
+
+            <span class="c1"># get date obs and wcc</span>
+            <span class="n">date_obs</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATE-OBS&#39;</span><span class="p">])</span>
+            <span class="n">wcs</span> <span class="o">=</span> <span class="n">WCS</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
+
+            <span class="c1"># coordinates without offset</span>
+            <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;CRVAL1&#39;</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;CRVAL2&#39;</span><span class="p">]</span>
+
+            <span class="c1"># get WCS and RA/DEC for target pixel and</span>
+            <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">wcs</span><span class="o">.</span><span class="n">all_pix2world</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">radec_center</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">lon</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">lat</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;icrs&#39;</span><span class="p">,</span> <span class="n">obstime</span><span class="o">=</span><span class="n">date_obs</span><span class="p">,</span>
+                                    <span class="n">location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+
+            <span class="c1"># get required shift in RA/Dec</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Analyzing image...&#39;</span><span class="p">)</span>
+            <span class="n">x_target</span><span class="p">,</span> <span class="n">y_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_radec</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+
+            <span class="c1"># convert to world</span>
+            <span class="n">ra_target</span><span class="p">,</span> <span class="n">dec_target</span> <span class="o">=</span> <span class="n">wcs</span><span class="o">.</span><span class="n">all_pix2world</span><span class="p">(</span><span class="n">x_target</span><span class="p">,</span> <span class="n">y_target</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">radec_target</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">ra_target</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">dec_target</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;icrs&#39;</span><span class="p">,</span>
+                                    <span class="n">obstime</span><span class="o">=</span><span class="n">date_obs</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+
+            <span class="c1"># get current position (without offsets!)</span>
+            <span class="n">cur_ra</span><span class="p">,</span> <span class="n">cur_dec</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_radec</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="n">radec_current</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">cur_ra</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">cur_dec</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;icrs&#39;</span><span class="p">,</span>
+                                     <span class="n">obstime</span><span class="o">=</span><span class="n">date_obs</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+
+            <span class="c1"># calculate offsets and return them</span>
+            <span class="n">dra</span> <span class="o">=</span> <span class="p">(</span><span class="n">radec_target</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">degree</span> <span class="o">-</span> <span class="n">radec_center</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">degree</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">cur_dec</span><span class="p">))</span>
+            <span class="n">ddec</span> <span class="o">=</span> <span class="n">radec_target</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degree</span> <span class="o">-</span> <span class="n">radec_center</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degree</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">radec_center</span><span class="o">.</span><span class="n">separation</span><span class="p">(</span><span class="n">radec_target</span><span class="p">)</span><span class="o">.</span><span class="n">degree</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found RA/Dec shift of dRA=</span><span class="si">%.2f</span><span class="s1">&quot;, dDec=</span><span class="si">%.2f</span><span class="s1">&quot;, giving </span><span class="si">%.2f</span><span class="s1">&quot; in total.&#39;</span><span class="p">,</span>
+                     <span class="n">dra</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">,</span> <span class="n">ddec</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">,</span> <span class="n">dist</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">)</span>
+
+            <span class="c1"># for testing, calculate offsets from current</span>
+            <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">radec_current</span><span class="o">.</span><span class="n">spherical_offsets_to</span><span class="p">(</span><span class="n">radec_target</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;TESTING current-&gt;target: dRA=</span><span class="si">%.2f</span><span class="s1">&quot;, dDec=</span><span class="si">%.2f</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="n">t1</span><span class="o">.</span><span class="n">arcsec</span><span class="p">,</span> <span class="n">t2</span><span class="o">.</span><span class="n">arcsec</span><span class="p">)</span>
+            <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">radec_center</span><span class="o">.</span><span class="n">spherical_offsets_to</span><span class="p">(</span><span class="n">radec_target</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;TESTING center-&gt;target: dRA=</span><span class="si">%.2f</span><span class="s1">&quot;, dDec=</span><span class="si">%.2f</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="n">t1</span><span class="o">.</span><span class="n">arcsec</span><span class="p">,</span> <span class="n">t2</span><span class="o">.</span><span class="n">arcsec</span><span class="p">)</span>
+
+            <span class="c1"># get distance</span>
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">*</span> <span class="mf">3600.</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span><span class="p">:</span>
+                <span class="c1"># we&#39;re finished!</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Target successfully acquired.&#39;</span><span class="p">)</span>
+
+                <span class="c1"># get current Alt/Az</span>
+                <span class="n">cur_alt</span><span class="p">,</span> <span class="n">cur_az</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_altaz</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+                <span class="c1"># prepare log entry</span>
+                <span class="n">log_entry</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;datetime&#39;</span><span class="p">:</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isot</span><span class="p">,</span>
+                    <span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="n">cur_ra</span><span class="p">,</span>
+                    <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="n">cur_dec</span><span class="p">,</span>
+                    <span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="n">cur_alt</span><span class="p">,</span>
+                    <span class="s1">&#39;az&#39;</span><span class="p">:</span> <span class="n">cur_az</span>
+                <span class="p">}</span>
+
+                <span class="c1"># Alt/Az or RA/Dec?</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">telescope</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">):</span>
+                    <span class="n">log_entry</span><span class="p">[</span><span class="s1">&#39;off_ra&#39;</span><span class="p">],</span> <span class="n">log_entry</span><span class="p">[</span><span class="s1">&#39;off_dec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_radec_offsets</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">telescope</span><span class="p">,</span> <span class="n">IAltAzOffsets</span><span class="p">):</span>
+                    <span class="n">log_entry</span><span class="p">[</span><span class="s1">&#39;off_alt&#39;</span><span class="p">],</span> <span class="n">log_entry</span><span class="p">[</span><span class="s1">&#39;off_az&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_altaz_offsets</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+                <span class="c1"># write log</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span><span class="p">(</span><span class="o">**</span><span class="n">log_entry</span><span class="p">)</span>
+
+                <span class="c1"># finished</span>
+                <span class="k">return</span> <span class="n">log_entry</span>
+
+            <span class="c1"># abort?</span>
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">*</span> <span class="mf">3600.</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_offset</span><span class="p">:</span>
+                <span class="c1"># move a maximum of 120&quot;=2&#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Calculated offsets too large.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># is telescope on an equitorial mount?</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">telescope</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">):</span>
+                <span class="c1"># get current offset</span>
+                <span class="n">cur_dra</span><span class="p">,</span> <span class="n">cur_ddec</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_radec_offsets</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+                <span class="c1"># calculate total offsets</span>
+                <span class="n">total_dra</span><span class="p">,</span> <span class="n">total_ddec</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cur_dra</span> <span class="o">+</span> <span class="n">dra</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">cur_ddec</span> <span class="o">+</span> <span class="n">ddec</span><span class="p">)</span>
+
+                <span class="c1"># move offset</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Offsetting telescope to dRA=</span><span class="si">%.2f</span><span class="s1">&quot;, dDec=</span><span class="si">%.2f</span><span class="s1">&quot;...&#39;</span><span class="p">,</span> <span class="n">total_dra</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">,</span> <span class="n">total_ddec</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">)</span>
+                <span class="n">telescope</span><span class="o">.</span><span class="n">set_radec_offsets</span><span class="p">(</span><span class="n">total_dra</span><span class="p">,</span> <span class="n">total_ddec</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">telescope</span><span class="p">,</span> <span class="n">IAltAzOffsets</span><span class="p">):</span>
+                <span class="c1"># transform both to Alt/AZ</span>
+                <span class="n">altaz1</span> <span class="o">=</span> <span class="n">radec_center</span><span class="o">.</span><span class="n">transform_to</span><span class="p">(</span><span class="n">AltAz</span><span class="p">)</span>
+                <span class="n">altaz2</span> <span class="o">=</span> <span class="n">radec_target</span><span class="o">.</span><span class="n">transform_to</span><span class="p">(</span><span class="n">AltAz</span><span class="p">)</span>
+
+                <span class="c1"># calculate offsets</span>
+                <span class="n">dalt</span> <span class="o">=</span> <span class="n">altaz2</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span> <span class="o">-</span> <span class="n">altaz1</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span>
+                <span class="n">daz</span> <span class="o">=</span> <span class="n">altaz2</span><span class="o">.</span><span class="n">az</span><span class="o">.</span><span class="n">degree</span> <span class="o">-</span> <span class="n">altaz1</span><span class="o">.</span><span class="n">az</span><span class="o">.</span><span class="n">degree</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Transformed to Alt/Az shift of dalt=</span><span class="si">%.2f</span><span class="s1">&quot;, daz=</span><span class="si">%.2f</span><span class="s1">&quot;.&#39;</span><span class="p">,</span> <span class="n">dalt</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">,</span> <span class="n">daz</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">)</span>
+
+                <span class="c1"># get current offset</span>
+                <span class="n">cur_dalt</span><span class="p">,</span> <span class="n">cur_daz</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_altaz_offsets</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Current offsets alt=</span><span class="si">%.2f</span><span class="s1">, az=</span><span class="si">%.2f</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">cur_dalt</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">,</span> <span class="n">cur_daz</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span>
+
+                <span class="c1"># move offset</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Offsetting telescope...&#39;</span><span class="p">)</span>
+                <span class="n">telescope</span><span class="o">.</span><span class="n">set_altaz_offsets</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cur_dalt</span> <span class="o">+</span> <span class="n">dalt</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">cur_daz</span> <span class="o">+</span> <span class="n">daz</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Telescope has neither altaz nor equitorial mount. No idea how to move it...&#39;</span><span class="p">)</span>
+
+        <span class="c1"># could not acquire target</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not acquire target within given tolerance.&#39;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_target_radec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">:</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ra</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dec</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns RA/Dec coordinates of pixel that needs to be centered.</span>
+
+<span class="sd">        Params:</span>
+<span class="sd">            img: Image to analyze.</span>
+<span class="sd">            ra: Requested RA.</span>
+<span class="sd">            dec: Requested Declination.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (ra, dec) of pixel that needs to be moved to the centre of the image.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError if target coordinates could not be determined.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="bp">NotImplemented</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BaseAcquisition&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

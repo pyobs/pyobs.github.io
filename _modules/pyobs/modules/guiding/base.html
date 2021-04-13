@@ -1,0 +1,517 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.guiding.base &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.guiding.base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.guiding.base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="kn">import</span> <span class="n">SkyCoord</span><span class="p">,</span> <span class="n">AltAz</span>
+<span class="kn">from</span> <span class="nn">astropy.wcs</span> <span class="kn">import</span> <span class="n">WCS</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.images.processors</span> <span class="kn">import</span> <span class="n">SoftBin</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.publisher</span> <span class="kn">import</span> <span class="n">CsvPublisher</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IAutoGuiding</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">,</span> <span class="n">IAltAzOffsets</span><span class="p">,</span> <span class="n">ICamera</span>
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span><span class="p">,</span> <span class="n">get_object</span>
+<span class="kn">from</span> <span class="nn">pyobs.images.processors.offsets</span> <span class="kn">import</span> <span class="n">Offsets</span>
+<span class="kn">from</span> <span class="nn">pyobs.images</span> <span class="kn">import</span> <span class="n">Image</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BaseGuiding"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/base.html#pyobs.modules.guiding.BaseGuiding">[docs]</a><span class="k">class</span> <span class="nc">BaseGuiding</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IAutoGuiding</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseGuiding.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/base.html#pyobs.modules.guiding.BaseGuiding.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">],</span> <span class="n">telescope</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">],</span>
+                 <span class="n">offsets</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Offsets</span><span class="p">],</span> <span class="n">min_offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">max_offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+                 <span class="n">max_exposure_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">max_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">600</span><span class="p">,</span>
+                 <span class="n">separation_reset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">pid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">soft_bin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new science frame auto guiding system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            telescope: Telescope to use.</span>
+<span class="sd">            offsets: Auto-guider to use</span>
+<span class="sd">            min_offset: Min offset in arcsec to move.</span>
+<span class="sd">            max_offset: Max offset in arcsec to move.</span>
+<span class="sd">            max_exposure_time: Maximum exposure time in sec for images to analyse.</span>
+<span class="sd">            min_interval: Minimum interval in sec between two images.</span>
+<span class="sd">            max_interval: Maximum interval in sec between to consecutive images to guide.</span>
+<span class="sd">            separation_reset: Min separation in arcsec between two consecutive images that triggers a reset.</span>
+<span class="sd">            pid: Whether to use a PID for guiding.</span>
+<span class="sd">            log_file: Name of file to write log to.</span>
+<span class="sd">            soft_bin: Factor to the images with before processing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="o">=</span> <span class="n">camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span> <span class="o">=</span> <span class="n">telescope</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_offset</span> <span class="o">=</span> <span class="n">min_offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_offset</span> <span class="o">=</span> <span class="n">max_offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_exposure_time</span> <span class="o">=</span> <span class="n">max_exposure_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_interval</span> <span class="o">=</span> <span class="n">min_interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_interval</span> <span class="o">=</span> <span class="n">max_interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_separation_reset</span> <span class="o">=</span> <span class="n">separation_reset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pid</span> <span class="o">=</span> <span class="n">pid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loop_closed</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># headers of last and of reference image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_header</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ref_header</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># create auto-guiding system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_guiding_offset</span> <span class="o">=</span> <span class="n">get_object</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="n">Offsets</span><span class="p">)</span>
+
+        <span class="c1"># init log file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">log_file</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">CsvPublisher</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
+
+        <span class="c1"># binning</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_soft_bin</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">soft_bin</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">SoftBin</span><span class="p">(</span><span class="n">binning</span><span class="o">=</span><span class="n">soft_bin</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseGuiding.open"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/base.html#pyobs.modules.guiding.BaseGuiding.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># check telescope</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Given telescope does not exist or is not of correct type at the moment.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># check camera</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Given camera does not exist or is not of correct type at the moment.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseGuiding.start"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/base.html#pyobs.modules.guiding.BaseGuiding.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Starts/resets auto-guiding.&quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Start auto-guiding...&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_guiding</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseGuiding.stop"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/base.html#pyobs.modules.guiding.BaseGuiding.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stops auto-guiding.&quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Stopping autp-guiding...&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_guiding</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseGuiding.is_running"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/base.html#pyobs.modules.guiding.BaseGuiding.is_running">[docs]</a>    <span class="k">def</span> <span class="nf">is_running</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Whether auto-guiding is running.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Auto-guiding is running.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span></div>
+
+<div class="viewcode-block" id="BaseGuiding.get_fits_headers"><a class="viewcode-back" href="../../../../modules/pyobs/guiding/base.html#pyobs.modules.guiding.BaseGuiding.get_fits_headers">[docs]</a>    <span class="k">def</span> <span class="nf">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns FITS header for the current status of this module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            namespaces: If given, only return FITS headers for the given namespaces.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary containing FITS headers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># state</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="s1">&#39;GUIDING_CLOSED_LOOP&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop_closed</span> <span class="k">else</span> <span class="s1">&#39;GUIDING_OPEN_LOOP&#39;</span>
+
+        <span class="c1"># return header</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;AGSTATE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;Autoguider state&#39;</span><span class="p">)</span>
+        <span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="nf">_reset_guiding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Image</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset guiding.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: If given, new reference image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">enabled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loop_closed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ref_header</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_header</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span>
+
+        <span class="c1"># reset offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_guiding_offset</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># if image is given, process it</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_guiding_offset</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_process_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Processes a single image and offsets telescope.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: Image to process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># not enabled?</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># we only accept OBJECT images</span>
+        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;IMAGETYP&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;object&#39;</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># bin?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_soft_bin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_soft_bin</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+        <span class="c1"># reference header?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ref_header</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting new reference image...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset_guiding</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># check RA/Dec in header and separation</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;TEL-RA&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;TEL-DEC&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;icrs&#39;</span><span class="p">)</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ref_header</span><span class="p">[</span><span class="s1">&#39;TEL-RA&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ref_header</span><span class="p">[</span><span class="s1">&#39;TEL-DEC&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;icrs&#39;</span><span class="p">)</span>
+        <span class="n">separation</span> <span class="o">=</span> <span class="n">c1</span><span class="o">.</span><span class="n">separation</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span><span class="o">.</span><span class="n">deg</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_separation_reset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">separation</span> <span class="o">*</span> <span class="mf">3600.</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_separation_reset</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Nominal position of reference and new image differ by </span><span class="si">%.2f</span><span class="s1">&quot;, resetting reference...&#39;</span><span class="p">,</span>
+                            <span class="n">separation</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset_guiding</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># check filter</span>
+        <span class="k">if</span> <span class="s1">&#39;FILTER&#39;</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span> <span class="ow">and</span> <span class="s1">&#39;FILTER&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ref_header</span> <span class="ow">and</span> \
+                <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;FILTER&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ref_header</span><span class="p">[</span><span class="s1">&#39;FILTER&#39;</span><span class="p">]:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;The filter has been changed since the last exposure, resetting reference...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset_guiding</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># get time</span>
+        <span class="n">date_obs</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATE-OBS&#39;</span><span class="p">])</span>
+
+        <span class="c1"># check times and focus</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># check times</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_header</span><span class="p">[</span><span class="s1">&#39;DATE-OBS&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">date_obs</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span><span class="o">.</span><span class="n">sec</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_interval</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Time between current and last image is too large, resetting reference...&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_reset_guiding</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">date_obs</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span><span class="o">.</span><span class="n">sec</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_interval</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Time between current and last image is too small, ignoring image...&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="c1"># check focus</span>
+            <span class="k">if</span> <span class="s1">&#39;TEL-FOCU&#39;</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;TEL-FOCU&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_header</span><span class="p">[</span><span class="s1">&#39;TEL-FOCU&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.05</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Focus difference between current and last image is too large, resetting reference...&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_reset_guiding</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">)</span>
+                    <span class="k">return</span>
+
+        <span class="c1"># remember header</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_header</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span>
+
+        <span class="c1"># get offset</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_guiding_offset</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not correlate image with reference.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found pixel shift of dx=</span><span class="si">%.2f</span><span class="s1">, dy=</span><span class="si">%.2f</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span>
+
+        <span class="c1"># get reference pixel</span>
+        <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;CRPIX1&#39;</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;CRPIX1&#39;</span><span class="p">]</span>
+
+        <span class="c1"># get WCS and RA/DEC for pixel and pixel + dx/dy</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">WCS</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
+        <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">all_pix2world</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">radec1</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">lon</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">lat</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;icrs&#39;</span><span class="p">,</span> <span class="n">obstime</span><span class="o">=</span><span class="n">date_obs</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+        <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">all_pix2world</span><span class="p">(</span><span class="n">cx</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">radec2</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">lon</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">lat</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;icrs&#39;</span><span class="p">,</span> <span class="n">obstime</span><span class="o">=</span><span class="n">date_obs</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+
+        <span class="c1"># get telescope</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">telescope</span><span class="p">:</span> <span class="n">ITelescope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Given telescope does not exist or is not of correct type.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># get current position</span>
+        <span class="n">cur_ra</span><span class="p">,</span> <span class="n">cur_dec</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_radec</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="n">cur_alt</span><span class="p">,</span> <span class="n">cur_az</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_altaz</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+        <span class="c1"># calculate offsets</span>
+        <span class="n">dra</span> <span class="o">=</span> <span class="p">(</span><span class="n">radec2</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">degree</span> <span class="o">-</span> <span class="n">radec1</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">degree</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">cur_dec</span><span class="p">))</span>
+        <span class="n">ddec</span> <span class="o">=</span> <span class="n">radec2</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degree</span> <span class="o">-</span> <span class="n">radec1</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degree</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Transformed to RA/Dec shift of dRA=</span><span class="si">%.2f</span><span class="s1">&quot;, dDec=</span><span class="si">%.2f</span><span class="s1">&quot;.&#39;</span><span class="p">,</span> <span class="n">dra</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">,</span> <span class="n">ddec</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">)</span>
+
+        <span class="c1"># too large or too small?</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">dra</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span> <span class="o">+</span> <span class="p">(</span><span class="n">ddec</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">diff</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_offset</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Shift too small, skipping auto-guiding for now...&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_offset</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Shift too large, skipping auto-guiding for now...&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># exposure time too large</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_exposure_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;EXPTIME&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_exposure_time</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Exposure time too large, skipping auto-guiding for now...&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># prepare log entry</span>
+        <span class="n">log_entry</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;datetime&#39;</span><span class="p">:</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isot</span><span class="p">,</span>
+            <span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="n">cur_ra</span><span class="p">,</span>
+            <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="n">cur_dec</span><span class="p">,</span>
+            <span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="n">cur_alt</span><span class="p">,</span>
+            <span class="s1">&#39;az&#39;</span><span class="p">:</span> <span class="n">cur_az</span>
+        <span class="p">}</span>
+
+        <span class="c1"># push offset into PID</span>
+        <span class="c1">#if self._pid:</span>
+        <span class="c1">#    dra = self._pid_ra.update(dra)</span>
+        <span class="c1">#    ddec = self._pid_dec.update(ddec)</span>
+        <span class="c1">#    log.info(&#39;PID results in RA/Dec shift of dRA=%.2f&quot;, dDec=%.2f.&#39;, dra * 3600., ddec * 3600.)</span>
+
+        <span class="c1"># is telescope on an equitorial mount?</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">telescope</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">):</span>
+            <span class="c1"># log</span>
+            <span class="n">log_entry</span><span class="p">[</span><span class="s1">&#39;dra&#39;</span><span class="p">],</span> <span class="n">log_entry</span><span class="p">[</span><span class="s1">&#39;ddec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dra</span><span class="p">,</span> <span class="n">ddec</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span><span class="p">(</span><span class="o">**</span><span class="n">log_entry</span><span class="p">)</span>
+
+            <span class="c1"># get current offset</span>
+            <span class="n">cur_dra</span><span class="p">,</span> <span class="n">cur_ddec</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_radec_offsets</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+            <span class="c1"># move offset</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Offsetting telescope...&#39;</span><span class="p">)</span>
+            <span class="n">telescope</span><span class="o">.</span><span class="n">set_radec_offsets</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cur_dra</span> <span class="o">+</span> <span class="n">dra</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">cur_ddec</span> <span class="o">+</span> <span class="n">ddec</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished image.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_loop_closed</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">telescope</span><span class="p">,</span> <span class="n">IAltAzOffsets</span><span class="p">):</span>
+            <span class="c1"># transform both to Alt/AZ</span>
+            <span class="n">altaz1</span> <span class="o">=</span> <span class="n">radec1</span><span class="o">.</span><span class="n">transform_to</span><span class="p">(</span><span class="n">AltAz</span><span class="p">)</span>
+            <span class="n">altaz2</span> <span class="o">=</span> <span class="n">radec2</span><span class="o">.</span><span class="n">transform_to</span><span class="p">(</span><span class="n">AltAz</span><span class="p">)</span>
+
+            <span class="c1"># calculate offsets</span>
+            <span class="n">dalt</span> <span class="o">=</span> <span class="n">altaz2</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span> <span class="o">-</span> <span class="n">altaz1</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span>
+            <span class="n">daz</span> <span class="o">=</span> <span class="n">altaz2</span><span class="o">.</span><span class="n">az</span><span class="o">.</span><span class="n">degree</span> <span class="o">-</span> <span class="n">altaz1</span><span class="o">.</span><span class="n">az</span><span class="o">.</span><span class="n">degree</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Transformed to Alt/Az shift of dalt=</span><span class="si">%.2f</span><span class="s1">&quot;, daz=</span><span class="si">%.2f</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">dalt</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">,</span> <span class="n">daz</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">)</span>
+
+            <span class="c1"># log</span>
+            <span class="n">log_entry</span><span class="p">[</span><span class="s1">&#39;dalt&#39;</span><span class="p">],</span> <span class="n">log_entry</span><span class="p">[</span><span class="s1">&#39;daz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dalt</span><span class="p">,</span> <span class="n">daz</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span><span class="p">(</span><span class="o">**</span><span class="n">log_entry</span><span class="p">)</span>
+
+            <span class="c1"># get current offset</span>
+            <span class="n">cur_dalt</span><span class="p">,</span> <span class="n">cur_daz</span> <span class="o">=</span> <span class="n">telescope</span><span class="o">.</span><span class="n">get_altaz_offsets</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+            <span class="c1"># move offset</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Offsetting telescope...&#39;</span><span class="p">)</span>
+            <span class="n">telescope</span><span class="o">.</span><span class="n">set_altaz_offsets</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cur_dalt</span> <span class="o">+</span> <span class="n">dalt</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">cur_daz</span> <span class="o">+</span> <span class="n">daz</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished image.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_loop_closed</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Telescope has neither altaz nor equitorial mount. No idea how to move it...&#39;</span><span class="p">)</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BaseGuiding&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+Kiosk
+=====
+
+.. autoclass:: pyobs.modules.utils.Kiosk
+    :members:
+    :special-members: __init__
+

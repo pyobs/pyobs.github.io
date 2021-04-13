@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.robotic.pointing &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.robotic.pointing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.robotic.pointing</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="kn">import</span> <span class="n">SkyCoord</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.comm</span> <span class="kn">import</span> <span class="n">InvocationException</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IAcquisition</span><span class="p">,</span> <span class="n">IAutonomous</span><span class="p">,</span> <span class="n">ITelescope</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PointingSeries"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/pointing.html#pyobs.modules.robotic.PointingSeries">[docs]</a><span class="k">class</span> <span class="nc">PointingSeries</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IAutonomous</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Module for running pointing series.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PointingSeries.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/pointing.html#pyobs.modules.robotic.PointingSeries.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">30.</span><span class="p">,</span> <span class="mf">85.</span><span class="p">),</span> <span class="n">num_alt</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+                 <span class="n">az_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">360.</span><span class="p">),</span> <span class="n">num_az</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
+                 <span class="n">dec_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">80.</span><span class="p">,</span> <span class="mf">80.</span><span class="p">),</span> <span class="n">min_moon_dist</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">15.</span><span class="p">,</span> <span class="n">finish</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">90</span><span class="p">,</span>
+                 <span class="n">exp_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">acquisition</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;acquisition&#39;</span><span class="p">,</span> <span class="n">telescope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;telescope&#39;</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new auto focus system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alt_range: Range in degrees to use in altitude.</span>
+<span class="sd">            num_alt: Number of altitude points to create on grid.</span>
+<span class="sd">            az_range: Range in degrees to use in azimuth.</span>
+<span class="sd">            num_az: Number of azimuth points to create on grid.</span>
+<span class="sd">            dec_range: Range in declination in degrees to use.</span>
+<span class="sd">            min_moon_dist: Minimum moon distance in degrees.</span>
+<span class="sd">            finish: When this number in percent of points have been finished, terminate mastermind.</span>
+<span class="sd">            exp_time: Exposure time in secs.</span>
+<span class="sd">            acquisition: IAcquisition unit to use.</span>
+<span class="sd">            telescope: ITelescope unit to use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_alt_range</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">alt_range</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_alt</span> <span class="o">=</span> <span class="n">num_alt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_az_range</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">az_range</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_az</span> <span class="o">=</span> <span class="n">num_az</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dec_range</span> <span class="o">=</span> <span class="n">dec_range</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_moon_dist</span> <span class="o">=</span> <span class="n">min_moon_dist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_finish</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">finish</span> <span class="o">/</span> <span class="mf">100.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exp_time</span> <span class="o">=</span> <span class="n">exp_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_acquisition</span> <span class="o">=</span> <span class="n">acquisition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span> <span class="o">=</span> <span class="n">telescope</span>
+
+        <span class="c1"># if Az range is [0, 360], we got north double, so remove one step</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_az_range</span> <span class="o">==</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">360.</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_az_range</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">360.</span> <span class="o">-</span> <span class="mf">360.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_az</span><span class="p">)</span>
+
+        <span class="c1"># add thread func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_run_thread</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PointingSeries.start"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/pointing.html#pyobs.modules.robotic.PointingSeries.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Starts a service.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="PointingSeries.stop"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/pointing.html#pyobs.modules.robotic.PointingSeries.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stops a service.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="PointingSeries.is_running"><a class="viewcode-back" href="../../../../modules/pyobs/robotic/pointing.html#pyobs.modules.robotic.PointingSeries.is_running">[docs]</a>    <span class="k">def</span> <span class="nf">is_running</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Whether a service is running.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="k">def</span> <span class="nf">_run_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run a pointing series.&quot;&quot;&quot;</span>
+
+        <span class="c1"># create grid</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;az&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;done&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">az</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_az_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_az_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_az</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">alt</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alt_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alt_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_alt</span><span class="p">):</span>
+                <span class="n">grid</span><span class="p">[</span><span class="s1">&#39;alt&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">alt</span><span class="p">]</span>
+                <span class="n">grid</span><span class="p">[</span><span class="s1">&#39;az&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">az</span><span class="p">]</span>
+                <span class="n">grid</span><span class="p">[</span><span class="s1">&#39;done&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
+
+        <span class="c1"># to dataframe</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;az&#39;</span><span class="p">])</span>
+
+        <span class="c1"># get acquisition and telescope units</span>
+        <span class="n">acquisition</span><span class="p">:</span> <span class="n">IAcquisition</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_acquisition</span><span class="p">,</span> <span class="n">IAcquisition</span><span class="p">)</span>
+        <span class="n">telescope</span><span class="p">:</span> <span class="n">ITelescope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">)</span>
+
+        <span class="c1"># loop until finished</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># get all entries without offset measurements</span>
+            <span class="n">todo</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="o">~</span><span class="n">grid</span><span class="p">[</span><span class="s1">&#39;done&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">todo</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finish</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished.&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Grid points left to do: </span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">todo</span><span class="p">))</span>
+
+            <span class="c1"># get moon</span>
+            <span class="n">moon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observer</span><span class="o">.</span><span class="n">moon_altaz</span><span class="p">(</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+
+            <span class="c1"># try to find a good point</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="c1"># aborted or not running?</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                    <span class="k">return</span>
+
+                <span class="c1"># pick a random index and remove from list</span>
+                <span class="n">alt</span><span class="p">,</span> <span class="n">az</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">todo</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">todo</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">alt</span><span class="p">,</span> <span class="n">az</span><span class="p">))</span>
+                <span class="n">altaz</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="n">alt</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">az</span><span class="o">=</span><span class="n">az</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;altaz&#39;</span><span class="p">,</span> <span class="n">obstime</span><span class="o">=</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+                                 <span class="n">location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observer</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+
+                <span class="c1"># get RA/Dec</span>
+                <span class="n">radec</span> <span class="o">=</span> <span class="n">altaz</span><span class="o">.</span><span class="n">icrs</span>
+
+                <span class="c1"># moon far enough away?</span>
+                <span class="k">if</span> <span class="n">altaz</span><span class="o">.</span><span class="n">separation</span><span class="p">(</span><span class="n">moon</span><span class="p">)</span><span class="o">.</span><span class="n">degree</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_moon_dist</span><span class="p">:</span>
+                    <span class="c1"># yep, are we in declination range?</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dec_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">radec</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degree</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dec_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="c1"># yep, break here, we found our target</span>
+                        <span class="k">break</span>
+
+                <span class="c1"># to do list empty?</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">todo</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># could not find a grid point</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Could not find a suitable grid point, resetting todo list for next entry...&#39;</span><span class="p">)</span>
+                    <span class="n">todo</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+            <span class="c1"># log finding</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Picked grid point at Alt=</span><span class="si">%.2f</span><span class="s1">, Az=</span><span class="si">%.2f</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">).&#39;</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">radec</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="s1">&#39;hmsdms&#39;</span><span class="p">))</span>
+
+            <span class="c1"># acquire target and process result</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># move telescope</span>
+                <span class="n">telescope</span><span class="o">.</span><span class="n">move_radec</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">radec</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">degree</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">radec</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degree</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+                <span class="c1"># acquire target</span>
+                <span class="n">acq</span> <span class="o">=</span> <span class="n">acquisition</span><span class="o">.</span><span class="n">acquire_target</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_exp_time</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+                <span class="c1">#  process result</span>
+                <span class="k">if</span> <span class="n">acq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_process_acquisition</span><span class="p">(</span><span class="o">**</span><span class="n">acq</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">InvocationException</span><span class="p">):</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Could not acquire target.&#39;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># finished</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">alt</span><span class="p">,</span> <span class="n">az</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># finished</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Pointing series aborted.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Pointing series finished.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_process_acquisition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datetime</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ra</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">az</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                             <span class="n">off_ra</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">off_dec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">off_alt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">off_az</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Process the result of the acquisition. Either ra_off/dec_off or alt_off/az_off must be given.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            datetime: Date and time of observation.</span>
+<span class="sd">            ra: Right ascension without offsets at destination.</span>
+<span class="sd">            dec: Declination without offsets at destination.</span>
+<span class="sd">            alt: Altitude without offsets at destination.</span>
+<span class="sd">            az: Azimuth without offsets at destination.</span>
+<span class="sd">            off_ra: Found RA offset.</span>
+<span class="sd">            off_dec: Found Dec offset.</span>
+<span class="sd">            off_alt: Found Alt offset.</span>
+<span class="sd">            off_az: Found Az offset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PointingSeries&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

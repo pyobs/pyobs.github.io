@@ -1,10 +1,11 @@
-Auto-focus
-==========
+pyobs.modules.focus
+===================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   focusmodel
    focusseries
    projection
+   focusmodel
+

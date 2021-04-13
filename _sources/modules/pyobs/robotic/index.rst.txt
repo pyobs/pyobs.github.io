@@ -1,0 +1,11 @@
+pyobs.modules.robotic
+=====================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   pointing
+   scheduler
+   mastermind
+

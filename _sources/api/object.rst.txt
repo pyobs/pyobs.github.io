@@ -1,0 +1,6 @@
+Object
+======
+
+.. autoclass:: pyobs.object.Object
+    :members:
+    :private-members:

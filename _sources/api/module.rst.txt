@@ -1,0 +1,8 @@
+Module
+======
+
+.. autoclass:: pyobs.modules.Module
+    :members:
+
+.. autoclass:: pyobs.modules.MultiModule
+    :members:

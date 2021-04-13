@@ -1,0 +1,7 @@
+Scheduler
+=========
+
+.. autoclass:: pyobs.modules.robotic.Scheduler
+    :members:
+    :special-members: __init__
+

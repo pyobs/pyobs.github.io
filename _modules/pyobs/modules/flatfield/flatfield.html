@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.flatfield.flatfield &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.flatfield.flatfield</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.flatfield.flatfield</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">BadWeatherEvent</span><span class="p">,</span> <span class="n">RoofClosingEvent</span><span class="p">,</span> <span class="n">Event</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">IFlatField</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">ITelescope</span>
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span><span class="p">,</span> <span class="n">get_object</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.publisher</span> <span class="kn">import</span> <span class="n">CsvPublisher</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.skyflats.flatfielder</span> <span class="kn">import</span> <span class="n">FlatFielder</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FlatField"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField">[docs]</a><span class="k">class</span> <span class="nc">FlatField</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IFlatField</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Module for auto-focusing a telescope.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FlatField.Twilight"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.Twilight">[docs]</a>    <span class="k">class</span> <span class="nc">Twilight</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="n">DUSK</span> <span class="o">=</span> <span class="s1">&#39;dusk&#39;</span>
+        <span class="n">DAWN</span> <span class="o">=</span> <span class="s1">&#39;dawn&#39;</span></div>
+
+<div class="viewcode-block" id="FlatField.State"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.State">[docs]</a>    <span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="n">INIT</span> <span class="o">=</span> <span class="s1">&#39;init&#39;</span>
+        <span class="n">WAITING</span> <span class="o">=</span> <span class="s1">&#39;waiting&#39;</span>
+        <span class="n">TESTING</span> <span class="o">=</span> <span class="s1">&#39;testing&#39;</span>
+        <span class="n">RUNNING</span> <span class="o">=</span> <span class="s1">&#39;running&#39;</span>
+        <span class="n">FINISHED</span> <span class="o">=</span> <span class="s1">&#39;finished&#39;</span></div>
+
+<div class="viewcode-block" id="FlatField.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">telescope</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">],</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">],</span>
+                 <span class="n">filters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">],</span> <span class="n">flat_fielder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">FlatFielder</span><span class="p">],</span>
+                 <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new flat fielder.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            telescope: Name of ITelescope.</span>
+<span class="sd">            camera: Name of ICamera.</span>
+<span class="sd">            filters: Name of IFilters, if any.</span>
+<span class="sd">            pointing: Pointing to use.</span>
+<span class="sd">            log_file: Name of file to store flat field log in.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># store telescope, camera, and filters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span> <span class="o">=</span> <span class="n">telescope</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="o">=</span> <span class="n">camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filters</span> <span class="o">=</span> <span class="n">filters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+        <span class="c1"># flat fielder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span> <span class="o">=</span> <span class="n">get_object</span><span class="p">(</span><span class="n">flat_fielder</span><span class="p">,</span> <span class="n">FlatFielder</span><span class="p">,</span> <span class="n">vfs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vfs</span><span class="p">,</span>
+                                        <span class="n">observer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observer</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">)</span>
+
+        <span class="c1"># init log file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">log_file</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">CsvPublisher</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlatField.open"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># check telescope, camera, and filters</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filters</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Either telescope, camera or filters do not exist or are not of correct type at the moment.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># subscribe to events</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">BadWeatherEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_weather</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">RoofClosingEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_weather</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlatField.close"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close module.&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FlatField.callback"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.callback">[docs]</a>    <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datetime</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">solalt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">exptime</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">counts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">filter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">binning</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Callback for flat-field class to call with statistics.&quot;&quot;&quot;</span>
+        <span class="c1"># write log</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span><span class="p">(</span><span class="n">datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">,</span> <span class="n">solalt</span><span class="o">=</span><span class="n">solalt</span><span class="p">,</span> <span class="n">exptime</span><span class="o">=</span><span class="n">exptime</span><span class="p">,</span> <span class="n">counts</span><span class="o">=</span><span class="n">counts</span><span class="p">,</span>
+                            <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">,</span> <span class="n">binning</span><span class="o">=</span><span class="n">binning</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlatField.flat_field"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.flat_field">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">flat_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">binning</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Do a series of flat fields in the given filter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filter_name: Name of filter</span>
+<span class="sd">            count: Number of images to take</span>
+<span class="sd">            binning: Binning to use</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Number of images actually taken and total exposure time in ms</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Performing flat fielding...&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+        <span class="c1"># get telescope</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting proxy for telescope...&#39;</span><span class="p">)</span>
+        <span class="n">telescope</span><span class="p">:</span> <span class="n">ITelescope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">)</span>
+
+        <span class="c1"># get camera</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting proxy for camera...&#39;</span><span class="p">)</span>
+        <span class="n">camera</span><span class="p">:</span> <span class="n">ICamera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">)</span>
+
+        <span class="c1"># get filter wheel</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting proxy for filter wheel...&#39;</span><span class="p">)</span>
+        <span class="n">filters</span><span class="p">:</span> <span class="n">IFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filters</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">)</span>
+
+        <span class="c1"># reset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="c1"># run until state is finished or we aborted</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">while</span> <span class="n">state</span> <span class="o">!=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">FINISHED</span><span class="p">:</span>
+            <span class="c1"># can we run?</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">telescope</span><span class="o">.</span><span class="n">is_ready</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">():</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Telescope not in valid state, aborting...&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="o">.</span><span class="n">image_count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="o">.</span><span class="n">total_exptime</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Aborting flat-fielding...&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="o">.</span><span class="n">image_count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="o">.</span><span class="n">total_exptime</span>
+
+            <span class="c1"># do step</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="p">(</span><span class="n">telescope</span><span class="p">,</span> <span class="n">camera</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">binning</span><span class="p">)</span>
+
+        <span class="c1"># stop telescope</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Stopping telescope...&#39;</span><span class="p">)</span>
+        <span class="n">telescope</span><span class="o">.</span><span class="n">stop_motion</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Flat-fielding finished.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># return number of taken images</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="o">.</span><span class="n">image_count</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="o">.</span><span class="n">total_exptime</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlatField.abort"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.abort">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abort current actions.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FlatField.flat_field_status"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.flat_field_status">[docs]</a>    <span class="k">def</span> <span class="nf">flat_field_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current status of auto focus.</span>
+
+<span class="sd">        Returned dictionary contains a list of focus/fwhm pairs in X and Y direction.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary with current status.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+    <span class="k">def</span> <span class="nf">_abort_weather</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abort on bad weather.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">()</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FlatField&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

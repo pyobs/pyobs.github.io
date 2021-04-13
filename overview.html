@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>3. Overview &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Command Line Interface" href="cli.html" />
+    <link rel="prev" title="2. Installing pyobs" href="installing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module">3.1. Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment">3.2. Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comm">3.3. Comm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#virtual-file-system">3.4. Virtual File System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#events">3.5. Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">3. </span>Overview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/overview.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="overview">
+<h1><span class="section-number">3. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>After installing pyobs, you have the new command <code class="docutils literal notranslate"><span class="pre">pyobs</span></code>, which creates and
+starts pyobs modules from the command line based on a configuration file, written
+in YAML.</p>
+<p>A simple configuration file (<code class="docutils literal notranslate"><span class="pre">standalone.yaml</span></code>) might look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">StandAlone</span>
+<span class="n">message</span><span class="p">:</span> <span class="n">Hello</span> <span class="n">world</span>
+<span class="n">interval</span><span class="p">:</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>Basically you always define a <code class="docutils literal notranslate"><span class="pre">class</span></code> for a block together with its properties.</p>
+<p>In this example, the module is of type <a class="reference internal" href="modules/pyobs/test/standalone.html#pyobs.modules.test.StandAlone" title="pyobs.modules.test.StandAlone"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandAlone</span></code></a>, which is a trivial implementation
+of a module that does nothing more than logging a given message continuously in a given interval:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">StandAlone</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Example module that only logs the given message forever in the given interval.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Hello world&#39;</span><span class="p">,</span> <span class="n">interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a new StandAlone object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            message: Message to log in the given interval.</span>
+<span class="sd">            interval: Interval between messages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add thread func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_message_func</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">=</span> <span class="n">interval</span>
+
+    <span class="k">def</span> <span class="nf">_message_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Thread function for async processing.&quot;&quot;&quot;</span>
+        <span class="c1"># loop until closing</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># log message</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="p">)</span>
+
+            <span class="c1"># sleep a little</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The constructor just calls the constructor of <a class="reference internal" href="api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a> and calls a method
+<a class="reference internal" href="api/object.html#pyobs.object.Object._add_thread_func" title="pyobs.object.Object._add_thread_func"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_add_thread_func()</span></code></a>, which takes a method that is run in an extra thread. In this case,
+it is the method <code class="docutils literal notranslate"><span class="pre">thread_func()</span></code>, that does some logging in a loop until the program quits.</p>
+<p>The class method default_config() defines the default configuration for the module, and open() and close()
+are called when the module is opened and closed, respectively.</p>
+<p>If the configuration file is saved as <code class="docutils literal notranslate"><span class="pre">standalone.yaml</span></code>, one can easily start it via the <code class="docutils literal notranslate"><span class="pre">pyobs</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyobs</span> <span class="n">standalone</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>The program quits gracefully when it receives an interrupt, so you can stop it by simply pressing <code class="docutils literal notranslate"><span class="pre">Ctrl+c</span></code>.</p>
+<div class="section" id="module">
+<h2><span class="section-number">3.1. </span>Module<a class="headerlink" href="#module" title="Permalink to this headline">¶</a></h2>
+<p>A Module defines a single process in <em>pyobs</em>, as defined in <a class="reference internal" href="api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a>. Modules can work
+completely independent of each other, but usually they want to communicate and call methods on other modules.
+The functionality that a module exports for remote calling is defined by its base classe, specifically classes
+derived from <a class="reference internal" href="api/interfaces.html#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">Interface</span></code></a>.</p>
+</div>
+<div class="section" id="environment">
+<h2><span class="section-number">3.2. </span>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h2>
+<p>There is some functionality that is required in many modules, including those concerning the environment,
+especially the location of the telescope and the local time. For this, the <a class="reference internal" href="api/application.html#pyobs.application.Application" title="pyobs.application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code></a> class
+has support for an additional module of type <a class="reference internal" href="api/environment.html#pyobs.environment.Environment" title="pyobs.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code></a>, which can be
+defined in the application’s configuration at top-level like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">timezone</span><span class="p">:</span> <span class="n">utc</span>
+<span class="n">location</span><span class="p">:</span>
+  <span class="n">longitude</span><span class="p">:</span> <span class="mf">20.810808</span>
+  <span class="n">latitude</span><span class="p">:</span> <span class="o">-</span><span class="mf">32.375823</span>
+  <span class="n">elevation</span><span class="p">:</span> <span class="mf">1798.</span>
+</pre></div>
+</div>
+<p>Now an object of this type is automatically pushed into the module and can be accessed via the <code class="docutils literal notranslate"><span class="pre">environment</span></code>
+property, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="comm">
+<h2><span class="section-number">3.3. </span>Comm<a class="headerlink" href="#comm" title="Permalink to this headline">¶</a></h2>
+<p>In case the module is supposed to communicate with others, we need another module of type
+<a class="reference internal" href="api/comm.html#pyobs.comm.Comm" title="pyobs.comm.Comm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comm</span></code></a>, which can be defined in the application’s configuration like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comm</span><span class="p">:</span>
+  <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+  <span class="n">jid</span><span class="p">:</span> <span class="n">some_module</span><span class="nd">@my</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>More details about this can be found in the <a class="reference internal" href="api/comm.html"><span class="doc">Comm</span></a> section.</p>
+</div>
+<div class="section" id="virtual-file-system">
+<h2><span class="section-number">3.4. </span>Virtual File System<a class="headerlink" href="#virtual-file-system" title="Permalink to this headline">¶</a></h2>
+<p>At the telescope the <em>pyobs</em> system usually contains multiple modules that are distributed over several computers. In
+order to make file exchange es easy as possible, <em>pyobs</em> has a built-in virtual file system (VFS) that dynamically maps
+file paths to real locations.</p>
+<p>A typical VFS setup in a module configuration file looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vfs</span><span class="p">:</span>
+  <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">VirtualFileSystem</span>
+  <span class="n">roots</span><span class="p">:</span>
+    <span class="n">cache</span><span class="p">:</span>
+      <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">LocalFile</span>
+      <span class="n">root</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">data</span>
+</pre></div>
+</div>
+<p>This simple case uses a <a class="reference internal" href="api/vfs.html#pyobs.vfs.LocalFile" title="pyobs.vfs.LocalFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocalFile</span></code></a> to map every filename beginning with <code class="docutils literal notranslate"><span class="pre">cache</span></code> (see the key in the
+<code class="docutils literal notranslate"><span class="pre">roots</span></code> dictionary) to the path <code class="docutils literal notranslate"><span class="pre">/path/to/data</span></code> in the local file system. So opening a file via
+<code class="docutils literal notranslate"><span class="pre">vfs.open_file('/cache/test.txt',</span> <span class="pre">'w')</span></code> actually opens the file in <code class="docutils literal notranslate"><span class="pre">/path/to/data/test.txt</span></code> for writing.</p>
+<p>The magic begins when running another module on another computer with this configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vfs</span><span class="p">:</span>
+  <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">VirtualFileSystem</span>
+  <span class="n">roots</span><span class="p">:</span>
+    <span class="n">cache</span><span class="p">:</span>
+      <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">SSHFile</span>
+      <span class="n">hostname</span><span class="p">:</span> <span class="n">othercomputer</span>
+      <span class="n">username</span><span class="p">:</span> <span class="n">xxx</span>
+      <span class="n">password</span><span class="p">:</span> <span class="n">xxx</span>
+      <span class="n">root</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">data</span>
+</pre></div>
+</div>
+<p>Now on that machine you can read the same file, using the same command <code class="docutils literal notranslate"><span class="pre">vfs.open_file('/cache/test.txt',</span> <span class="pre">'r')</span></code>,
+via a SSH connection, by specifying <a class="reference internal" href="api/vfs.html#pyobs.vfs.SSHFile" title="pyobs.vfs.SSHFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSHFile</span></code></a> as the class for the given root.</p>
+<p>See <a class="reference internal" href="api/vfs.html"><span class="doc">Virtual File System</span></a> for more information about the VFS.</p>
+</div>
+<div class="section" id="events">
+<h2><span class="section-number">3.5. </span>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
+<p>In addition to calling each other’s method, <em>pyobs</em> modules can also send and receive events. See more about this
+in <a class="reference internal" href="api/events.html"><span class="doc">Events</span></a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="cli.html" class="btn btn-neutral float-right" title="4. Command Line Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installing.html" class="btn btn-neutral float-left" title="2. Installing pyobs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+BaseDome
+========
+
+.. autoclass:: pyobs.modules.roof.BaseDome
+    :members:
+    :special-members: __init__
+

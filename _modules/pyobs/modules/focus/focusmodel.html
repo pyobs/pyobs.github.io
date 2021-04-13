@@ -1,0 +1,677 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.focus.focusmodel &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.focus.focusmodel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.focus.focusmodel</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">py_expression_eval</span> <span class="kn">import</span> <span class="n">Parser</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IFocuser</span><span class="p">,</span> <span class="n">IWeather</span><span class="p">,</span> <span class="n">ITemperatures</span><span class="p">,</span> <span class="n">IFocusModel</span><span class="p">,</span> <span class="n">IFilters</span>
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">FocusFoundEvent</span><span class="p">,</span> <span class="n">FilterChangedEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.publisher</span> <span class="kn">import</span> <span class="n">CsvPublisher</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FocusModel"><a class="viewcode-back" href="../../../../modules/pyobs/focus/focusmodel.html#pyobs.modules.focus.FocusModel">[docs]</a><span class="k">class</span> <span class="nc">FocusModel</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IFocusModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A focus model that is automatically applied to an IFocuser.</span>
+
+<span class="sd">    If, e.g., the model is defined as:</span>
+
+<span class="sd">        model: -0.043807*T1 - 0.031798*T2 + 0.062042*temp + 41.694895</span>
+
+<span class="sd">    Then &quot;temp&quot; is taken from the weather module automatically. The other temperatures must be defined, e.g., as:</span>
+
+<span class="sd">        temperatures:</span>
+<span class="sd">            T1:</span>
+<span class="sd">                module: telescope</span>
+<span class="sd">                sensor: T1</span>
+<span class="sd">            T2:</span>
+<span class="sd">                module: telescope</span>
+<span class="sd">                sensor: T2</span>
+
+<span class="sd">    In this case, the method get_temperatures() is called on the module &quot;telescope&quot; and the values T1 and T2 are</span>
+<span class="sd">    taken for the model.</span>
+
+<span class="sd">    Alternatively, the coefficients can be defined as symbols:</span>
+
+<span class="sd">        model: a*T1 + b*T2 + c*temp + d</span>
+
+<span class="sd">    For this to work, initial values must be specified separately:</span>
+
+<span class="sd">        coefficients:</span>
+<span class="sd">            a: -0.043807</span>
+<span class="sd">            b: -0.031798</span>
+<span class="sd">            c: 0.062042</span>
+<span class="sd">            d: 41.694895</span>
+
+<span class="sd">    Only this way it is possible to automatically re-calculate the model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FocusModel.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/focus/focusmodel.html#pyobs.modules.focus.FocusModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">focuser</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">weather</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">temperatures</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_measurements</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">temp_sensor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;average.temp&#39;</span><span class="p">,</span> <span class="n">default_filter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">filter_offsets</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">filter_wheel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a focus model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            focuser: Name of focuser.</span>
+<span class="sd">            weather: Name of weather station.</span>
+<span class="sd">            interval: Interval for setting focus or None, if no regular setting of focus is required.</span>
+<span class="sd">            model: Focus model to use.</span>
+<span class="sd">            coefficients: Coefficients in model, mainly used when updating it.</span>
+<span class="sd">            update: Whether to update the model on new focus values.</span>
+<span class="sd">            log_file: Path to file containing all focus measurements.</span>
+<span class="sd">            min_measurements: Minimum number of measurements to update model.</span>
+<span class="sd">            enabled: If False, no focus is set.</span>
+<span class="sd">            temp_sensor: Name of sensor at weather station to provide ambient temperature.</span>
+<span class="sd">            default_filter: Name of default filter. If None, filters are ignored.</span>
+<span class="sd">            filter_offsets: Offsets for different filters. If None, they are not modeled.</span>
+<span class="sd">            filter_wheel: Name of filter wheel module to use for fetching filter before setting focus.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># check import</span>
+        <span class="kn">import</span> <span class="nn">lmfit</span>
+
+        <span class="c1"># add thread func</span>
+        <span class="k">if</span> <span class="n">interval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">interval</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_run_thread</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_focuser</span> <span class="o">=</span> <span class="n">focuser</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weather</span> <span class="o">=</span> <span class="n">weather</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">=</span> <span class="n">interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temperatures</span> <span class="o">=</span> <span class="n">temperatures</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">temperatures</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">temperatures</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_focuser_ready</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">coefficients</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">coefficients</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_model</span> <span class="o">=</span> <span class="n">update</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_measurements</span> <span class="o">=</span> <span class="n">min_measurements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">enabled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temp_station</span><span class="p">,</span> <span class="n">sensor</span> <span class="o">=</span> <span class="n">temp_sensor</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temp_sensor</span> <span class="o">=</span> <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="p">(</span><span class="n">sensor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_filter</span> <span class="o">=</span> <span class="n">default_filter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filter_offsets</span> <span class="o">=</span> <span class="n">filter_offsets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filter_wheel</span> <span class="o">=</span> <span class="n">filter_wheel</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Going to fetch temperature from sensor </span><span class="si">%s</span><span class="s1"> at station </span><span class="si">%s</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_sensor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_station</span><span class="p">)</span>
+
+        <span class="c1"># model</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Parsing model: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="c1"># coefficients</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found coefficients: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">=</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span>
+
+        <span class="c1"># variables</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">variables</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">variables</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found variables: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">variables</span><span class="p">))</span>
+
+        <span class="c1"># init log file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">log_file</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">CsvPublisher</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
+
+        <span class="c1"># update model now?</span>
+        <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calc_focus_model</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FocusModel.open"><a class="viewcode-back" href="../../../../modules/pyobs/focus/focusmodel.html#pyobs.modules.focus.FocusModel.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># subscribe to events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">FocusFoundEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_on_focus_found</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_offsets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_wheel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">FilterChangedEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_on_filter_changed</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_run_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># wait a little</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># run until closed</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># if not enabled, just sleep a little</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># get focuser</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">focuser</span><span class="p">:</span> <span class="n">IFocuser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_focuser</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not connect to focuser.&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># is focuser ready?</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="n">focuser</span><span class="o">.</span><span class="n">is_ready</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="c1"># log</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_focuser_ready</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Focuser not ready, waiting for it...&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_focuser_ready</span> <span class="o">=</span> <span class="kc">False</span>
+
+                <span class="c1"># sleep a little and continue</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># came from not ready state?</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_focuser_ready</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Focuser ready now, starting focus tracking...&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_focuser_ready</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># now set focus</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># set optimal focus</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_optimal_focus</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="c1"># something went wrong, wait a little and continue</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># sleep interval</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Going to sleep for </span><span class="si">%d</span><span class="s1"> seconds...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_optimal_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the optimal focus.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filter_name: If given, use this filter name instead of fetching one.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optimum focus calculated from model.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If anything went wrong.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get values for variables</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_values</span><span class="p">()</span>
+
+        <span class="c1"># evaluate model</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Evaluating model...&#39;</span><span class="p">)</span>
+        <span class="n">focus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">({</span><span class="o">**</span><span class="n">values</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">})</span>
+
+        <span class="c1"># focus offset?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_offsets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_wheel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># need a filter name?</span>
+                <span class="k">if</span> <span class="n">filter_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># get proxy</span>
+                    <span class="n">wheel</span><span class="p">:</span> <span class="n">IFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_wheel</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">)</span>
+
+                    <span class="c1"># get filter</span>
+                    <span class="n">filter_name</span> <span class="o">=</span> <span class="n">wheel</span><span class="o">.</span><span class="n">get_filter</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+                <span class="c1"># add offset</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_offsets</span><span class="p">[</span><span class="n">filter_name</span><span class="p">]</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Adding filter offset of </span><span class="si">%.2f</span><span class="s1"> for filter </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">)</span>
+                <span class="n">focus</span> <span class="o">+=</span> <span class="n">offset</span>
+
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not determine filter offset.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># set focus</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found optimal focus of </span><span class="si">%.4f</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">focus</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">focus</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FocusModel.get_optimal_focus"><a class="viewcode-back" href="../../../../modules/pyobs/focus/focusmodel.html#pyobs.modules.focus.FocusModel.get_optimal_focus">[docs]</a>    <span class="k">def</span> <span class="nf">get_optimal_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the optimal focus.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optimum focus calculated from model.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If anything went wrong.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_optimal_focus</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve all required values for the model.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary containing all values required by the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># variables for model evaluation</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># do we need a weather proxy?</span>
+        <span class="k">if</span> <span class="s1">&#39;temp&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">variables</span><span class="p">():</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Fetching temperature from weather module...&#39;</span><span class="p">)</span>
+
+            <span class="c1"># get weather proxy</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">weather</span><span class="p">:</span> <span class="n">IWeather</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weather</span><span class="p">,</span> <span class="n">IWeather</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not connect to weather module.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># get value</span>
+            <span class="n">time</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">weather</span><span class="o">.</span><span class="n">get_sensor_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_temp_station</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_sensor</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Received invalid temperature from weather station.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># get temperature</span>
+            <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Got temperature of </span><span class="si">%.2f</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">])</span>
+
+        <span class="c1"># loop other temperatures</span>
+        <span class="n">module_temps</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temperatures</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># need to fetch temperatures from module?</span>
+            <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">module_temps</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Fetching temperatures from module </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">])</span>
+
+                <span class="c1"># get proxy</span>
+                <span class="n">proxy</span><span class="p">:</span> <span class="n">ITemperatures</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">],</span> <span class="n">ITemperatures</span><span class="p">)</span>
+
+                <span class="c1"># get temperatures</span>
+                <span class="n">module_temps</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">proxy</span><span class="o">.</span><span class="n">get_temperatures</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+                <span class="c1"># log</span>
+                <span class="nb">vars</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">=</span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">module_temps</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Received temperatures: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">vars</span><span class="p">)</span>
+
+            <span class="c1"># store, what we need</span>
+            <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;sensor&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">module_temps</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">]]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Temperature for sensor </span><span class="si">%s</span><span class="s1"> not in data from module </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span>
+                                 <span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;sensor&#39;</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">]))</span>
+            <span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">module_temps</span><span class="p">[</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">]][</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;sensor&#39;</span><span class="p">]]</span>
+
+        <span class="c1"># log</span>
+        <span class="nb">vars</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">=</span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found values for model: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">vars</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">variables</span>
+
+    <span class="k">def</span> <span class="nf">_set_optimal_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets optimal focus.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filter_name: Name of filter to use.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If anything went wrong.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get focuser</span>
+        <span class="n">focuser</span><span class="p">:</span> <span class="n">IFocuser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_focuser</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">)</span>
+
+        <span class="c1"># get focus</span>
+        <span class="n">focus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_optimal_focus</span><span class="p">(</span><span class="n">filter_name</span><span class="o">=</span><span class="n">filter_name</span><span class="p">)</span>
+
+        <span class="c1"># set it</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting optimal focus...&#39;</span><span class="p">)</span>
+        <span class="n">focuser</span><span class="o">.</span><span class="n">set_focus</span><span class="p">(</span><span class="n">focus</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Done.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FocusModel.set_optimal_focus"><a class="viewcode-back" href="../../../../modules/pyobs/focus/focusmodel.html#pyobs.modules.focus.FocusModel.set_optimal_focus">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_optimal_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets optimal focus.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If anything went wrong.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_optimal_focus</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_on_focus_found</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">FocusFoundEvent</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Receive FocusFoundEvent.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event itself</span>
+<span class="sd">            sender: The name of the sender.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Received new focus of </span><span class="si">%.4f</span><span class="s1"> +- </span><span class="si">%.4f</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">focus</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
+
+        <span class="c1"># collect values for model</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_values</span><span class="p">()</span>
+
+        <span class="c1"># add focus and datetime</span>
+        <span class="n">values</span><span class="p">[</span><span class="s1">&#39;focus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">focus</span>
+        <span class="n">values</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">error</span>
+        <span class="n">values</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isot</span>
+        <span class="n">values</span><span class="p">[</span><span class="s1">&#39;filter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">filter_name</span>
+
+        <span class="c1"># write log</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span><span class="p">(</span><span class="o">**</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># finally, calculate new model</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Re-calculating model...&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calc_focus_model</span><span class="p">()</span>
+
+        <span class="c1"># finished</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Done.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_calc_focus_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculate new focus model from saved entries.&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">lmfit</span>
+
+        <span class="c1"># no coefficients? no model...</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table_storage</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># only take clear filter images for now</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table_storage</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># enough measurements?</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_measurements</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Not enough measurements found for re-calculating model (</span><span class="si">%d</span><span class="s1">&lt;</span><span class="si">%d</span><span class="s1">).&#39;</span><span class="p">,</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_measurements</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># build parameters</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+
+        <span class="c1"># if we want to fit filter offsets, add them to params</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_offsets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># get unique list of filters and add them</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;filter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+                <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;off_&#39;</span> <span class="o">+</span> <span class="n">f</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+
+        <span class="c1"># fit</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Fitting coefficients...&#39;</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_residuals</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">data</span><span class="p">,))</span>
+
+        <span class="c1"># print results</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found best coefficients:&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;off_&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;  </span><span class="si">%-5s</span><span class="s1"> = </span><span class="si">%10.5f</span><span class="s1"> +- </span><span class="si">%8.5f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;  </span><span class="si">%-5s</span><span class="s1"> = </span><span class="si">%10.5f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_offsets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found filter offsets:&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;off_&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;  </span><span class="si">%-10s</span><span class="s1"> = </span><span class="si">%10.5f</span><span class="s1"> +- </span><span class="si">%8.5f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">:],</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;  </span><span class="si">%-10s</span><span class="s1"> = </span><span class="si">%10.5f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">:],</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Reduced chi squared: </span><span class="si">%.3f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">redchi</span><span class="p">)</span>
+
+        <span class="c1"># store new coefficients and filter offsets</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_model</span><span class="p">:</span>
+            <span class="c1"># just copy all?</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">())</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_offsets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="n">d</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># need to separate</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;off_&#39;</span><span class="p">)}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_filter_offsets</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[</span><span class="mi">4</span><span class="p">:]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;off_&#39;</span><span class="p">)}</span>
+
+    <span class="k">def</span> <span class="nf">_residuals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;lmfit.Parameters&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit method for model</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: Paramaters to evaluate.</span>
+<span class="sd">            data: Full data set.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># calc model</span>
+        <span class="n">focus</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="c1"># how do we fit?</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_filter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># just fit it</span>
+                <span class="n">mod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">({</span><span class="o">**</span><span class="n">x</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">(),</span> <span class="o">**</span><span class="n">row</span><span class="p">})</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># do we want to fit filter offsets?</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_offsets</span><span class="p">:</span>
+                    <span class="c1"># evaluate and add offset</span>
+                    <span class="n">mod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">({</span><span class="o">**</span><span class="n">x</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">(),</span> <span class="o">**</span><span class="n">row</span><span class="p">})</span>
+                    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;filter&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_filter</span><span class="p">:</span>
+                        <span class="n">mod</span> <span class="o">+=</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;off_&#39;</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;filter&#39;</span><span class="p">]]</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># no filter offsets, so ignore this row if, if wrong filter</span>
+                    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;filter&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_filter</span><span class="p">:</span>
+                        <span class="n">mod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">({</span><span class="o">**</span><span class="n">x</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">(),</span> <span class="o">**</span><span class="n">row</span><span class="p">})</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+            <span class="c1"># add it</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+            <span class="n">focus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;focus&#39;</span><span class="p">])</span>
+            <span class="n">error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">])</span>
+
+        <span class="c1"># return residuals</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">focus</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">model</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_filter_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">FilterChangedEvent</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Receive FilterChangedEvent and set focus.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event itself</span>
+<span class="sd">            sender: The name of the sender.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># wrong sender?</span>
+        <span class="k">if</span> <span class="n">sender</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_wheel</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># log and change</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Detected filter change to </span><span class="si">%s</span><span class="s1">, adjusting focus...&#39;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">filter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_optimal_focus</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">filter</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not set focus.&#39;</span><span class="p">)</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FocusModel&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

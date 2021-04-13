@@ -1,0 +1,510 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pyobs.modules.telescope.dummytelescope &mdash; pyobs  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pyobs
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">1. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing pyobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">3. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">4. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">5. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/index.html">6. Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyobs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyobs.modules.telescope.dummytelescope</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyobs.modules.telescope.dummytelescope</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="kn">import</span> <span class="n">SkyCoord</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">FilterChangedEvent</span><span class="p">,</span> <span class="n">InitializedEvent</span><span class="p">,</span> <span class="n">TelescopeMovingEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IFocuser</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">IMotion</span><span class="p">,</span> <span class="n">ITemperatures</span><span class="p">,</span> <span class="n">IRaDecOffsets</span>
+<span class="kn">from</span> <span class="nn">pyobs.mixins.fitsnamespace</span> <span class="kn">import</span> <span class="n">FitsNamespaceMixin</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules.telescope.basetelescope</span> <span class="kn">import</span> <span class="n">BaseTelescope</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.threads</span> <span class="kn">import</span> <span class="n">LockWithAbort</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DummyTelescope"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope">[docs]</a><span class="k">class</span> <span class="nc">DummyTelescope</span><span class="p">(</span><span class="n">BaseTelescope</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">ITemperatures</span><span class="p">,</span>
+                     <span class="n">FitsNamespaceMixin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A dummy telescope for testing.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DummyTelescope.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">:</span> <span class="s1">&#39;SimWorld&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a new dummy telescope.&quot;&quot;&quot;</span>
+        <span class="n">BaseTelescope</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">motion_status_interfaces</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ITelescope&#39;</span><span class="p">,</span> <span class="s1">&#39;IFocuser&#39;</span><span class="p">,</span> <span class="s1">&#39;IFilters&#39;</span><span class="p">])</span>
+        <span class="n">FitsNamespaceMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># init world and get telescope</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_world</span> <span class="o">=</span> <span class="n">world</span> <span class="k">if</span> <span class="n">world</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">({</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;pyobs.utils.simulation.world.SimWorld&#39;</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_world</span><span class="o">.</span><span class="n">telescope</span>
+
+        <span class="c1"># automatically send status updates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">status_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span>
+
+        <span class="c1"># some multi-threading stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock_focus</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort_focus</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.open"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">BaseTelescope</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># subscribe to events</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">FilterChangedEvent</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">InitializedEvent</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">TelescopeMovingEvent</span><span class="p">)</span>
+
+        <span class="c1"># init status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_move_radec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ra</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Actually starts tracking on given coordinates. Must be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ra: RA in deg to track.</span>
+<span class="sd">            dec: Dec in deg to track.</span>
+<span class="sd">            abort_event: Event that gets triggered when movement should be aborted.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: On any error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># send event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">TelescopeMovingEvent</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">dec</span><span class="p">))</span>
+
+        <span class="c1"># start slewing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__move</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_move_altaz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">az</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Actually moves to given coordinates. Must be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alt: Alt in deg to move to.</span>
+<span class="sd">            az: Az in deg to move to.</span>
+<span class="sd">            abort_event: Event that gets triggered when movement should be aborted.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: On error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># alt/az coordinates to ra/dec</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="n">alt</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span> <span class="n">az</span><span class="o">=</span><span class="n">az</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span> <span class="n">obstime</span><span class="o">=</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+                          <span class="n">location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;altaz&#39;</span><span class="p">)</span>
+        <span class="n">icrs</span> <span class="o">=</span> <span class="n">coords</span><span class="o">.</span><span class="n">icrs</span>
+
+        <span class="c1"># send event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">TelescopeMovingEvent</span><span class="p">(</span><span class="n">alt</span><span class="o">=</span><span class="n">alt</span><span class="p">,</span> <span class="n">az</span><span class="o">=</span><span class="n">az</span><span class="p">))</span>
+
+        <span class="c1"># start slewing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__move</span><span class="p">(</span><span class="n">icrs</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span> <span class="n">icrs</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ra</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Simulate move.</span>
+
+<span class="sd">       Args:</span>
+<span class="sd">           ra: RA in deg to track.</span>
+<span class="sd">           dec: Dec in deg to track.</span>
+<span class="sd">           abort_event: Event that gets triggered when movement should be aborted.</span>
+
+<span class="sd">       Raises:</span>
+<span class="sd">           Exception: On any error.</span>
+<span class="sd">       &quot;&quot;&quot;</span>
+
+        <span class="c1"># simulate slew</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">move_ra_dec</span><span class="p">(</span><span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">ra</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">dec</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;icrs&#39;</span><span class="p">))</span>
+
+        <span class="c1"># wait for it</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">SLEWING</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">abort_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DummyTelescope.get_focus"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.get_focus">[docs]</a>    <span class="k">def</span> <span class="nf">get_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return current focus.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Current focus.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">focus</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.set_focus"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.set_focus">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">focus</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets new focus.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            focus: New focus value.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            InterruptedError: If focus was interrupted.</span>
+<span class="sd">            AcquireLockFailed: If current motion could not be aborted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># acquire lock</span>
+        <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_focus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_focus</span><span class="p">):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting focus to </span><span class="si">%.2f</span><span class="s2">...&quot;</span> <span class="o">%</span> <span class="n">focus</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFocuser&#39;</span><span class="p">)</span>
+            <span class="n">ifoc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">focus</span> <span class="o">*</span> <span class="mf">1.</span>
+            <span class="n">dfoc</span> <span class="o">=</span> <span class="p">(</span><span class="n">focus</span> <span class="o">-</span> <span class="n">ifoc</span><span class="p">)</span> <span class="o">/</span> <span class="mf">300.</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
+                <span class="c1"># abort?</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_focus</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="ne">InterruptedError</span><span class="p">(</span><span class="s1">&#39;Setting focus was interrupted.&#39;</span><span class="p">)</span>
+
+                <span class="c1"># move focus and sleep a little</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">focus</span> <span class="o">=</span> <span class="n">ifoc</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">dfoc</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFocuser&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">focus</span> <span class="o">=</span> <span class="n">focus</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.list_filters"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.list_filters">[docs]</a>    <span class="k">def</span> <span class="nf">list_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;List available filters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of available filters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">filters</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.get_filter"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.get_filter">[docs]</a>    <span class="k">def</span> <span class="nf">get_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get currently set filter.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Name of currently set filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">filter</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.set_filter"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.set_filter">[docs]</a>    <span class="k">def</span> <span class="nf">set_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the current filter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filter_name: Name of filter to set.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If binning could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># log and send event</span>
+        <span class="k">if</span> <span class="n">filter_name</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">filter</span><span class="p">:</span>
+            <span class="c1"># set it</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting filter to </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="n">filter_name</span>
+
+            <span class="c1"># send event</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">FilterChangedEvent</span><span class="p">(</span><span class="n">filter_name</span><span class="p">))</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;New filter set.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.init"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.init">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize telescope.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If telescope could not be initialized.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># INIT, wait a little, then IDLE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">INITIALIZING</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">5.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">InitializedEvent</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.park"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.park">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">park</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Park telescope.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If telescope could not be parked.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># PARK, wait a little, then PARKED</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PARKING</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">5.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PARKED</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.set_radec_offsets"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.set_radec_offsets">[docs]</a>    <span class="k">def</span> <span class="nf">set_radec_offsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dra</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ddec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Move an RA/Dec offset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dra: RA offset in degrees.</span>
+<span class="sd">            ddec: Dec offset in degrees.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If offset could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Moving offset dra=</span><span class="si">%.5f</span><span class="s2">, ddec=</span><span class="si">%.5f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">dra</span><span class="p">,</span> <span class="n">ddec</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">set_offsets</span><span class="p">(</span><span class="n">dra</span><span class="p">,</span> <span class="n">ddec</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.get_radec_offsets"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.get_radec_offsets">[docs]</a>    <span class="k">def</span> <span class="nf">get_radec_offsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get RA/Dec offset.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with RA and Dec offsets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">offsets</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.get_radec"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.get_radec">[docs]</a>    <span class="k">def</span> <span class="nf">get_radec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current RA and Dec.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of current RA and Dec in degrees.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">degree</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degree</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.get_altaz"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.get_altaz">[docs]</a>    <span class="k">def</span> <span class="nf">get_altaz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current Alt and Az.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of current Alt and Az in degrees.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">observer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">alt_az</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observer</span><span class="o">.</span><span class="n">altaz</span><span class="p">(</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">alt_az</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">alt_az</span><span class="o">.</span><span class="n">az</span><span class="o">.</span><span class="n">degree</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No observer given.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.get_fits_headers"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.get_fits_headers">[docs]</a>    <span class="k">def</span> <span class="nf">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns FITS header for the current status of this module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            namespaces: If given, only return FITS headers for the given namespaces.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary containing FITS headers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># fetch from BaseTelescope</span>
+        <span class="n">hdr</span> <span class="o">=</span> <span class="n">BaseTelescope</span><span class="o">.</span><span class="n">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># focus</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;TEL-FOCU&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span><span class="o">.</span><span class="n">focus</span><span class="p">,</span> <span class="s1">&#39;Focus position [mm]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># finished</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_fits_namespace</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="n">namespaces</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.stop_motion"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.stop_motion">[docs]</a>    <span class="k">def</span> <span class="nf">stop_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop the motion.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            device: Name of device to stop, or None for all.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.get_focus_offset"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.get_focus_offset">[docs]</a>    <span class="k">def</span> <span class="nf">get_focus_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return current focus offset.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Current focus offset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="DummyTelescope.get_temperatures"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/dummytelescope.html#pyobs.modules.telescope.DummyTelescope.get_temperatures">[docs]</a>    <span class="k">def</span> <span class="nf">get_temperatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns all temperatures measured by this module.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict containing temperatures.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;M1&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="s1">&#39;M2&#39;</span><span class="p">:</span> <span class="mi">12</span>
+        <span class="p">}</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DummyTelescope&#39;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, Tim-Oliver Husser.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
