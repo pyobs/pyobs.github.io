@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pyobs_weather.weather.evaluators.Switch &#8212; pyobs  documentation</title>
-    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyobs_weather.weather.evaluators.Valid" href="valid.html" />
@@ -37,7 +37,8 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">pyobs  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" ><em>pyobs-weather</em></a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of evaluators</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of evaluators</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs_weather.weather.evaluators.Switch</a></li> 
       </ul>
     </div>  
 
@@ -48,23 +49,13 @@
             
   <div class="section" id="pyobs-weather-weather-evaluators-switch">
 <h1>pyobs_weather.weather.evaluators.Switch<a class="headerlink" href="#pyobs-weather-weather-evaluators-switch" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pyobs_weather.weather.evaluators.Switch">
-<em class="property">class </em><code class="sig-prename descclassname">pyobs_weather.weather.evaluators.</code><code class="sig-name descname">Switch</code><span class="sig-paren">(</span><em class="sig-param">threshold: float</em>, <em class="sig-param">invert: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.evaluators.Switch" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs_weather.weather.evaluators.</span></code><code class="sig-name descname"><span class="pre">Switch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invert</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/evaluators/switch.html#Switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.evaluators.Switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>A simple Switch that changes its value whenever a given threshold is reached.</p>
-<p>Creates a new Switch.</p>
-<p>The switch evaluates to True (False, if invert is True), if its value is smaller than the given threshold.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>threshold</strong> – Threshold for switch.</p></li>
-<li><p><strong>invert</strong> – If True, invert result of evaluation.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs_weather.weather.evaluators.Switch.__call__">
-<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">sensor</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.evaluators.Switch.__call__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">__call__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/evaluators/switch.html#Switch.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.evaluators.Switch.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates this evaluator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -76,11 +67,18 @@
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt id="pyobs_weather.weather.evaluators.Switch.areas">
+<code class="sig-name descname"><span class="pre">areas</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/evaluators/switch.html#Switch.areas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.evaluators.Switch.areas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of areas for plot.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -118,8 +116,8 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2020, Tim-Oliver Husser.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   
   </body>

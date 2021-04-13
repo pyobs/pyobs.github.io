@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pyobs_weather.weather.stations.McDonaldLocke &#8212; pyobs  documentation</title>
-    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyobs_weather.weather.stations.McDonaldLockeArchive" href="mcdlockearchive.html" />
@@ -37,7 +37,8 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">pyobs  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" ><em>pyobs-weather</em></a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of weather station classes</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of weather station classes</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs_weather.weather.stations.McDonaldLocke</a></li> 
       </ul>
     </div>  
 
@@ -48,15 +49,15 @@
             
   <div class="section" id="pyobs-weather-weather-stations-mcdonaldlocke">
 <h1>pyobs_weather.weather.stations.McDonaldLocke<a class="headerlink" href="#pyobs-weather-weather-stations-mcdonaldlocke" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pyobs_weather.weather.stations.McDonaldLocke">
-<em class="property">class </em><code class="sig-prename descclassname">pyobs_weather.weather.stations.</code><code class="sig-name descname">McDonaldLocke</code><span class="sig-paren">(</span><em class="sig-param">station: pyobs_weather.weather.models.Station</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLocke" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs_weather.weather.stations.</span></code><code class="sig-name descname"><span class="pre">McDonaldLocke</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">station</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs_weather.weather.models.Station</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/stations/mcdlocke.html#McDonaldLocke"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLocke" title="Permalink to this definition">¶</a></dt>
 <dd><p>The McDonaldLocke weather station reads current weather information from the Mt. Lock weather page at
 <a class="reference external" href="http://weather.as.utexas.edu/latest_5min.dat">http://weather.as.utexas.edu/latest_5min.dat</a>.</p>
 <p>It does not require any configuration.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs_weather.weather.stations.McDonaldLocke.create_sensors">
-<code class="sig-name descname">create_sensors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLocke.create_sensors" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">create_sensors</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/stations/mcdlocke.html#McDonaldLocke.create_sensors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLocke.create_sensors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for creating sensors for this station.</p>
 <p>Sensors created by this station are:</p>
 <ul class="simple">
@@ -69,9 +70,9 @@
 </ul>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs_weather.weather.stations.McDonaldLocke.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLocke.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/stations/mcdlocke.html#McDonaldLocke.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLocke.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for updating sensor values for this station.</p>
 <p>This method reads the Mt. Locke weather page and extracts the latest values.</p>
 </dd></dl>
@@ -81,6 +82,7 @@
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -118,8 +120,8 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2020, Tim-Oliver Husser.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   
   </body>

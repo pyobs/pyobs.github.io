@@ -1,219 +1,53 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>5.7. Interfaces &mdash; pyobs  documentation</title>
-  
 
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interfaces &#8212; pyobs  documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="5.8. Events" href="events.html" />
-    <link rel="prev" title="5.6. Virtual File System" href="vfs.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
+    <link rel="next" title="Events" href="events.html" />
+    <link rel="prev" title="Virtual File System" href="vfs.html" />
    
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
-          
-            <a href="../index.html" class="icon icon-home"> pyobs
-          
-
-          
-          </a>
-
-          
-            
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">1. Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing pyobs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview.html">3. Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli.html">4. Command Line Interface</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="application.html">5.1. Application</a></li>
-<li class="toctree-l2"><a class="reference internal" href="comm.html">5.2. Comm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html">5.3. Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="module.html">5.4. Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="object.html">5.5. Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vfs.html">5.6. Virtual File System</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">5.7. Interfaces</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#iabortable">5.7.1. IAbortable</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iacquisition">5.7.2. IAcquisition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ialtaz">5.7.3. IAltAz</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ialtazoffsets">5.7.4. IAltAzOffsets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iautofocus">5.7.5. IAutoFocus</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iautoguiding">5.7.6. IAutoGuiding</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iautonomous">5.7.7. IAutonomous</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#icalibrate">5.7.8. ICalibrate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#icamera">5.7.9. ICamera</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#icamerabinning">5.7.10. ICameraBinning</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#icameraexposuretime">5.7.11. ICameraExposureTime</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#icamerawindow">5.7.12. ICameraWindow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iconfig">5.7.13. IConfig</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#icooling">5.7.14. ICooling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#icoordinatesquery">5.7.15. ICoordinatesQuery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#idome">5.7.16. IDome</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ifilters">5.7.17. IFilters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ifitsheaderprovider">5.7.18. IFitsHeaderProvider</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iflatfield">5.7.19. IFlatField</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ifocusmodel">5.7.20. IFocusModel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ifocuser">5.7.21. IFocuser</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iimageformat">5.7.22. IImageFormat</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iimagetype">5.7.23. IImageType</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ilatlon">5.7.24. ILatLon</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imodule">5.7.25. IModule</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imotion">5.7.26. IMotion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ipipeline">5.7.27. IPipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iradec">5.7.28. IRaDec</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iradecoffsets">5.7.29. IRaDecOffsets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iready">5.7.30. IReady</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iroof">5.7.31. IRoof</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#irotation">5.7.32. IRotation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#irunnable">5.7.33. IRunnable</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iscriptrunner">5.7.34. IScriptRunner</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#istoppable">5.7.35. IStoppable</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#isynctarget">5.7.36. ISyncTarget</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#itelescope">5.7.37. ITelescope</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#itemperatures">5.7.38. ITemperatures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#iweather">5.7.39. IWeather</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="events.html">5.8. Events</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../modules/index.html">6. Modules</a></li>
-</ul>
-
-            
-          
-        </div>
-        
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">pyobs</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="index.html"><span class="section-number">5. </span>API</a> &raquo;</li>
-        
-      <li><span class="section-number">5.7. </span>Interfaces</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="../_sources/api/interfaces.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
+  </head><body>
   
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="events.html" title="Events"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="vfs.html" title="Virtual File System"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyobs  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Interfaces</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
             
   <div class="section" id="interfaces">
-<h1><span class="section-number">5.7. </span>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h1>
+<h1>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="pyobs.interfaces.Interface">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">Interface</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/interface.html#Interface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.Interface" title="Permalink to this definition">¶</a></dt>
@@ -221,7 +55,7 @@
 </dd></dl>
 
 <div class="section" id="iabortable">
-<h2><span class="section-number">5.7.1. </span>IAbortable<a class="headerlink" href="#iabortable" title="Permalink to this headline">¶</a></h2>
+<h2>IAbortable<a class="headerlink" href="#iabortable" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IAbortable">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAbortable</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAbortable.html#IAbortable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAbortable" title="Permalink to this definition">¶</a></dt>
@@ -235,7 +69,7 @@
 
 </div>
 <div class="section" id="iacquisition">
-<h2><span class="section-number">5.7.2. </span>IAcquisition<a class="headerlink" href="#iacquisition" title="Permalink to this headline">¶</a></h2>
+<h2>IAcquisition<a class="headerlink" href="#iacquisition" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IAcquisition">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAcquisition</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAcquisition.html#IAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAcquisition" title="Permalink to this definition">¶</a></dt>
@@ -262,7 +96,7 @@ coordinates.</p>
 
 </div>
 <div class="section" id="ialtaz">
-<h2><span class="section-number">5.7.3. </span>IAltAz<a class="headerlink" href="#ialtaz" title="Permalink to this headline">¶</a></h2>
+<h2>IAltAz<a class="headerlink" href="#ialtaz" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IAltAz">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAltAz</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAz.html#IAltAz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAz" title="Permalink to this definition">¶</a></dt>
@@ -299,7 +133,7 @@ coordinates.</p>
 
 </div>
 <div class="section" id="ialtazoffsets">
-<h2><span class="section-number">5.7.4. </span>IAltAzOffsets<a class="headerlink" href="#ialtazoffsets" title="Permalink to this headline">¶</a></h2>
+<h2>IAltAzOffsets<a class="headerlink" href="#ialtazoffsets" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IAltAzOffsets">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAltAzOffsets</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAzOffsets.html#IAltAzOffsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAzOffsets" title="Permalink to this definition">¶</a></dt>
@@ -336,7 +170,7 @@ coordinates.</p>
 
 </div>
 <div class="section" id="iautofocus">
-<h2><span class="section-number">5.7.5. </span>IAutoFocus<a class="headerlink" href="#iautofocus" title="Permalink to this headline">¶</a></h2>
+<h2>IAutoFocus<a class="headerlink" href="#iautofocus" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IAutoFocus">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAutoFocus</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAutoFocus.html#IAutoFocus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutoFocus" title="Permalink to this definition">¶</a></dt>
@@ -382,7 +216,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 
 </div>
 <div class="section" id="iautoguiding">
-<h2><span class="section-number">5.7.6. </span>IAutoGuiding<a class="headerlink" href="#iautoguiding" title="Permalink to this headline">¶</a></h2>
+<h2>IAutoGuiding<a class="headerlink" href="#iautoguiding" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IAutoGuiding">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAutoGuiding</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAutoGuiding.html#IAutoGuiding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutoGuiding" title="Permalink to this definition">¶</a></dt>
@@ -401,7 +235,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 
 </div>
 <div class="section" id="iautonomous">
-<h2><span class="section-number">5.7.7. </span>IAutonomous<a class="headerlink" href="#iautonomous" title="Permalink to this headline">¶</a></h2>
+<h2>IAutonomous<a class="headerlink" href="#iautonomous" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IAutonomous">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IAutonomous</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IAutonomous.html#IAutonomous"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutonomous" title="Permalink to this definition">¶</a></dt>
@@ -410,7 +244,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 
 </div>
 <div class="section" id="icalibrate">
-<h2><span class="section-number">5.7.8. </span>ICalibrate<a class="headerlink" href="#icalibrate" title="Permalink to this headline">¶</a></h2>
+<h2>ICalibrate<a class="headerlink" href="#icalibrate" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ICalibrate">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICalibrate</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICalibrate.html#ICalibrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICalibrate" title="Permalink to this definition">¶</a></dt>
@@ -425,7 +259,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 
 </div>
 <div class="section" id="icamera">
-<h2><span class="section-number">5.7.9. </span>ICamera<a class="headerlink" href="#icamera" title="Permalink to this headline">¶</a></h2>
+<h2>ICamera<a class="headerlink" href="#icamera" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ICamera">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICamera</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICamera.html#ICamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICamera" title="Permalink to this definition">¶</a></dt>
@@ -487,7 +321,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 
 </div>
 <div class="section" id="icamerabinning">
-<h2><span class="section-number">5.7.10. </span>ICameraBinning<a class="headerlink" href="#icamerabinning" title="Permalink to this headline">¶</a></h2>
+<h2>ICameraBinning<a class="headerlink" href="#icamerabinning" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ICameraBinning">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICameraBinning</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraBinning.html#ICameraBinning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraBinning" title="Permalink to this definition">¶</a></dt>
@@ -534,7 +368,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 
 </div>
 <div class="section" id="icameraexposuretime">
-<h2><span class="section-number">5.7.11. </span>ICameraExposureTime<a class="headerlink" href="#icameraexposuretime" title="Permalink to this headline">¶</a></h2>
+<h2>ICameraExposureTime<a class="headerlink" href="#icameraexposuretime" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ICameraExposureTime">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICameraExposureTime</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraExposureTime.html#ICameraExposureTime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraExposureTime" title="Permalink to this definition">¶</a></dt>
@@ -578,7 +412,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 
 </div>
 <div class="section" id="icamerawindow">
-<h2><span class="section-number">5.7.12. </span>ICameraWindow<a class="headerlink" href="#icamerawindow" title="Permalink to this headline">¶</a></h2>
+<h2>ICameraWindow<a class="headerlink" href="#icamerawindow" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ICameraWindow">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICameraWindow</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraWindow.html#ICameraWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraWindow" title="Permalink to this definition">¶</a></dt>
@@ -627,7 +461,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 
 </div>
 <div class="section" id="iconfig">
-<h2><span class="section-number">5.7.13. </span>IConfig<a class="headerlink" href="#iconfig" title="Permalink to this headline">¶</a></h2>
+<h2>IConfig<a class="headerlink" href="#iconfig" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IConfig">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IConfig</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IConfig.html#IConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IConfig" title="Permalink to this definition">¶</a></dt>
@@ -681,7 +515,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 
 </div>
 <div class="section" id="icooling">
-<h2><span class="section-number">5.7.14. </span>ICooling<a class="headerlink" href="#icooling" title="Permalink to this headline">¶</a></h2>
+<h2>ICooling<a class="headerlink" href="#icooling" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ICooling">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICooling</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICooling.html#ICooling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICooling" title="Permalink to this definition">¶</a></dt>
@@ -723,7 +557,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="icoordinatesquery">
-<h2><span class="section-number">5.7.15. </span>ICoordinatesQuery<a class="headerlink" href="#icoordinatesquery" title="Permalink to this headline">¶</a></h2>
+<h2>ICoordinatesQuery<a class="headerlink" href="#icoordinatesquery" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ICoordinatesQuery">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ICoordinatesQuery</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ICoordinatesQuery.html#ICoordinatesQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICoordinatesQuery" title="Permalink to this definition">¶</a></dt>
@@ -755,7 +589,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="idome">
-<h2><span class="section-number">5.7.16. </span>IDome<a class="headerlink" href="#idome" title="Permalink to this headline">¶</a></h2>
+<h2>IDome<a class="headerlink" href="#idome" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IDome">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IDome</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IDome.html#IDome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IDome" title="Permalink to this definition">¶</a></dt>
@@ -764,7 +598,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="ifilters">
-<h2><span class="section-number">5.7.17. </span>IFilters<a class="headerlink" href="#ifilters" title="Permalink to this headline">¶</a></h2>
+<h2>IFilters<a class="headerlink" href="#ifilters" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IFilters">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFilters</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFilters.html#IFilters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFilters" title="Permalink to this definition">¶</a></dt>
@@ -808,7 +642,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="ifitsheaderprovider">
-<h2><span class="section-number">5.7.18. </span>IFitsHeaderProvider<a class="headerlink" href="#ifitsheaderprovider" title="Permalink to this headline">¶</a></h2>
+<h2>IFitsHeaderProvider<a class="headerlink" href="#ifitsheaderprovider" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IFitsHeaderProvider">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFitsHeaderProvider</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFitsHeaderProvider.html#IFitsHeaderProvider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFitsHeaderProvider" title="Permalink to this definition">¶</a></dt>
@@ -830,7 +664,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="iflatfield">
-<h2><span class="section-number">5.7.19. </span>IFlatField<a class="headerlink" href="#iflatfield" title="Permalink to this headline">¶</a></h2>
+<h2>IFlatField<a class="headerlink" href="#iflatfield" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IFlatField">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFlatField</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFlatField.html#IFlatField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFlatField" title="Permalink to this definition">¶</a></dt>
@@ -868,7 +702,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="ifocusmodel">
-<h2><span class="section-number">5.7.20. </span>IFocusModel<a class="headerlink" href="#ifocusmodel" title="Permalink to this headline">¶</a></h2>
+<h2>IFocusModel<a class="headerlink" href="#ifocusmodel" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IFocusModel">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFocusModel</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFocusModel.html#IFocusModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocusModel" title="Permalink to this definition">¶</a></dt>
@@ -888,7 +722,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="ifocuser">
-<h2><span class="section-number">5.7.21. </span>IFocuser<a class="headerlink" href="#ifocuser" title="Permalink to this headline">¶</a></h2>
+<h2>IFocuser<a class="headerlink" href="#ifocuser" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IFocuser">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IFocuser</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IFocuser.html#IFocuser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocuser" title="Permalink to this definition">¶</a></dt>
@@ -951,7 +785,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="iimageformat">
-<h2><span class="section-number">5.7.22. </span>IImageFormat<a class="headerlink" href="#iimageformat" title="Permalink to this headline">¶</a></h2>
+<h2>IImageFormat<a class="headerlink" href="#iimageformat" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IImageFormat">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IImageFormat</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IImageFormat.html#IImageFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageFormat" title="Permalink to this definition">¶</a></dt>
@@ -996,7 +830,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="iimagetype">
-<h2><span class="section-number">5.7.23. </span>IImageType<a class="headerlink" href="#iimagetype" title="Permalink to this headline">¶</a></h2>
+<h2>IImageType<a class="headerlink" href="#iimagetype" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IImageType">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IImageType</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IImageType.html#IImageType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageType" title="Permalink to this definition">¶</a></dt>
@@ -1026,7 +860,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="ilatlon">
-<h2><span class="section-number">5.7.24. </span>ILatLon<a class="headerlink" href="#ilatlon" title="Permalink to this headline">¶</a></h2>
+<h2>ILatLon<a class="headerlink" href="#ilatlon" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ILatLon">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ILatLon</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ILatLon.html#ILatLon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ILatLon" title="Permalink to this definition">¶</a></dt>
@@ -1063,7 +897,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="imodule">
-<h2><span class="section-number">5.7.25. </span>IModule<a class="headerlink" href="#imodule" title="Permalink to this headline">¶</a></h2>
+<h2>IModule<a class="headerlink" href="#imodule" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IModule">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IModule</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IModule.html#IModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IModule" title="Permalink to this definition">¶</a></dt>
@@ -1077,7 +911,7 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </div>
 <div class="section" id="imotion">
-<h2><span class="section-number">5.7.26. </span>IMotion<a class="headerlink" href="#imotion" title="Permalink to this headline">¶</a></h2>
+<h2>IMotion<a class="headerlink" href="#imotion" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IMotion">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IMotion</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IMotion.html#IMotion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IMotion" title="Permalink to this definition">¶</a></dt>
@@ -1155,7 +989,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="ipipeline">
-<h2><span class="section-number">5.7.27. </span>IPipeline<a class="headerlink" href="#ipipeline" title="Permalink to this headline">¶</a></h2>
+<h2>IPipeline<a class="headerlink" href="#ipipeline" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IPipeline">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IPipeline</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IPipeline.html#IPipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IPipeline" title="Permalink to this definition">¶</a></dt>
@@ -1177,7 +1011,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="iradec">
-<h2><span class="section-number">5.7.28. </span>IRaDec<a class="headerlink" href="#iradec" title="Permalink to this headline">¶</a></h2>
+<h2>IRaDec<a class="headerlink" href="#iradec" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IRaDec">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRaDec</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDec.html#IRaDec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDec" title="Permalink to this definition">¶</a></dt>
@@ -1215,7 +1049,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="iradecoffsets">
-<h2><span class="section-number">5.7.29. </span>IRaDecOffsets<a class="headerlink" href="#iradecoffsets" title="Permalink to this headline">¶</a></h2>
+<h2>IRaDecOffsets<a class="headerlink" href="#iradecoffsets" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IRaDecOffsets">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRaDecOffsets</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDecOffsets.html#IRaDecOffsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDecOffsets" title="Permalink to this definition">¶</a></dt>
@@ -1252,7 +1086,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="iready">
-<h2><span class="section-number">5.7.30. </span>IReady<a class="headerlink" href="#iready" title="Permalink to this headline">¶</a></h2>
+<h2>IReady<a class="headerlink" href="#iready" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IReady">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IReady</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IReady.html#IReady"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IReady" title="Permalink to this definition">¶</a></dt>
@@ -1272,7 +1106,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="iroof">
-<h2><span class="section-number">5.7.31. </span>IRoof<a class="headerlink" href="#iroof" title="Permalink to this headline">¶</a></h2>
+<h2>IRoof<a class="headerlink" href="#iroof" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IRoof">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRoof</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRoof.html#IRoof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRoof" title="Permalink to this definition">¶</a></dt>
@@ -1281,7 +1115,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="irotation">
-<h2><span class="section-number">5.7.32. </span>IRotation<a class="headerlink" href="#irotation" title="Permalink to this headline">¶</a></h2>
+<h2>IRotation<a class="headerlink" href="#irotation" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IRotation">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRotation</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRotation.html#IRotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRotation" title="Permalink to this definition">¶</a></dt>
@@ -1307,7 +1141,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="irunnable">
-<h2><span class="section-number">5.7.33. </span>IRunnable<a class="headerlink" href="#irunnable" title="Permalink to this headline">¶</a></h2>
+<h2>IRunnable<a class="headerlink" href="#irunnable" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IRunnable">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IRunnable</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IRunnable.html#IRunnable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRunnable" title="Permalink to this definition">¶</a></dt>
@@ -1321,7 +1155,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="iscriptrunner">
-<h2><span class="section-number">5.7.34. </span>IScriptRunner<a class="headerlink" href="#iscriptrunner" title="Permalink to this headline">¶</a></h2>
+<h2>IScriptRunner<a class="headerlink" href="#iscriptrunner" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IScriptRunner">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IScriptRunner</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IScriptRunner.html#IScriptRunner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IScriptRunner" title="Permalink to this definition">¶</a></dt>
@@ -1341,7 +1175,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="istoppable">
-<h2><span class="section-number">5.7.35. </span>IStoppable<a class="headerlink" href="#istoppable" title="Permalink to this headline">¶</a></h2>
+<h2>IStoppable<a class="headerlink" href="#istoppable" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IStoppable">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IStoppable</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IStoppable.html#IStoppable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IStoppable" title="Permalink to this definition">¶</a></dt>
@@ -1367,7 +1201,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="isynctarget">
-<h2><span class="section-number">5.7.36. </span>ISyncTarget<a class="headerlink" href="#isynctarget" title="Permalink to this headline">¶</a></h2>
+<h2>ISyncTarget<a class="headerlink" href="#isynctarget" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ISyncTarget">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ISyncTarget</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ISyncTarget.html#ISyncTarget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ISyncTarget" title="Permalink to this definition">¶</a></dt>
@@ -1382,7 +1216,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="itelescope">
-<h2><span class="section-number">5.7.37. </span>ITelescope<a class="headerlink" href="#itelescope" title="Permalink to this headline">¶</a></h2>
+<h2>ITelescope<a class="headerlink" href="#itelescope" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ITelescope">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ITelescope</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ITelescope.html#ITelescope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ITelescope" title="Permalink to this definition">¶</a></dt>
@@ -1391,7 +1225,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="itemperatures">
-<h2><span class="section-number">5.7.38. </span>ITemperatures<a class="headerlink" href="#itemperatures" title="Permalink to this headline">¶</a></h2>
+<h2>ITemperatures<a class="headerlink" href="#itemperatures" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.ITemperatures">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">ITemperatures</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/ITemperatures.html#ITemperatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ITemperatures" title="Permalink to this definition">¶</a></dt>
@@ -1411,7 +1245,7 @@ to POSITIONED or TRACKING) but has not yet arrived at that state</p></li>
 
 </div>
 <div class="section" id="iweather">
-<h2><span class="section-number">5.7.39. </span>IWeather<a class="headerlink" href="#iweather" title="Permalink to this headline">¶</a></h2>
+<h2>IWeather<a class="headerlink" href="#iweather" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IWeather">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.interfaces.</span></code><code class="sig-name descname"><span class="pre">IWeather</span></code><a class="reference internal" href="../_modules/pyobs/interfaces/IWeather.html#IWeather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IWeather" title="Permalink to this definition">¶</a></dt>
@@ -1468,51 +1302,91 @@ with sensor information, which contain a value and a good flag.</p>
 </div>
 
 
-           </div>
-           
+            <div class="clearer"></div>
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="events.html" class="btn btn-neutral float-right" title="5.8. Events" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="vfs.html" class="btn btn-neutral float-left" title="5.6. Virtual File System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &#169; Copyright 2019, Tim-Oliver Husser.
-
-    </p>
-  </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
         </div>
       </div>
-
-    </section>
-
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Interfaces</a><ul>
+<li><a class="reference internal" href="#iabortable">IAbortable</a></li>
+<li><a class="reference internal" href="#iacquisition">IAcquisition</a></li>
+<li><a class="reference internal" href="#ialtaz">IAltAz</a></li>
+<li><a class="reference internal" href="#ialtazoffsets">IAltAzOffsets</a></li>
+<li><a class="reference internal" href="#iautofocus">IAutoFocus</a></li>
+<li><a class="reference internal" href="#iautoguiding">IAutoGuiding</a></li>
+<li><a class="reference internal" href="#iautonomous">IAutonomous</a></li>
+<li><a class="reference internal" href="#icalibrate">ICalibrate</a></li>
+<li><a class="reference internal" href="#icamera">ICamera</a></li>
+<li><a class="reference internal" href="#icamerabinning">ICameraBinning</a></li>
+<li><a class="reference internal" href="#icameraexposuretime">ICameraExposureTime</a></li>
+<li><a class="reference internal" href="#icamerawindow">ICameraWindow</a></li>
+<li><a class="reference internal" href="#iconfig">IConfig</a></li>
+<li><a class="reference internal" href="#icooling">ICooling</a></li>
+<li><a class="reference internal" href="#icoordinatesquery">ICoordinatesQuery</a></li>
+<li><a class="reference internal" href="#idome">IDome</a></li>
+<li><a class="reference internal" href="#ifilters">IFilters</a></li>
+<li><a class="reference internal" href="#ifitsheaderprovider">IFitsHeaderProvider</a></li>
+<li><a class="reference internal" href="#iflatfield">IFlatField</a></li>
+<li><a class="reference internal" href="#ifocusmodel">IFocusModel</a></li>
+<li><a class="reference internal" href="#ifocuser">IFocuser</a></li>
+<li><a class="reference internal" href="#iimageformat">IImageFormat</a></li>
+<li><a class="reference internal" href="#iimagetype">IImageType</a></li>
+<li><a class="reference internal" href="#ilatlon">ILatLon</a></li>
+<li><a class="reference internal" href="#imodule">IModule</a></li>
+<li><a class="reference internal" href="#imotion">IMotion</a></li>
+<li><a class="reference internal" href="#ipipeline">IPipeline</a></li>
+<li><a class="reference internal" href="#iradec">IRaDec</a></li>
+<li><a class="reference internal" href="#iradecoffsets">IRaDecOffsets</a></li>
+<li><a class="reference internal" href="#iready">IReady</a></li>
+<li><a class="reference internal" href="#iroof">IRoof</a></li>
+<li><a class="reference internal" href="#irotation">IRotation</a></li>
+<li><a class="reference internal" href="#irunnable">IRunnable</a></li>
+<li><a class="reference internal" href="#iscriptrunner">IScriptRunner</a></li>
+<li><a class="reference internal" href="#istoppable">IStoppable</a></li>
+<li><a class="reference internal" href="#isynctarget">ISyncTarget</a></li>
+<li><a class="reference internal" href="#itelescope">ITelescope</a></li>
+<li><a class="reference internal" href="#itemperatures">ITemperatures</a></li>
+<li><a class="reference internal" href="#iweather">IWeather</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="index.html">API</a><ul>
+      <li>Previous: <a href="vfs.html" title="previous chapter">Virtual File System</a></li>
+      <li>Next: <a href="events.html" title="next chapter">Events</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/interfaces.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
+  </body>
 </html>

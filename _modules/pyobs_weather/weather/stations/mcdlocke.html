@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyobs_weather.weather.stations.mcdlocke &#8212; pyobs  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs_weather.weather.stations.mcdlocke</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyobs_weather.weather.stations.mcdlocke</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">pytz</span>
+<span class="kn">from</span> <span class="nn">astropy.time</span> <span class="kn">import</span> <span class="n">Time</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">.station</span> <span class="kn">import</span> <span class="n">WeatherStation</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="McDonaldLocke"><a class="viewcode-back" href="../../../../pyobs-weather/stations/mcdlocke.html#pyobs_weather.weather.stations.McDonaldLocke">[docs]</a><span class="k">class</span> <span class="nc">McDonaldLocke</span><span class="p">(</span><span class="n">WeatherStation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The McDonaldLocke weather station reads current weather information from the Mt. Lock weather page at</span>
+<span class="sd">    http://weather.as.utexas.edu/latest_5min.dat.</span>
+
+<span class="sd">    It does not require any configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="McDonaldLocke.create_sensors"><a class="viewcode-back" href="../../../../pyobs-weather/stations/mcdlocke.html#pyobs_weather.weather.stations.McDonaldLocke.create_sensors">[docs]</a>    <span class="k">def</span> <span class="nf">create_sensors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Entry point for creating sensors for this station.</span>
+
+<span class="sd">        Sensors created by this station are:</span>
+
+<span class="sd">        - temp</span>
+
+<span class="sd">        - humid</span>
+
+<span class="sd">        - winddir</span>
+
+<span class="sd">        - windspeed</span>
+
+<span class="sd">        - particles</span>
+
+<span class="sd">        - rain</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_sensor</span><span class="p">(</span><span class="s1">&#39;temp&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_sensor</span><span class="p">(</span><span class="s1">&#39;humid&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_sensor</span><span class="p">(</span><span class="s1">&#39;press&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_sensor</span><span class="p">(</span><span class="s1">&#39;winddir&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_sensor</span><span class="p">(</span><span class="s1">&#39;windspeed&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_sensor</span><span class="p">(</span><span class="s1">&#39;particles&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_sensor</span><span class="p">(</span><span class="s1">&#39;rain&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="McDonaldLocke.update"><a class="viewcode-back" href="../../../../pyobs-weather/stations/mcdlocke.html#pyobs_weather.weather.stations.McDonaldLocke.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Entry point for updating sensor values for this station.</span>
+
+<span class="sd">        This method reads the Mt. Locke weather page and extracts the latest values.&quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Updating McDonald Locke station </span><span class="si">%s</span><span class="s1">...&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_station</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+
+        <span class="c1"># do request</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://weather.as.utexas.edu/latest_5min.dat&#39;</span><span class="p">)</span>
+
+        <span class="c1"># check code</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not connect to McDonald weather station.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># split lines</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)]</span>
+
+        <span class="c1"># do checks</span>
+        <span class="c1"># 1st line is title</span>
+        <span class="k">if</span> <span class="s1">&#39;Mt. LOCKE LOCAL WEATHER&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;First line does not contain &quot;Mt. LOCKE LOCAL WEATHER&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># 2nd line is date</span>
+        <span class="k">if</span> <span class="s1">&#39;Current Date GMT&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;No date given in response from server.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="c1"># strip line and capitalize first letter of month</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">18</span><span class="p">:</span><span class="mi">21</span><span class="p">]</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">21</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">22</span><span class="p">:]</span>
+        <span class="c1"># compare with today</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">-%b-%Y&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">date</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Weather data from server not for today.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># 3rd, 4th, and 5th lines</span>
+        <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;|TEMP.|HUMID|DEW PT.| BAROM | WIND_DIR | WIND SPEED  | PARTICLE |  RAIN&#39;</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Column headers do not match.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;TIME  | avg | avg |  avg  | PRESS | avg stdev| avg max min |  COUNT   |  Y/N&#39;</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Column headers do not match.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;-[GMT]-|-[F]-|-[%]-|--[F]--|[In.Hg]|---[Az]---|----[MPH]----|--[ppcf]--|[on/off]&#39;</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Units do not match.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># finally, 6th line is current weather</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)]</span>
+
+        <span class="c1"># time is easy, just concatenate date and time</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:00&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">pytz</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
+
+        <span class="c1"># convert temp from °F to °C</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.8</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># humidity</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">humid</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">humid</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># dew point, given in °F, convert to °C</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dew_pt</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">-</span> <span class="mi">32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.8</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">dew_pt</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># pressure, convert from inHg to hPa</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">press</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">*</span> <span class="mf">33.86389</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">press</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># wind dir, given as &quot;avg ~ std&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span>
+            <span class="n">wind_dir</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">wind_dir</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># wind speed, given as &quot;avg max min&quot;, convert from mph to kmh</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">wind_speed</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1.609344</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">wind_speed</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># particle count, convert from particles per ft³ to particles per m³</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">particles</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span> <span class="o">*</span> <span class="mf">3.2808</span> <span class="o">**</span> <span class="mi">3</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">particles</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># rain</span>
+        <span class="n">rain</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Y&#39;</span>
+
+        <span class="c1"># got all values, now add them</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_value</span><span class="p">(</span><span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">temp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_value</span><span class="p">(</span><span class="s1">&#39;humid&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">humid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_value</span><span class="p">(</span><span class="s1">&#39;press&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">press</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_value</span><span class="p">(</span><span class="s1">&#39;winddir&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">wind_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_value</span><span class="p">(</span><span class="s1">&#39;windspeed&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">wind_speed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_value</span><span class="p">(</span><span class="s1">&#39;particles&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">particles</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_value</span><span class="p">(</span><span class="s1">&#39;rain&#39;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">rain</span><span class="p">)</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;McDonaldLocke&#39;</span><span class="p">]</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation index</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>

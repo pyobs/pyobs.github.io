@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pyobs_weather.weather.stations.MySQL &#8212; pyobs  documentation</title>
-    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyobs_weather.weather.stations.Observer" href="observer.html" />
@@ -37,7 +37,8 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">pyobs  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" ><em>pyobs-weather</em></a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of weather station classes</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of weather station classes</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs_weather.weather.stations.MySQL</a></li> 
       </ul>
     </div>  
 
@@ -48,71 +49,20 @@
             
   <div class="section" id="pyobs-weather-weather-stations-mysql">
 <h1>pyobs_weather.weather.stations.MySQL<a class="headerlink" href="#pyobs-weather-weather-stations-mysql" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pyobs_weather.weather.stations.MySQL">
-<em class="property">class </em><code class="sig-prename descclassname">pyobs_weather.weather.stations.</code><code class="sig-name descname">MySQL</code><span class="sig-paren">(</span><em class="sig-param">connect</em>, <em class="sig-param">table</em>, <em class="sig-param">fields</em>, <em class="sig-param">time: str = 'time'</em>, <em class="sig-param">time_offset: int = 0</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.MySQL" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs_weather.weather.stations.</span></code><code class="sig-name descname"><span class="pre">MySQL</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/stations/mysql.html#MySQL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.stations.MySQL" title="Permalink to this definition">¶</a></dt>
 <dd><p>The MySQL weather station reads current weather information from a MySQL database.</p>
-<p>Creates a new Database station.</p>
-<p>A typical JSON configuration for this weather station might look like this:</p>
-<div class="line-block">
-<div class="line">{</div>
-<div class="line-block">
-<div class="line">“connect”: {</div>
-<div class="line-block">
-<div class="line">“host”: “database.com”,</div>
-<div class="line">“user”: “weather”,</div>
-<div class="line">“password”: “weather”,</div>
-<div class="line">“db”: “weather”</div>
-</div>
-<div class="line">},</div>
-<div class="line">“table”: “weather_table”,</div>
-<div class="line">“time”: “sensor_datetime”,</div>
-<div class="line">“time_offset”: -7200,</div>
-<div class="line">“fields”: {</div>
-<div class="line-block">
-<div class="line">“temp”: {“code”: “temp”, “name”: “Temperature”, “unit”: “°C”},</div>
-<div class="line">“rel_hum”: {“code”: “humid”, “name”: “Relative humidity”, “unit”: “%”},</div>
-<div class="line">“temp_dew”: {“code”: “dewpoint”, “name”: “Dew point”, “unit”: “°C”},</div>
-<div class="line">“windsp”: {“code”: “windspeed”, “name”: “Wind speed”, “unit”: “km/h”},</div>
-<div class="line">“winddir”: {“code”: “winddir”, “name”: “Wind direction”, “unit”: “°E of N”},</div>
-<div class="line">“pressure”: {“code”: “press”, “name”: “Pressure”, “unit”: “hPa”}</div>
-</div>
-<div class="line">}</div>
-</div>
-<div class="line">}</div>
-</div>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul>
-<li><p><strong>connect</strong> – Dictionary with fields required by MySQLd.connect</p></li>
-<li><p><strong>table</strong> – Database table.</p></li>
-<li><p><strong>time</strong> – Name of column containing time.</p></li>
-<li><p><strong>fields</strong> –</p>
-<dl class="simple">
-<dt>Dictionary with field-&gt;SensorType data,</dt><dd><p>e.g. {column: {code=”temp”, name=”Temperature”, unit=”C”}}</p>
-</dd>
-</dl>
-<p>column: table column
-code: field code
-name: field name
-unit: field unit
-bool_true: if given, evaluate value to 1 if equal to this, otherwise 0
-bool_false: if given, evaluate value to 0 if equal to this, otherwise 1</p>
-</li>
-<li><p><strong>time_offset</strong> – Offset in seconds to add to current time to get UTC.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs_weather.weather.stations.MySQL.create_sensors">
-<code class="sig-name descname">create_sensors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.MySQL.create_sensors" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">create_sensors</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/stations/mysql.html#MySQL.create_sensors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.stations.MySQL.create_sensors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for creating sensors for this station.</p>
 <p>New sensors are created based on the configuration.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs_weather.weather.stations.MySQL.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.MySQL.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/stations/mysql.html#MySQL.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.stations.MySQL.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for updating sensor values for this station.</p>
 <p>This method connects to the database and reads the latest values.</p>
 </dd></dl>
@@ -122,6 +72,7 @@ bool_false: if given, evaluate value to 0 if equal to this, otherwise 1</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -159,8 +110,8 @@ bool_false: if given, evaluate value to 0 if equal to this, otherwise 1</p>
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2020, Tim-Oliver Husser.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   
   </body>

@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pyobs_weather.weather.stations.McDonaldLockeArchive &#8212; pyobs  documentation</title>
-    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyobs_weather.weather.stations.McDonaldTelnet" href="mcdtelnet.html" />
@@ -37,7 +37,8 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">pyobs  documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" ><em>pyobs-weather</em></a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of weather station classes</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">List of weather station classes</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs_weather.weather.stations.McDonaldLockeArchive</a></li> 
       </ul>
     </div>  
 
@@ -48,31 +49,21 @@
             
   <div class="section" id="pyobs-weather-weather-stations-mcdonaldlockearchive">
 <h1>pyobs_weather.weather.stations.McDonaldLockeArchive<a class="headerlink" href="#pyobs-weather-weather-stations-mcdonaldlockearchive" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pyobs_weather.weather.stations.McDonaldLockeArchive">
-<em class="property">class </em><code class="sig-prename descclassname">pyobs_weather.weather.stations.</code><code class="sig-name descname">McDonaldLockeArchive</code><span class="sig-paren">(</span><em class="sig-param">fields: dict</em>, <em class="sig-param">url: str = 'http://weather.as.utexas.edu/cgi-bin/weather/weather-data.pl'</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLockeArchive" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs_weather.weather.stations.</span></code><code class="sig-name descname"><span class="pre">McDonaldLockeArchive</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'http://weather.as.utexas.edu/cgi-bin/weather/weather-data.pl'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/stations/mcdlockearchive.html#McDonaldLockeArchive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLockeArchive" title="Permalink to this definition">¶</a></dt>
 <dd><p>The McDonaldLockeArchive weather station reads current weather information from the Mt. Lock weather archive
 at <a class="reference external" href="http://weather.as.utexas.edu/cgi-bin/weather/weather-data.pl">http://weather.as.utexas.edu/cgi-bin/weather/weather-data.pl</a>.</p>
-<p>Creates a new McDonaldLockeArchive weather station.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fields</strong> – Dictionary with field-&gt;SensorType data,
-e.g. {‘cloud-Sky-ambient’: {code=”skytemp”, name=”Temperature”, unit=”C”}}</p></li>
-<li><p><strong>time_offset</strong> – Offset in seconds to add to current time to get UTC.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs_weather.weather.stations.McDonaldLockeArchive.create_sensors">
-<code class="sig-name descname">create_sensors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLockeArchive.create_sensors" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">create_sensors</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/stations/mcdlockearchive.html#McDonaldLockeArchive.create_sensors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLockeArchive.create_sensors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for creating sensors for this station.</p>
 <p>New sensors are created based on the configuration.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyobs_weather.weather.stations.McDonaldLockeArchive.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLockeArchive.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs_weather/weather/stations/mcdlockearchive.html#McDonaldLockeArchive.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_weather.weather.stations.McDonaldLockeArchive.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for updating sensor values for this station.</p>
 <p>This method reads the Mt. Locke weather archive and extracts the latest values.</p>
 </dd></dl>
@@ -82,6 +73,7 @@ e.g. {‘cloud-Sky-ambient’: {code=”skytemp”, name=”Temperature”, unit
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -119,8 +111,8 @@ e.g. {‘cloud-Sky-ambient’: {code=”skytemp”, name=”Temperature”, unit
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2020, Tim-Oliver Husser.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   
   </body>

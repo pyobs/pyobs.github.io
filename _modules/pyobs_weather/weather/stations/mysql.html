@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyobs_weather.weather.stations.mysql &#8212; pyobs  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs_weather.weather.stations.mysql</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyobs_weather.weather.stations.mysql</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">MySQLdb</span>
+<span class="kn">import</span> <span class="nn">pytz</span>
+<span class="kn">from</span> <span class="nn">astropy.time</span> <span class="kn">import</span> <span class="n">Time</span><span class="p">,</span> <span class="n">TimeDelta</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+
+<span class="kn">from</span> <span class="nn">pyobs_weather.weather.models</span> <span class="kn">import</span> <span class="n">Sensor</span><span class="p">,</span> <span class="n">SensorType</span>
+<span class="kn">from</span> <span class="nn">.station</span> <span class="kn">import</span> <span class="n">WeatherStation</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MySQL"><a class="viewcode-back" href="../../../../pyobs-weather/stations/mysql.html#pyobs_weather.weather.stations.MySQL">[docs]</a><span class="k">class</span> <span class="nc">MySQL</span><span class="p">(</span><span class="n">WeatherStation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The MySQL weather station reads current weather information from a MySQL database.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connect</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">time_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a new Database station.</span>
+
+<span class="sd">        A typical JSON configuration for this weather station might look like this:</span>
+
+<span class="sd">        |  {</span>
+<span class="sd">        |      &quot;connect&quot;: {</span>
+<span class="sd">        |          &quot;host&quot;: &quot;database.com&quot;,</span>
+<span class="sd">        |          &quot;user&quot;: &quot;weather&quot;,</span>
+<span class="sd">        |          &quot;password&quot;: &quot;weather&quot;,</span>
+<span class="sd">        |          &quot;db&quot;: &quot;weather&quot;</span>
+<span class="sd">        |      },</span>
+<span class="sd">        |      &quot;table&quot;: &quot;weather_table&quot;,</span>
+<span class="sd">        |      &quot;time&quot;: &quot;sensor_datetime&quot;,</span>
+<span class="sd">        |      &quot;time_offset&quot;: -7200,</span>
+<span class="sd">        |      &quot;fields&quot;: {</span>
+<span class="sd">        |          &quot;temp&quot;: {&quot;code&quot;: &quot;temp&quot;, &quot;name&quot;: &quot;Temperature&quot;, &quot;unit&quot;: &quot;°C&quot;},</span>
+<span class="sd">        |          &quot;rel_hum&quot;: {&quot;code&quot;: &quot;humid&quot;, &quot;name&quot;: &quot;Relative humidity&quot;, &quot;unit&quot;: &quot;%&quot;},</span>
+<span class="sd">        |          &quot;temp_dew&quot;: {&quot;code&quot;: &quot;dewpoint&quot;, &quot;name&quot;: &quot;Dew point&quot;, &quot;unit&quot;: &quot;°C&quot;},</span>
+<span class="sd">        |          &quot;windsp&quot;: {&quot;code&quot;: &quot;windspeed&quot;, &quot;name&quot;: &quot;Wind speed&quot;, &quot;unit&quot;: &quot;km/h&quot;},</span>
+<span class="sd">        |          &quot;winddir&quot;: {&quot;code&quot;: &quot;winddir&quot;, &quot;name&quot;: &quot;Wind direction&quot;, &quot;unit&quot;: &quot;°E of N&quot;},</span>
+<span class="sd">        |          &quot;pressure&quot;: {&quot;code&quot;: &quot;press&quot;, &quot;name&quot;: &quot;Pressure&quot;, &quot;unit&quot;: &quot;hPa&quot;}</span>
+<span class="sd">        |      }</span>
+<span class="sd">        |  }</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connect: Dictionary with fields required by MySQLd.connect</span>
+<span class="sd">            table: Database table.</span>
+<span class="sd">            time: Name of column containing time.</span>
+<span class="sd">            fields: Dictionary with field-&gt;SensorType data,</span>
+<span class="sd">                        e.g. {column: {code=&quot;temp&quot;, name=&quot;Temperature&quot;, unit=&quot;C&quot;}}</span>
+<span class="sd">                    column: table column</span>
+<span class="sd">                    code: field code</span>
+<span class="sd">                    name: field name</span>
+<span class="sd">                    unit: field unit</span>
+<span class="sd">                    bool_true: if given, evaluate value to 1 if equal to this, otherwise 0</span>
+<span class="sd">                    bool_false: if given, evaluate value to 0 if equal to this, otherwise 1</span>
+<span class="sd">            time_offset: Offset in seconds to add to current time to get UTC.&quot;&quot;&quot;</span>
+        <span class="n">WeatherStation</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span> <span class="o">=</span> <span class="n">connect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">table</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_offset</span> <span class="o">=</span> <span class="n">time_offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
+
+<div class="viewcode-block" id="MySQL.create_sensors"><a class="viewcode-back" href="../../../../pyobs-weather/stations/mysql.html#pyobs_weather.weather.stations.MySQL.create_sensors">[docs]</a>    <span class="k">def</span> <span class="nf">create_sensors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Entry point for creating sensors for this station.</span>
+
+<span class="sd">        New sensors are created based on the configuration.&quot;&quot;&quot;</span>
+
+        <span class="c1"># loop all fields</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">typ</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s1">&#39;name&#39;</span> <span class="ow">in</span> <span class="n">typ</span> <span class="ow">and</span> <span class="s1">&#39;unit&#39;</span> <span class="ow">in</span> <span class="n">typ</span><span class="p">:</span>
+                <span class="c1"># get or create sensor type</span>
+                <span class="n">sensor_type</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">SensorType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">typ</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">typ</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">typ</span><span class="p">[</span><span class="s1">&#39;unit&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sensor_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_sensor</span><span class="p">(</span><span class="n">typ</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">])</span>
+
+            <span class="c1"># get or create sensor</span>
+            <span class="n">Sensor</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">station</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_station</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">sensor_type</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MySQL.update"><a class="viewcode-back" href="../../../../pyobs-weather/stations/mysql.html#pyobs_weather.weather.stations.MySQL.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Entry point for updating sensor values for this station.</span>
+
+<span class="sd">        This method connects to the database and reads the latest values.&quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Updating Database station </span><span class="si">%s</span><span class="s1">...&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_station</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+
+        <span class="c1"># connect to DB</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">)</span>
+
+        <span class="c1"># get all columns to query</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># build query</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s1">&#39;SELECT </span><span class="si">%s</span><span class="s1"> FROM </span><span class="si">%s</span><span class="s1"> ORDER BY </span><span class="si">%s</span><span class="s1"> DESC LIMIT 1&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">columns</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+
+        <span class="c1"># and query</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># nothing?</span>
+        <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Result from database is empty.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># evaluate row</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="p">(</span><span class="n">Time</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">TimeDelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_offset</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">second</span><span class="p">))</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">pytz</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
+
+        <span class="c1"># other values</span>
+        <span class="k">for</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="c1"># boolean?</span>
+            <span class="k">if</span> <span class="s1">&#39;bool_true&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bool_true&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="s1">&#39;bool_false&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;bool_false&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span> <span class="k">else</span> <span class="mi">1</span>
+
+            <span class="c1"># add value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_value</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">],</span> <span class="n">time</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MySQL&#39;</span><span class="p">]</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation index</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2019, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>
