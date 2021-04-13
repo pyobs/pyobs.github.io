@@ -3,3 +3,4 @@ Application
 
 .. autoclass:: pyobs.application.Application
     :members:
+    :special-members: __init__

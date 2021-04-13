@@ -1,5 +1,16 @@
 Comm
 ====
 
+.. automodule:: pyobs.comm.comm
+
 .. autoclass:: pyobs.comm.Comm
     :members:
+    :special-members: __init__
+
+
+XmppComm
+--------
+
+.. autoclass:: pyobs.comm.xmpp.XmppComm
+    :members:
+    :special-members: __init__

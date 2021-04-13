@@ -30,6 +30,9 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="environment.html" title="Environment"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -46,24 +49,38 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="comm">
-<h1>Comm<a class="headerlink" href="#comm" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.comm.comm">
+<span id="comm"></span><h1>Comm<a class="headerlink" href="#module-pyobs.comm.comm" title="Permalink to this headline">¶</a></h1>
+<p>The Comm object is responsible for all communication between modules (see <a class="reference internal" href="module.html#module-pyobs.modules.module" title="pyobs.modules.module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyobs.modules.module</span></code></a>). The base
+class for all implementations is <a class="reference internal" href="#pyobs.comm.Comm" title="pyobs.comm.Comm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.comm.Comm</span></code></a>.</p>
+<p>The user usually only has contact with the Comm object when writing the configuration for an existing module or when
+developing a new module that needs to communicate with other modules.</p>
+<p>In a configuration file, the Comm object is defined at top-level like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comm</span><span class="p">:</span>
+    <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+</pre></div>
+</div>
+<p>Except for a single parameter defined in <a class="reference internal" href="#pyobs.comm.Comm" title="pyobs.comm.Comm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comm</span></code></a>’s constructor, all parameters are defined in derived
+classes.</p>
+<p>There is currently one one implementation of the Comm interface:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pyobs.comm.xmpp.XmppComm" title="pyobs.comm.xmpp.XmppComm"><code class="xref py py-class docutils literal notranslate"><span class="pre">XmppComm</span></code></a> uses the XMPP protocol for communication.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt>Module <a class="reference internal" href="module.html#module-pyobs.modules.module" title="pyobs.modules.module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module</span></code></a></dt><dd><p>Description for modules, to which Comm objects are usually assigned.</p>
+</dd>
+</dl>
+</div>
 <dl class="py class">
 <dt id="pyobs.comm.Comm">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.comm.</span></code><code class="sig-name descname"><span class="pre">Comm</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_proxies</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all Comm modules in pyobs.</p>
 <dl class="py method">
-<dt id="pyobs.comm.Comm.add_command_handler">
-<code class="sig-name descname"><span class="pre">add_command_handler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.add_command_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.add_command_handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a command handler.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>command</strong> (<em>str</em>) – Name of command to handle.</p></li>
-<li><p><strong>handler</strong> – Method that handles the command</p></li>
-</ul>
-</dd>
-</dl>
+<dt id="pyobs.comm.Comm.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_proxies</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a comm module.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -95,20 +112,6 @@
 <dt id="pyobs.comm.Comm.close">
 <code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close module.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.comm.Comm.del_command_handler">
-<code class="sig-name descname"><span class="pre">del_command_handler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.del_command_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.del_command_handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete a command handler.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>command</strong> – Name of command to handle.</p></li>
-<li><p><strong>handler</strong> – Method that handles the command</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -155,6 +158,12 @@
 <dd class="field-odd"><p><strong>entry</strong> (<em>LogEvent</em>) – Log event to send.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.Comm.module">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">module</span></code><a class="headerlink" href="#pyobs.comm.Comm.module" title="Permalink to this definition">¶</a></dt>
+<dd><p>The module that this Comm object is attached to.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -228,22 +237,187 @@ send them.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<div class="section" id="xmppcomm">
+<h2>XmppComm<a class="headerlink" href="#xmppcomm" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.comm.xmpp.XmppComm">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.comm.xmpp.</span></code><code class="sig-name descname"><span class="pre">XmppComm</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'pyobs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_tls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/xmpp/xmppcomm.html#XmppComm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Comm class using XMPP.</p>
+<p>This Comm class uses an XMPP server (e.g. <a class="reference external" href="https://www.ejabberd.im">ejabberd</a>) for communication between modules.
+Essentially required for a connection to the server is a JID, a JabberID. It can be specified in the configuration
+like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comm</span><span class="p">:</span>
+    <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+    <span class="n">jid</span><span class="p">:</span>  <span class="n">someuser</span><span class="nd">@example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pyobs</span>
+</pre></div>
+</div>
+<p>Using this, <em>pyobs</em> tries to connect to example.com as user <code class="docutils literal notranslate"><span class="pre">someuser</span></code> with resource <code class="docutils literal notranslate"><span class="pre">pyobs</span></code>. Since <code class="docutils literal notranslate"><span class="pre">pyobs</span></code>
+is the default resource, it can be omitted:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jid</span><span class="p">:</span>  <span class="n">someuser</span><span class="nd">@example</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>Alternatively, one can split the user, domain, and resource (if required) into three different parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">user</span><span class="p">:</span> <span class="n">someuser</span>
+<span class="n">domain</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>This comes in handy, if one wants to put the basic Comm configuration into a separate file. Imagine a <code class="docutils literal notranslate"><span class="pre">_comm.yaml</span></code>
+in the same directory as the module config:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comm_cfg</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">comm</span>
+    <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+    <span class="n">domain</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>Now in the module configuration, one can simply do this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">include</span> <span class="n">_comm</span><span class="o">.</span><span class="n">yaml</span><span class="p">}</span>
+
+<span class="n">comm</span><span class="p">:</span>
+    <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">comm</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">someuser</span>
+    <span class="n">password</span><span class="p">:</span> <span class="n">supersecret</span>
+</pre></div>
+</div>
+<p>This allows for a super easy change of the domain for all configurations, which especially makes developing on
+different machines a lot easier.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">server</span></code> parameter can be used, when the server’s hostname is different from the XMPP domain. This might,
+e.g., be the case, when connecting to a server via SSH port forwarding:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jid</span><span class="p">:</span>  <span class="n">someuser</span><span class="nd">@example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pyobs</span>
+<span class="n">server</span><span class="p">:</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">52222</span>
+</pre></div>
+</div>
+<p>Finally, always make sure that <code class="docutils literal notranslate"><span class="pre">use_tls</span></code> is set according to the server’s settings, i.e. if it uses TLS, this
+parameter must be True, and False otherwise. Cryptic error messages will follow, if one does not set this properly.</p>
 <dl class="py method">
-<dt id="pyobs.comm.Comm.send_text_message">
-<code class="sig-name descname"><span class="pre">send_text_message</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/comm.html#Comm.send_text_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.Comm.send_text_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send a text message to another client.</p>
+<dt id="pyobs.comm.xmpp.XmppComm.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'pyobs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_tls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/xmpp/xmppcomm.html#XmppComm.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new XMPP Comm module.</p>
+<p>Either a fill JID needs to be provided, or a set of user/domian/resource, from which a JID is built.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>client</strong> – ID of client to send message to.</p></li>
-<li><p><strong>msg</strong> – Message to send.</p></li>
+<li><p><strong>jid</strong> – JID to connect as.</p></li>
+<li><p><strong>user</strong> – Username part of the JID.</p></li>
+<li><p><strong>domain</strong> – Domain part of the JID.</p></li>
+<li><p><strong>resource</strong> – Resource part of the JID.</p></li>
+<li><p><strong>password</strong> – Password for given JID.</p></li>
+<li><p><strong>server</strong> – Server to connect to. If not given, domain from JID is used.</p></li>
+<li><p><strong>use_tls</strong> – Whether or not to use TLS.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.xmpp.XmppComm.client">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">client</span></code><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the XMPP client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The XMPP client.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.xmpp.XmppComm.clients">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">clients</span></code><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.clients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of currently connected clients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(list) List of currently connected clients.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.xmpp.XmppComm.close">
+<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/xmpp/xmppcomm.html#XmppComm.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close connection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.xmpp.XmppComm.execute">
+<code class="sig-name descname"><span class="pre">execute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Any</span><a class="reference internal" href="../_modules/pyobs/comm/xmpp/xmppcomm.html#XmppComm.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a given method on a remote client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>str</em>) – ID of client.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Method to call.</p></li>
+<li><p><strong>*args</strong> – List of parameters for given method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Passes through return from method call.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.xmpp.XmppComm.get_interfaces">
+<code class="sig-name descname"><span class="pre">get_interfaces</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/pyobs/comm/xmpp/xmppcomm.html#XmppComm.get_interfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.get_interfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of interfaces for given client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>client</strong> – Name of client.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of supported interfaces.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>IndexError</strong><strong>, </strong><strong>if client cannot be found.</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.xmpp.XmppComm.name">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">name</span></code><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of this client.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.xmpp.XmppComm.open">
+<code class="sig-name descname"><span class="pre">open</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/pyobs/comm/xmpp/xmppcomm.html#XmppComm.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the connection to the XMPP server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Whether opening was successful.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.xmpp.XmppComm.register_event">
+<code class="sig-name descname"><span class="pre">register_event</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/xmpp/xmppcomm.html#XmppComm.register_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.register_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register an event type. If a handler is given, we also receive those events, otherwise we just
+send them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_class</strong> – Class of event to register.</p></li>
+<li><p><strong>handler</strong> – Event handler method.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.comm.xmpp.XmppComm.send_event">
+<code class="sig-name descname"><span class="pre">send_event</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs.events.event.Event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/comm/xmpp/xmppcomm.html#XmppComm.send_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.comm.xmpp.XmppComm.send_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an event to other clients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>Event</em>) – Event to send</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
+</div>
 </div>
 
 
@@ -252,7 +426,15 @@ send them.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Comm</a><ul>
+<li><a class="reference internal" href="#xmppcomm">XmppComm</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="index.html">API</a><ul>
