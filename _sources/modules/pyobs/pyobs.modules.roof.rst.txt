@@ -1,0 +1,4 @@
+.. automodule:: pyobs.modules.roof
+   :members:
+   :imported-members:
+

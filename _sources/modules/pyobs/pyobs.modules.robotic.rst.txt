@@ -1,0 +1,4 @@
+.. automodule:: pyobs.modules.robotic
+   :members:
+   :imported-members:
+

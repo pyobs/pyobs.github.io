@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.interfaces.ICooling &#8212; pyobs  documentation</title>
+    <title>pyobs.interfaces.ICooling &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs.interfaces.ICooling</a></li> 
       </ul>
@@ -47,17 +47,18 @@
 <span class="kn">from</span> <span class="nn">.ITemperatures</span> <span class="kn">import</span> <span class="n">ITemperatures</span>
 
 
-<div class="viewcode-block" id="ICooling"><a class="viewcode-back" href="../../../api/interfaces.html#pyobs.interfaces.ICooling">[docs]</a><span class="k">class</span> <span class="nc">ICooling</span><span class="p">(</span><span class="n">ITemperatures</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">ICooling</span><span class="p">(</span><span class="n">ITemperatures</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Interface for all devices that allow for some kind of cooling.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.interfaces&#39;</span>
 
 <div class="viewcode-block" id="ICooling.get_cooling_status"><a class="viewcode-back" href="../../../api/interfaces.html#pyobs.interfaces.ICooling.get_cooling_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_cooling_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the current status for the cooling.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Tuple containing:</span>
-<span class="sd">                Enabled (bool):         Whether the cooling is enabled</span>
-<span class="sd">                SetPoint (float):       Setpoint for the cooling in celsius.</span>
-<span class="sd">                Power (float):          Current cooling power in percent or None.</span>
+<span class="sd">            (tuple): Tuple containing:</span>
+<span class="sd">                Enabled:  Whether the cooling is enabled</span>
+<span class="sd">                SetPoint: Setpoint for the cooling in celsius.</span>
+<span class="sd">                Power:    Current cooling power in percent or None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
@@ -71,7 +72,7 @@
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If cooling could not be set.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ICooling&#39;</span><span class="p">]</span>
@@ -104,7 +105,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

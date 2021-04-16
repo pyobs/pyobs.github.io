@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.vfs.localfile &#8212; pyobs  documentation</title>
+    <title>pyobs.vfs.localfile &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs.vfs.localfile</a></li> 
       </ul>
@@ -49,8 +49,9 @@
 <span class="kn">from</span> <span class="nn">.vfs</span> <span class="kn">import</span> <span class="n">VFSFile</span>
 
 
-<div class="viewcode-block" id="LocalFile"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.LocalFile">[docs]</a><span class="k">class</span> <span class="nc">LocalFile</span><span class="p">(</span><span class="n">VFSFile</span><span class="p">,</span> <span class="n">FileIO</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">LocalFile</span><span class="p">(</span><span class="n">VFSFile</span><span class="p">,</span> <span class="n">FileIO</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wraps a local file with the virtual file system.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.vfs&#39;</span>
 
 <div class="viewcode-block" id="LocalFile.__init__"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.LocalFile.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">mkdir</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open a local file.</span>
@@ -122,7 +123,7 @@
         <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
         <span class="c1"># check</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LocalFile&#39;</span><span class="p">]</span>
@@ -155,7 +156,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

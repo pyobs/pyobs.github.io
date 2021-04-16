@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API &#8212; pyobs  documentation</title>
+    <title>API &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,7 +14,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Application" href="application.html" />
+    <link rel="next" title="Objects" href="object.html" />
     <link rel="prev" title="Command Line Interface" href="../cli.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -33,12 +33,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="application.html" title="Application"
+          <a href="object.html" title="Objects"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../cli.html" title="Command Line Interface"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.12 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">API</a></li> 
       </ul>
     </div>  
@@ -53,14 +53,22 @@
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="application.html">Application</a></li>
-<li class="toctree-l1"><a class="reference internal" href="comm.html">Comm</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="object.html">Objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="object.html#object">Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object.html#get-object">get_object</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module.html">Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module.html#module">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module.html#multimodule">MultiModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="comm.html">Communication between modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="comm.html#comm">Comm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comm.html#xmppcomm">XmppComm</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="environment.html">Environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vfs.html">Virtual File System</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="vfs.html#archivefile">ArchiveFile</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vfs.html#gzipreader">GzipReader</a></li>
@@ -137,6 +145,23 @@
 <li class="toctree-l2"><a class="reference internal" href="events.html#variablesupdateevent">VariablesUpdateEvent</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="images.html">Images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="images.html#image">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="images.html#module-pyobs.images.processors.astrometry">Image Processors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils/index.html">Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utils/archive.html">Image archives (pyobs.utils.archive)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/enums.html">Enumerations (pyobs.utils.enums)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/fits.html">FITS utilities (pyobs.utils.fits)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/focusseries.html">Focus series (pyobs.utils.focusseries)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/simulation.html">Simulations (pyobs.utils.simulations)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/skyflats.html">Skyflats (pyobs.utils.skyflats)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/skyflats.html#sky-flat-pointings-pyobs-utils-skyflats-pointing">Sky flat pointings (pyobs.utils.skyflats.pointing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/skyflats.html#sky-flat-priorities-pyobs-utils-skyflats-priorities">Sky flat priorities (pyobs.utils.skyflats.priorities)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/time.html">Time (pyobs.utils.time)</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -151,7 +176,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
       <li>Previous: <a href="../cli.html" title="previous chapter">Command Line Interface</a></li>
-      <li>Next: <a href="application.html" title="next chapter">Application</a></li>
+      <li>Next: <a href="object.html" title="next chapter">Objects</a></li>
   </ul></li>
 </ul>
   <div role="note" aria-label="source link">
@@ -176,7 +201,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

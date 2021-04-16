@@ -1,7 +1,0 @@
-SbigTracker
-===========
-
-.. autoclass:: pyobs_sbig.SbigTracker
-    :members:
-    :special-members: __init__
-

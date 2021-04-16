@@ -1,7 +1,0 @@
-Telegram
-========
-
-.. autoclass:: pyobs.modules.utils.Telegram
-    :members:
-    :special-members: __init__
-

@@ -1,16 +1,16 @@
-Comm
-====
+Communication between modules
+=============================
 
 .. automodule:: pyobs.comm.comm
 
-.. autoclass:: pyobs.comm.Comm
+Comm
+----
+.. autoclass:: pyobs.comm.comm.Comm
     :members:
     :special-members: __init__
 
-
 XmppComm
 --------
-
-.. autoclass:: pyobs.comm.xmpp.XmppComm
+.. autoclass:: pyobs.comm.xmpp.xmppcomm.XmppComm
     :members:
     :special-members: __init__

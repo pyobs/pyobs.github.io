@@ -1,0 +1,4 @@
+.. automodule:: pyobs.modules.flatfield
+   :members:
+   :imported-members:
+

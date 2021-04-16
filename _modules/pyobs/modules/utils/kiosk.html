@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.modules.utils.kiosk &#8212; pyobs  documentation</title>
+    <title>pyobs.modules.utils.kiosk &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs.modules.utils.kiosk</a></li> 
       </ul>
@@ -52,7 +52,7 @@
 <span class="kn">import</span> <span class="nn">tornado.gen</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">Module</span>
 <span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> <span class="n">IStoppable</span><span class="p">,</span> <span class="n">ICameraWindow</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -92,10 +92,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="Kiosk"><a class="viewcode-back" href="../../../../modules/pyobs/utils/kiosk.html#pyobs.modules.utils.Kiosk">[docs]</a><span class="k">class</span> <span class="nc">Kiosk</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">,</span> <span class="n">IStoppable</span><span class="p">):</span>
+<div class="viewcode-block" id="Kiosk"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Kiosk">[docs]</a><span class="k">class</span> <span class="nc">Kiosk</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">,</span> <span class="n">IStoppable</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A kiosk mode for a pyobs camera that takes images and published them via HTTP.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Kiosk.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/utils/kiosk.html#pyobs.modules.utils.Kiosk.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ICamera</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">37077</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ICamera</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">37077</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes file cache.</span>
 
 <span class="sd">        Args:</span>
@@ -121,9 +121,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_port</span> <span class="o">=</span> <span class="n">port</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exp_time</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_image</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Kiosk.close"><a class="viewcode-back" href="../../../../modules/pyobs/utils/kiosk.html#pyobs.modules.utils.Kiosk.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Kiosk.close"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Kiosk.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Close server.&quot;&quot;&quot;</span>
 
         <span class="c1"># close io loop and parent</span>
@@ -135,15 +135,15 @@
         <span class="sd">&quot;&quot;&quot;Whether the server is started.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_listening</span>
 
-<div class="viewcode-block" id="Kiosk.start"><a class="viewcode-back" href="../../../../modules/pyobs/utils/kiosk.html#pyobs.modules.utils.Kiosk.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Kiosk.start"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Kiosk.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Start kiosk mode.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="Kiosk.stop"><a class="viewcode-back" href="../../../../modules/pyobs/utils/kiosk.html#pyobs.modules.utils.Kiosk.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Kiosk.stop"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Kiosk.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stop kiosk mode.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="Kiosk.is_running"><a class="viewcode-back" href="../../../../modules/pyobs/utils/kiosk.html#pyobs.modules.utils.Kiosk.is_running">[docs]</a>    <span class="k">def</span> <span class="nf">is_running</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="Kiosk.is_running"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Kiosk.is_running">[docs]</a>    <span class="k">def</span> <span class="nf">is_running</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Whether kiosk mode is running.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_running</span></div>
 
@@ -214,7 +214,7 @@
                 <span class="c1"># cut</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_exp_time</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_exp_time</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Kiosk.image"><a class="viewcode-back" href="../../../../modules/pyobs/utils/kiosk.html#pyobs.modules.utils.Kiosk.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Kiosk.image"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Kiosk.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return image data.&quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span></div></div>
@@ -250,7 +250,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

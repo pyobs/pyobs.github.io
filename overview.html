@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Overview &#8212; pyobs  documentation</title>
+    <title>Overview &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="installing.html" title="Installing pyobs"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyobs 0.12 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Overview</a></li> 
       </ul>
     </div>  
@@ -60,7 +60,7 @@ in YAML.</p>
 </pre></div>
 </div>
 <p>Basically you always define a <code class="docutils literal notranslate"><span class="pre">class</span></code> for a block together with its properties.</p>
-<p>In this example, the module is of type <a class="reference internal" href="modules/pyobs/test/standalone.html#pyobs.modules.test.StandAlone" title="pyobs.modules.test.StandAlone"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandAlone</span></code></a>, which is a trivial implementation
+<p>In this example, the module is of type <a class="reference internal" href="modules/pyobs/pyobs.modules.test.html#pyobs.modules.test.StandAlone" title="pyobs.modules.test.StandAlone"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandAlone</span></code></a>, which is a trivial implementation
 of a module that does nothing more than logging a given message continuously in a given interval:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">StandAlone</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Example module that only logs the given message forever in the given interval.&quot;&quot;&quot;</span>
@@ -102,17 +102,17 @@ are called when the module is opened and closed, respectively.</p>
 </pre></div>
 </div>
 <p>The program quits gracefully when it receives an interrupt, so you can stop it by simply pressing <code class="docutils literal notranslate"><span class="pre">Ctrl+c</span></code>.</p>
-<div class="section" id="module">
-<h2>Module<a class="headerlink" href="#module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
 <p>A Module defines a single process in <em>pyobs</em>, as defined in <a class="reference internal" href="api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a>. Modules can work
 completely independent of each other, but usually they want to communicate and call methods on other modules.
 The functionality that a module exports for remote calling is defined by its base classe, specifically classes
 derived from <a class="reference internal" href="api/interfaces.html#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">Interface</span></code></a>.</p>
 </div>
-<div class="section" id="environment">
-<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="location-of-observatory">
+<h2>Location of observatory<a class="headerlink" href="#location-of-observatory" title="Permalink to this headline">¶</a></h2>
 <p>There is some functionality that is required in many modules, including those concerning the environment,
-especially the location of the telescope and the local time. For this, the <a class="reference internal" href="api/application.html#pyobs.application.Application" title="pyobs.application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code></a> class
+especially the location of the telescope and the local time. For this, the <code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code> class
 has support for an additional module of type <a class="reference internal" href="api/environment.html#pyobs.environment.Environment" title="pyobs.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code></a>, which can be
 defined in the application’s configuration at top-level like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">timezone</span><span class="p">:</span> <span class="n">utc</span>
@@ -130,16 +130,16 @@ property, e.g.:</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="comm">
-<h2>Comm<a class="headerlink" href="#comm" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="communication-between-modules">
+<h2>Communication between modules<a class="headerlink" href="#communication-between-modules" title="Permalink to this headline">¶</a></h2>
 <p>In case the module is supposed to communicate with others, we need another module of type
-<a class="reference internal" href="api/comm.html#pyobs.comm.Comm" title="pyobs.comm.Comm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comm</span></code></a>, which can be defined in the application’s configuration like this:</p>
+<a class="reference internal" href="api/comm.html#pyobs.comm.comm.Comm" title="pyobs.comm.comm.Comm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comm</span></code></a>, which can be defined in the application’s configuration like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comm</span><span class="p">:</span>
   <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
   <span class="n">jid</span><span class="p">:</span> <span class="n">some_module</span><span class="nd">@my</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">com</span>
 </pre></div>
 </div>
-<p>More details about this can be found in the <a class="reference internal" href="api/comm.html"><span class="doc">Comm</span></a> section.</p>
+<p>More details about this can be found in the <a class="reference internal" href="api/comm.html"><span class="doc">Communication between modules</span></a> section.</p>
 </div>
 <div class="section" id="virtual-file-system">
 <h2>Virtual File System<a class="headerlink" href="#virtual-file-system" title="Permalink to this headline">¶</a></h2>
@@ -191,9 +191,9 @@ in <a class="reference internal" href="api/events.html"><span class="doc">Events
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Overview</a><ul>
-<li><a class="reference internal" href="#module">Module</a></li>
-<li><a class="reference internal" href="#environment">Environment</a></li>
-<li><a class="reference internal" href="#comm">Comm</a></li>
+<li><a class="reference internal" href="#modules">Modules</a></li>
+<li><a class="reference internal" href="#location-of-observatory">Location of observatory</a></li>
+<li><a class="reference internal" href="#communication-between-modules">Communication between modules</a></li>
 <li><a class="reference internal" href="#virtual-file-system">Virtual File System</a></li>
 <li><a class="reference internal" href="#events">Events</a></li>
 </ul>
@@ -228,7 +228,7 @@ in <a class="reference internal" href="api/events.html"><span class="doc">Events
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

@@ -5,11 +5,12 @@ API
    :maxdepth: 2
    :caption: Contents:
 
-   application
+   object
+   module
    comm
    environment
-   module
-   object
    vfs
    interfaces
    events
+   images
+   utils/index

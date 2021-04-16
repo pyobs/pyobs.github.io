@@ -1,0 +1,4 @@
+.. automodule:: pyobs.modules.test
+   :members:
+   :imported-members:
+

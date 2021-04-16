@@ -1,9 +1,0 @@
-pyobs.modules.weather
-=====================
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   weather
-

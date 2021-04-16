@@ -1,0 +1,4 @@
+.. automodule:: pyobs.utils.enums
+   :members:
+   :undoc-members:
+

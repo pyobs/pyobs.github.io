@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modules &#8212; pyobs  documentation</title>
+    <title>Modules &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,8 +14,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyobs" href="pyobs/index.html" />
-    <link rel="prev" title="Events" href="../api/events.html" />
+    <link rel="next" title="Core modules (pyobs.modules)" href="pyobs/index.html" />
+    <link rel="prev" title="Time (pyobs.utils.time)" href="../api/utils/time.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -33,12 +33,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyobs/index.html" title="pyobs"
+          <a href="pyobs/index.html" title="Core modules (pyobs.modules)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../api/events.html" title="Events"
+          <a href="../api/utils/time.html" title="Time (pyobs.utils.time)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.12 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Modules</a></li> 
       </ul>
     </div>  
@@ -51,106 +51,28 @@
   <div class="section" id="modules">
 <h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">pyobs repository:</span></p>
+<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="pyobs/index.html">pyobs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/filecache/index.html">pyobs.modules.filecache</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/filecache/http.html">HttpFileCacheServer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs/index.html">Core modules (pyobs.modules)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.acquisition.html">Astrometry (pyobs.modules.astrometry)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.camera.html">Cameras (pyobs.modules.camera)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.flatfield.html">Flatfielding (pyobs.modules.flatfield)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.focus.html">Focus (pyobs.modules.focus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.guiding.html">Auto-guiding (pyobs.modules.guiding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.image.html">Image operations (pyobs.modules.image)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.robotic.html">Robotic mode (pyobs.modules.robotic)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.roof.html">Roofs (pyobs.modules.roof)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.telescope.html">Telescopes (pyobs.modules.telescope)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.test.html">Test modules (pyobs.modules.test)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.utils.html">Utility modules (pyobs.modules.utils)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs/pyobs.modules.weather.html">Weather (pyobs.modules.weather)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/image/index.html">pyobs.modules.image</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/image/seeing.html">Seeing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/image/imagewatcher.html">ImageWatcher</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/image/imagewriter.html">ImageWriter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/image/onlinereduction.html">OnlineReduction</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/weather/index.html">pyobs.modules.weather</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/weather/weather.html">Weather</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/acquisition/index.html">pyobs.modules.acquisition</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/acquisition/astrometry.html">AstrometryAcquisition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/acquisition/base.html">BaseAcquisition</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/robotic/index.html">pyobs.modules.robotic</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/robotic/pointing.html">PointingSeries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/robotic/scheduler.html">Scheduler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/robotic/mastermind.html">Mastermind</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/telescope/index.html">pyobs.modules.telescope</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/telescope/basetelescope.html">BaseTelescope</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/telescope/dummytelescope.html">DummyTelescope</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/roof/index.html">pyobs.modules.roof</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/roof/baseroof.html">BaseRoof</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/roof/basedome.html">BaseDome</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/roof/dummyroof.html">DummyRoof</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/flatfield/index.html">pyobs.modules.flatfield</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/flatfield/pointing.html">FlatFieldPointing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/flatfield/scheduler.html">FlatFieldScheduler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/flatfield/flatfield.html">FlatField</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/camera/index.html">pyobs.modules.camera</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/camera/basecamera.html">BaseCamera</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/camera/dummycamera.html">DummyCamera</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/utils/index.html">pyobs.modules.utils</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/utils/scriptrunner.html">ScriptRunner</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/utils/jobscheduler.html">JobScheduler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/utils/autonomouswarning.html">AutonomousWarning</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/utils/telegram.html">Telegram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/utils/trigger.html">Trigger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/utils/kiosk.html">Kiosk</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/focus/index.html">pyobs.modules.focus</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/focus/focusseries.html">AutoFocusSeries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/focus/projection.html">AutoFocusProjection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/focus/focusmodel.html">FocusModel</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/test/index.html">pyobs.modules.test</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/test/standalone.html">StandAlone</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs/guiding/index.html">pyobs.modules.guiding</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/guiding/autoguiding.html">AutoGuiding</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/guiding/base.html">BaseGuiding</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pyobs/guiding/scienceframe.html">ScienceFrameAutoGuiding</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">pyobs_fli repository:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="pyobs_fli/index.html">pyobs_fli</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_fli/flicamera.html">FliCamera</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">pyobs_sbig repository:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="pyobs_sbig/index.html">pyobs_sbig</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_sbig/sbigbasecamera.html">SbigBaseCamera</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_sbig/sbigcamera.html">SbigCamera</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_sbig/sbig6303e.html">Sbig6303eCamera</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_sbig/sbigtracker.html">SbigTracker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyobs_sbig/sbigfiltercamera.html">SbigFilterCamera</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs_alpaca.html">ASCOM Alpaca modules (pyobs_alpaca)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs_asi.html">ASI camera modules (pyobs_asi)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs_fli.html">FLI camera modules (pyobs_fli)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs_gui.html">GUI (pyobs_gui)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs_sbig.html">SBIG camera modules (pyobs_sbig)</a></li>
 </ul>
 </div>
 </div>
@@ -164,8 +86,8 @@
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
-      <li>Previous: <a href="../api/events.html" title="previous chapter">Events</a></li>
-      <li>Next: <a href="pyobs/index.html" title="next chapter">pyobs</a></li>
+      <li>Previous: <a href="../api/utils/time.html" title="previous chapter">Time (pyobs.utils.time)</a></li>
+      <li>Next: <a href="pyobs/index.html" title="next chapter">Core modules (pyobs.modules)</a></li>
   </ul></li>
 </ul>
   <div role="note" aria-label="source link">
@@ -190,7 +112,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

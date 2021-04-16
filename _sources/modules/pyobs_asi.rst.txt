@@ -1,0 +1,4 @@
+.. automodule:: pyobs_asi
+   :members:
+   :imported-members:
+

@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.interfaces.IMotion &#8212; pyobs  documentation</title>
+    <title>pyobs.interfaces.IMotion &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs.interfaces.IMotion</a></li> 
       </ul>
@@ -45,40 +45,17 @@
 <span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
 <span class="kn">from</span> <span class="nn">.IReady</span> <span class="kn">import</span> <span class="n">IReady</span>
+<span class="kn">from</span> <span class="nn">..utils.enums</span> <span class="kn">import</span> <span class="n">MotionStatus</span>
 
 
-<div class="viewcode-block" id="IMotion"><a class="viewcode-back" href="../../../api/interfaces.html#pyobs.interfaces.IMotion">[docs]</a><span class="k">class</span> <span class="nc">IMotion</span><span class="p">(</span><span class="n">IReady</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">IMotion</span><span class="p">(</span><span class="n">IReady</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Basic interface for all devices that move.</span>
 
 <span class="sd">    There are no generic motion methods - these have to be defined in daughter</span>
 <span class="sd">    interfaces.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="IMotion.Status"><a class="viewcode-back" href="../../../api/interfaces.html#pyobs.interfaces.IMotion.Status">[docs]</a>    <span class="k">class</span> <span class="nc">Status</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Enumerator for moving device status:</span>
-<span class="sd">            - PARKED means that the device needs to be initialized or positioned or</span>
-<span class="sd">              moved (depending upon the device; some devices don&#39;t need a formal</span>
-<span class="sd">              initialization); presumedly, this is the safe &quot;off&quot; state.</span>
-<span class="sd">            - INITIALIZING means that the device is transitioning from a PARKED state</span>
-<span class="sd">              to an active state but is not yet fully operable.</span>
-<span class="sd">            - unPARKED is either IDLE (operating but in no particular state) or</span>
-<span class="sd">              POSITIONED (operating in a well-defined state)</span>
-<span class="sd">            - SLEWING means that the device is moving to some targeted state (e.g.</span>
-<span class="sd">              to POSITIONED or TRACKING) but has not yet arrived at that state</span>
-<span class="sd">            - TRACKING means that the device is moving as commanded</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ABORTING</span> <span class="o">=</span> <span class="s1">&#39;aborting&#39;</span>
-        <span class="n">ERROR</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
-        <span class="n">IDLE</span> <span class="o">=</span> <span class="s1">&#39;idle&#39;</span>
-        <span class="n">INITIALIZING</span> <span class="o">=</span> <span class="s1">&#39;initializing&#39;</span>
-        <span class="n">PARKING</span> <span class="o">=</span> <span class="s1">&#39;parking&#39;</span>
-        <span class="n">PARKED</span> <span class="o">=</span> <span class="s1">&#39;parked&#39;</span>
-        <span class="n">POSITIONED</span> <span class="o">=</span> <span class="s1">&#39;positioned&#39;</span>
-        <span class="n">SLEWING</span> <span class="o">=</span> <span class="s1">&#39;slewing&#39;</span>
-        <span class="n">TRACKING</span> <span class="o">=</span> <span class="s1">&#39;tracking&#39;</span>
-        <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s1">&#39;unknown&#39;</span></div>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.interfaces&#39;</span>
 
 <div class="viewcode-block" id="IMotion.init"><a class="viewcode-back" href="../../../api/interfaces.html#pyobs.interfaces.IMotion.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize device.</span>
@@ -96,7 +73,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="IMotion.get_motion_status"><a class="viewcode-back" href="../../../api/interfaces.html#pyobs.interfaces.IMotion.get_motion_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_motion_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Status</span><span class="p">:</span>
+<div class="viewcode-block" id="IMotion.get_motion_status"><a class="viewcode-back" href="../../../api/interfaces.html#pyobs.interfaces.IMotion.get_motion_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_motion_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MotionStatus</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns current motion status.</span>
 
 <span class="sd">        Args:</span>
@@ -113,7 +90,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            device: Name of device to stop, or None for all.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;IMotion&#39;</span><span class="p">]</span>
@@ -146,7 +123,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

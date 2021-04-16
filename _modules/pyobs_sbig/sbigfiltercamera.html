@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs_sbig.sbigfiltercamera &#8212; pyobs  documentation</title>
+    <title>pyobs_sbig.sbigfiltercamera &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs_sbig.sbigfiltercamera</a></li> 
       </ul>
@@ -50,6 +50,7 @@
 
 <span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">FilterChangedEvent</span>
 <span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">IMotion</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">MotionStatus</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.threads</span> <span class="kn">import</span> <span class="n">LockWithAbort</span>
 
 <span class="kn">from</span> <span class="nn">.sbigcamera</span> <span class="kn">import</span> <span class="n">SbigCamera</span>
@@ -59,10 +60,10 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="SbigFilterCamera"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera">[docs]</a><span class="k">class</span> <span class="nc">SbigFilterCamera</span><span class="p">(</span><span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">SbigCamera</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">):</span>
+<div class="viewcode-block" id="SbigFilterCamera"><a class="viewcode-back" href="../../modules/pyobs_sbig.html#pyobs_sbig.SbigFilterCamera">[docs]</a><span class="k">class</span> <span class="nc">SbigFilterCamera</span><span class="p">(</span><span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">SbigCamera</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A pyobs module for SBIG cameras.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SbigFilterCamera.__init__"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes a new SbigCamera.</span>
 
 <span class="sd">        Args:</span>
@@ -85,9 +86,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="n">FilterWheelPosition</span><span class="o">.</span><span class="n">UNKNOWN</span>
 
         <span class="c1"># init mixins</span>
-        <span class="n">MotionStatusMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">motion_status_interfaces</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;IFilters&#39;</span><span class="p">])</span></div>
+        <span class="n">MotionStatusMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">motion_status_interfaces</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;IFilters&#39;</span><span class="p">])</span>
 
-<div class="viewcode-block" id="SbigFilterCamera.open"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SbigFilterCamera.open"><a class="viewcode-back" href="../../modules/pyobs_sbig.html#pyobs_sbig.SbigFilterCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open module.</span>
 
 <span class="sd">        Raises:</span>
@@ -99,7 +100,7 @@
 
         <span class="c1"># init status of filter wheel</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">filter_wheel</span> <span class="o">!=</span> <span class="n">FilterWheelModel</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span>
 
         <span class="c1"># subscribe to events</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">:</span>
@@ -130,7 +131,7 @@
         <span class="c1"># finished</span>
         <span class="k">return</span> <span class="n">hdu</span>
 
-<div class="viewcode-block" id="SbigFilterCamera.set_filter"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.set_filter">[docs]</a>    <span class="k">def</span> <span class="nf">set_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="SbigFilterCamera.set_filter"><a class="viewcode-back" href="../../modules/pyobs_sbig.html#pyobs_sbig.SbigFilterCamera.set_filter">[docs]</a>    <span class="k">def</span> <span class="nf">set_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the current filter.</span>
 
 <span class="sd">        Args:</span>
@@ -157,7 +158,7 @@
             <span class="k">return</span>
 
         <span class="c1"># set status</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span>
 
         <span class="c1"># acquire lock</span>
         <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_motion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_motion</span><span class="p">):</span>
@@ -182,9 +183,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">FilterChangedEvent</span><span class="p">(</span><span class="n">filter_name</span><span class="p">))</span>
 
         <span class="c1"># set status</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s1">&#39;IFilters&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SbigFilterCamera.get_filter"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.get_filter">[docs]</a>    <span class="k">def</span> <span class="nf">get_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="SbigFilterCamera.get_filter"><a class="viewcode-back" href="../../modules/pyobs_sbig.html#pyobs_sbig.SbigFilterCamera.get_filter">[docs]</a>    <span class="k">def</span> <span class="nf">get_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Get currently set filter.</span>
 
 <span class="sd">        Returns:</span>
@@ -206,7 +207,7 @@
             <span class="k">pass</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="SbigFilterCamera.list_filters"><a class="viewcode-back" href="../../modules/pyobs_sbig/sbigfiltercamera.html#pyobs_sbig.SbigFilterCamera.list_filters">[docs]</a>    <span class="k">def</span> <span class="nf">list_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="SbigFilterCamera.list_filters"><a class="viewcode-back" href="../../modules/pyobs_sbig.html#pyobs_sbig.SbigFilterCamera.list_filters">[docs]</a>    <span class="k">def</span> <span class="nf">list_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;List available filters.</span>
 
 <span class="sd">        Returns:</span>
@@ -254,7 +255,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

@@ -1,0 +1,494 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyobs_asi.asicamera &#8212; pyobs 0.12 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs_asi.asicamera</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyobs_asi.asicamera</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">zwoasi</span> <span class="k">as</span> <span class="nn">asi</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">ICooling</span><span class="p">,</span> <span class="n">IImageFormat</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules.camera.basecamera</span> <span class="kn">import</span> <span class="n">BaseCamera</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">ImageFormat</span><span class="p">,</span> <span class="n">ExposureStatus</span>
+<span class="kn">from</span> <span class="nn">pyobs.images</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># map of image formats</span>
+<span class="n">FORMATS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ImageFormat</span><span class="o">.</span><span class="n">INT8</span><span class="p">:</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RAW8</span><span class="p">,</span>
+    <span class="n">ImageFormat</span><span class="o">.</span><span class="n">INT16</span><span class="p">:</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RAW16</span><span class="p">,</span>
+    <span class="n">ImageFormat</span><span class="o">.</span><span class="n">RGB24</span><span class="p">:</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RGB24</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="AsiCamera"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera">[docs]</a><span class="k">class</span> <span class="nc">AsiCamera</span><span class="p">(</span><span class="n">BaseCamera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">IImageFormat</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A pyobs module for ASI cameras.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sdk</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/lib/libASICamera2.so&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new AsiCamera.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            camera: Name of camera to use.</span>
+<span class="sd">            sdk: Path to .so file from ASI SDK.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseCamera</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_name</span> <span class="o">=</span> <span class="n">camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sdk_path</span> <span class="o">=</span> <span class="n">sdk</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">asi</span><span class="o">.</span><span class="n">Camera</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># window and binning and mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_format</span> <span class="o">=</span> <span class="n">ImageFormat</span><span class="o">.</span><span class="n">INT16</span>
+
+<div class="viewcode-block" id="AsiCamera.open"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">BaseCamera</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># init driver</span>
+        <span class="n">asi</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sdk_path</span><span class="p">)</span>
+
+        <span class="c1"># get number of cameras</span>
+        <span class="n">num_cameras</span> <span class="o">=</span> <span class="n">asi</span><span class="o">.</span><span class="n">get_num_cameras</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">num_cameras</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No cameras found&#39;</span><span class="p">)</span>
+
+        <span class="c1"># get ID of camera</span>
+        <span class="c1"># index() raises ValueError, if camera could not be found</span>
+        <span class="n">cameras_found</span> <span class="o">=</span> <span class="n">asi</span><span class="o">.</span><span class="n">list_cameras</span><span class="p">()</span>
+        <span class="n">camera_id</span> <span class="o">=</span> <span class="n">cameras_found</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_name</span><span class="p">)</span>
+
+        <span class="c1"># open driver</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="o">=</span> <span class="n">asi</span><span class="o">.</span><span class="n">Camera</span><span class="p">(</span><span class="n">camera_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_camera_property</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Camera info:&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;  - </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+
+        <span class="c1"># Set some sensible defaults. They will need adjusting depending upon</span>
+        <span class="c1"># the sensitivity, lens and lighting conditions used.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">disable_dark_subtract</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_GAIN</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_WB_B</span><span class="p">,</span> <span class="mi">99</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_WB_R</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_GAMMA</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_BRIGHTNESS</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_FLIP</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_image_type</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RAW16</span><span class="p">)</span>
+
+        <span class="c1"># Enabling stills mode</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Force any single exposure to be halted</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">stop_video_capture</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">stop_exposure</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyboardInterrupt</span><span class="p">,</span> <span class="ne">SystemExit</span><span class="p">):</span>
+            <span class="k">raise</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># get initial window and binning</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_bin</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_roi</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="AsiCamera.close"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the module.&quot;&quot;&quot;</span>
+        <span class="n">BaseCamera</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AsiCamera.get_full_frame"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera.get_full_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns full size of CCD.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with left, top, width, and height set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span><span class="p">[</span><span class="s1">&#39;MaxWidth&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span><span class="p">[</span><span class="s1">&#39;MaxHeight&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="AsiCamera.get_window"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera.get_window">[docs]</a>    <span class="k">def</span> <span class="nf">get_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the camera window.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with left, top, width, and height set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window</span></div>
+
+<div class="viewcode-block" id="AsiCamera.get_binning"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera.get_binning">[docs]</a>    <span class="k">def</span> <span class="nf">get_binning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the camera binning.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with x and y.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span></div>
+
+<div class="viewcode-block" id="AsiCamera.set_window"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera.set_window">[docs]</a>    <span class="k">def</span> <span class="nf">set_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">top</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the camera window.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            left: X offset of window.</span>
+<span class="sd">            top: Y offset of window.</span>
+<span class="sd">            width: Width of window.</span>
+<span class="sd">            height: Height of window.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If binning could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_window</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting window to </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1"> at </span><span class="si">%d</span><span class="s1">,</span><span class="si">%d</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AsiCamera.set_binning"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera.set_binning">[docs]</a>    <span class="k">def</span> <span class="nf">set_binning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the camera binning.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: X binning.</span>
+<span class="sd">            y: Y binning.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If binning could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting binning to </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AsiCamera.list_binnings"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera.list_binnings">[docs]</a>    <span class="k">def</span> <span class="nf">list_binnings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;List available binnings.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of available binnings as (x, y) tuples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="s1">&#39;SupportedBins&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span><span class="p">:</span>
+            <span class="c1"># create list of tuples</span>
+            <span class="k">return</span> <span class="p">[(</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span><span class="p">[</span><span class="s1">&#39;SupportedBins&#39;</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+    <span class="k">def</span> <span class="nf">_expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">open_shutter</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Actually do the exposure, should be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exposure_time: The requested exposure time in s.</span>
+<span class="sd">            open_shutter: Whether or not to open the shutter.</span>
+<span class="sd">            abort_event: Event that gets triggered when exposure should be aborted.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The actual image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># no camera?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No camera initialised.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># get image format</span>
+        <span class="n">image_format</span> <span class="o">=</span> <span class="n">FORMATS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_format</span><span class="p">]</span>
+
+        <span class="c1"># set window, divide width/height by binning</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set window to </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2"> (binned </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2"> with </span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">) at </span><span class="si">%d</span><span class="s2">,</span><span class="si">%d</span><span class="s2">.&quot;</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_roi</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">,</span> <span class="n">image_format</span><span class="p">)</span>
+
+        <span class="c1"># set status and exposure time in ms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">EXPOSING</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_EXPOSURE</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">exposure_time</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">))</span>
+
+        <span class="c1"># get date obs</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting exposure with </span><span class="si">%s</span><span class="s1"> shutter for </span><span class="si">%.2f</span><span class="s1"> seconds...&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;open&#39;</span> <span class="k">if</span> <span class="n">open_shutter</span> <span class="k">else</span> <span class="s1">&#39;closed&#39;</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">)</span>
+        <span class="n">date_obs</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># do exposure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">start_exposure</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="c1"># wait for image</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_exposure_status</span><span class="p">()</span> <span class="o">==</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_EXP_WORKING</span><span class="p">:</span>
+            <span class="c1"># aborted?</span>
+            <span class="k">if</span> <span class="n">abort_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Aborted exposure.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># sleep a little</span>
+            <span class="n">abort_event</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="c1"># success?</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_exposure_status</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_EXP_SUCCESS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not capture image: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">status</span><span class="p">)</span>
+
+        <span class="c1"># get data</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Exposure finished, reading out...&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">READOUT</span><span class="p">)</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_data_after_exposure</span><span class="p">()</span>
+        <span class="n">whbi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_roi_format</span><span class="p">()</span>
+
+        <span class="c1"># decide on image format</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">whbi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">whbi</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">image_format</span> <span class="o">==</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RAW8</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">image_format</span> <span class="o">==</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RAW16</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">image_format</span> <span class="o">==</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RGB24</span><span class="p">:</span>
+            <span class="n">shape</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown image format.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># reshape</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="c1"># special treatment for RGB images</span>
+        <span class="k">if</span> <span class="n">image_format</span> <span class="o">==</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RGB24</span><span class="p">:</span>
+            <span class="c1"># convert BGR to RGB</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># now we need to separate the R, G, and B images</span>
+            <span class="c1"># this is easiest done by shifting the RGB axis from last to first position</span>
+            <span class="c1"># i.e. we go from RGBRGBRGBRGBRGB to RRRRRGGGGGBBBBB</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># create FITS image and set header</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATE-OBS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">date_obs</span><span class="p">,</span> <span class="s1">&#39;Date and time of start of exposure&#39;</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;EXPTIME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">exposure_time</span><span class="p">,</span> <span class="s1">&#39;Exposure time [s]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># instrument and detector</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;INSTRUME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_name</span><span class="p">,</span> <span class="s1">&#39;Name of instrument&#39;</span><span class="p">)</span>
+
+        <span class="c1"># binning</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;XBINNING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-BIN1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">,</span> <span class="s1">&#39;Binning factor used on X axis&#39;</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-BIN2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_binning</span><span class="p">,</span> <span class="s1">&#39;Binning factor used on Y axis&#39;</span><span class="p">)</span>
+
+        <span class="c1"># window</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;XORGSUBF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Subframe origin on X axis&#39;</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Subframe origin on Y axis&#39;</span><span class="p">)</span>
+
+        <span class="c1"># statistics</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATAMIN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="s1">&#39;Minimum data value&#39;</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATAMAX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="s1">&#39;Maximum data value&#39;</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DATAMEAN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="s1">&#39;Mean data value&#39;</span><span class="p">)</span>
+
+        <span class="c1"># pixels</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-PIXL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span><span class="p">[</span><span class="s1">&#39;PixelSize&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">,</span> <span class="s1">&#39;Size of detector pixels (square) [mm]&#39;</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DET-GAIN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span><span class="p">[</span><span class="s1">&#39;ElecPerADU&#39;</span><span class="p">],</span> <span class="s1">&#39;Detector gain [e-/ADU]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Bayer pattern?</span>
+        <span class="k">if</span> <span class="n">image_format</span> <span class="ow">in</span> <span class="p">[</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RAW8</span><span class="p">,</span> <span class="n">asi</span><span class="o">.</span><span class="n">ASI_IMG_RAW16</span><span class="p">]:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;BAYERPAT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;COLORTYP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;GBRG&#39;</span><span class="p">,</span> <span class="s1">&#39;Bayer pattern for colors&#39;</span><span class="p">)</span>
+
+        <span class="c1"># biassec/trimsec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_biassec_trimsec</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span>
+
+        <span class="c1"># return FITS image</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Readout finished.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_exposure_status</span><span class="p">(</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">image</span>
+
+    <span class="k">def</span> <span class="nf">_abort_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abort the running exposure. Should be implemented by derived class.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If an error occured.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="AsiCoolCamera"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera">[docs]</a><span class="k">class</span> <span class="nc">AsiCoolCamera</span><span class="p">(</span><span class="n">AsiCamera</span><span class="p">,</span> <span class="n">ICooling</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A pyobs module for ASI cameras with cooling.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new AsiCoolCamera.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            setpoint: Cooling temperature setpoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AsiCamera</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span> <span class="o">=</span> <span class="n">setpoint</span>
+
+<div class="viewcode-block" id="AsiCoolCamera.open"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">AsiCamera</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># no cooling support?</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_info</span><span class="p">[</span><span class="s1">&#39;IsCoolerCam&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Camera has no support for cooling.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># activate cooling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_cooling</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AsiCoolCamera.get_cooling_status"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.get_cooling_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_cooling_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the current status for the cooling.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple containing:</span>
+<span class="sd">                Enabled (bool):         Whether the cooling is enabled</span>
+<span class="sd">                SetPoint (float):       Setpoint for the cooling in celsius.</span>
+<span class="sd">                Power (float):          Current cooling power in percent or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># no camera?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No camera initialised.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># return</span>
+        <span class="n">enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_COOLER_ON</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_TARGET_TEMP</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">power</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_COOLER_POWER_PERC</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">enabled</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">power</span></div>
+
+<div class="viewcode-block" id="AsiCoolCamera.get_temperatures"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.get_temperatures">[docs]</a>    <span class="k">def</span> <span class="nf">get_temperatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns all temperatures measured by this module.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict containing temperatures.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># no camera?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No camera initialised.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># return</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;CCD&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_TEMPERATURE</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">10.</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="AsiCoolCamera.set_cooling"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.set_cooling">[docs]</a>    <span class="k">def</span> <span class="nf">set_cooling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enables/disables cooling and sets setpoint.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            enabled: Enable or disable cooling.</span>
+<span class="sd">            setpoint: Setpoint in celsius for the cooling.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If cooling could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># no camera?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No camera initialised.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># log</span>
+        <span class="k">if</span> <span class="n">enabled</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Enabling cooling with a setpoint of </span><span class="si">%.2f</span><span class="s1">°C...&#39;</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_TARGET_TEMP</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">setpoint</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_COOLER_ON</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Disabling cooling...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_COOLER_ON</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AsiCoolCamera.set_image_format"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.set_image_format">[docs]</a>    <span class="k">def</span> <span class="nf">set_image_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">format</span><span class="p">:</span> <span class="n">ImageFormat</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the camera image format.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            format: New image format.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If format could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">FORMATS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported image format.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_format</span> <span class="o">=</span> <span class="nb">format</span></div>
+
+<div class="viewcode-block" id="AsiCoolCamera.get_image_format"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.get_image_format">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageFormat</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the camera image format.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Current image format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_format</span></div>
+
+<div class="viewcode-block" id="AsiCoolCamera.list_image_formats"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.list_image_formats">[docs]</a>    <span class="k">def</span> <span class="nf">list_image_formats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;List available image formats.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of available image formats.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">FORMATS</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AsiCamera&#39;</span><span class="p">,</span> <span class="s1">&#39;AsiCoolCamera&#39;</span><span class="p">]</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation index</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2021, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>

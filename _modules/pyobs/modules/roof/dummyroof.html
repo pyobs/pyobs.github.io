@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.modules.roof.dummyroof &#8212; pyobs  documentation</title>
+    <title>pyobs.modules.roof.dummyroof &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs.modules.roof.dummyroof</a></li> 
       </ul>
@@ -46,18 +46,19 @@
 <span class="kn">import</span> <span class="nn">threading</span>
 
 <span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">RoofOpenedEvent</span><span class="p">,</span> <span class="n">RoofClosingEvent</span>
-<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IRoof</span><span class="p">,</span> <span class="n">IMotion</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IRoof</span>
 <span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
 <span class="kn">from</span> <span class="nn">pyobs.modules.roof</span> <span class="kn">import</span> <span class="n">BaseRoof</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">MotionStatus</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.threads</span> <span class="kn">import</span> <span class="n">LockWithAbort</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="DummyRoof"><a class="viewcode-back" href="../../../../modules/pyobs/roof/dummyroof.html#pyobs.modules.roof.DummyRoof">[docs]</a><span class="k">class</span> <span class="nc">DummyRoof</span><span class="p">(</span><span class="n">BaseRoof</span><span class="p">,</span> <span class="n">IRoof</span><span class="p">):</span>
+<div class="viewcode-block" id="DummyRoof"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.roof.html#pyobs.modules.roof.DummyRoof">[docs]</a><span class="k">class</span> <span class="nc">DummyRoof</span><span class="p">(</span><span class="n">BaseRoof</span><span class="p">,</span> <span class="n">IRoof</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A dummy camera for testing.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DummyRoof.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/roof/dummyroof.html#pyobs.modules.roof.DummyRoof.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates a new dummy root.&quot;&quot;&quot;</span>
         <span class="n">BaseRoof</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -70,9 +71,9 @@
 
         <span class="c1"># register event</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">RoofOpenedEvent</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">RoofClosingEvent</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">RoofClosingEvent</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DummyRoof.open_roof"><a class="viewcode-back" href="../../../../modules/pyobs/roof/dummyroof.html#pyobs.modules.roof.DummyRoof.open_roof">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<div class="viewcode-block" id="DummyRoof.open_roof"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.roof.html#pyobs.modules.roof.DummyRoof.open_roof">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">open_roof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open the roof.</span>
 
@@ -85,7 +86,7 @@
             <span class="c1"># acquire lock</span>
             <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_motion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_motion</span><span class="p">):</span>
                 <span class="c1"># change status</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">INITIALIZING</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">INITIALIZING</span><span class="p">)</span>
 
                 <span class="c1"># open roof</span>
                 <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_percentage</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
@@ -94,7 +95,7 @@
 
                     <span class="c1"># abort?</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_motion</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
                         <span class="k">return</span>
 
                     <span class="c1"># wait a little</span>
@@ -104,12 +105,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">open_percentage</span> <span class="o">=</span> <span class="mi">100</span>
 
                 <span class="c1"># change status</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
 
                 <span class="c1"># send event</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">RoofOpenedEvent</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="DummyRoof.close_roof"><a class="viewcode-back" href="../../../../modules/pyobs/roof/dummyroof.html#pyobs.modules.roof.DummyRoof.close_roof">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<div class="viewcode-block" id="DummyRoof.close_roof"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.roof.html#pyobs.modules.roof.DummyRoof.close_roof">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">close_roof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Close the roof.</span>
 
@@ -122,7 +123,7 @@
             <span class="c1"># acquire lock</span>
             <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_motion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_motion</span><span class="p">):</span>
                 <span class="c1"># change status</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PARKING</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKING</span><span class="p">)</span>
 
                 <span class="c1"># send event</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">RoofClosingEvent</span><span class="p">())</span>
@@ -134,20 +135,20 @@
 
                     <span class="c1"># abort?</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_motion</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
                         <span class="k">return</span>
 
                     <span class="c1"># wait a little</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 
                 <span class="c1"># change status</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PARKED</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKED</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DummyRoof.get_percent_open"><a class="viewcode-back" href="../../../../modules/pyobs/roof/dummyroof.html#pyobs.modules.roof.DummyRoof.get_percent_open">[docs]</a>    <span class="k">def</span> <span class="nf">get_percent_open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="DummyRoof.get_percent_open"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.roof.html#pyobs.modules.roof.DummyRoof.get_percent_open">[docs]</a>    <span class="k">def</span> <span class="nf">get_percent_open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Get the percentage the roof is open.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_percentage</span></div>
 
-<div class="viewcode-block" id="DummyRoof.stop_motion"><a class="viewcode-back" href="../../../../modules/pyobs/roof/dummyroof.html#pyobs.modules.roof.DummyRoof.stop_motion">[docs]</a>    <span class="k">def</span> <span class="nf">stop_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DummyRoof.stop_motion"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.roof.html#pyobs.modules.roof.DummyRoof.stop_motion">[docs]</a>    <span class="k">def</span> <span class="nf">stop_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stop the motion.</span>
 
 <span class="sd">        Args:</span>
@@ -158,13 +159,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># change status</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">ABORTING</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">ABORTING</span><span class="p">)</span>
 
         <span class="c1"># abort</span>
         <span class="c1"># acquire lock</span>
         <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_motion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_motion</span><span class="p">):</span>
             <span class="c1"># change status</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span></div></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DummyRoof&#39;</span><span class="p">]</span>
@@ -197,7 +198,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

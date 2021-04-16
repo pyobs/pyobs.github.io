@@ -5,6 +5,8 @@ Virtual File System
     :members:
     :special-members: __init__
 
+.. autoclass:: pyobs.vfs.VFSFile
+
 ArchiveFile
 -----------
 

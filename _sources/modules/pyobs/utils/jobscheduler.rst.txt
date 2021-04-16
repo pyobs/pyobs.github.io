@@ -1,7 +1,0 @@
-JobScheduler
-============
-
-.. autoclass:: pyobs.modules.utils.JobScheduler
-    :members:
-    :special-members: __init__
-

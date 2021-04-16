@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.modules.camera.basecamera &#8212; pyobs  documentation</title>
+    <title>pyobs.modules.camera.basecamera &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs.modules.camera.basecamera</a></li> 
       </ul>
@@ -54,13 +54,13 @@
 <span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 
 <span class="kn">from</span> <span class="nn">pyobs.comm</span> <span class="kn">import</span> <span class="n">TimeoutException</span><span class="p">,</span> <span class="n">InvocationException</span>
-<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">ImageType</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">ImageType</span><span class="p">,</span> <span class="n">ExposureStatus</span>
 <span class="kn">from</span> <span class="nn">pyobs.images</span> <span class="kn">import</span> <span class="n">Image</span>
 
 <span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.fits</span> <span class="kn">import</span> <span class="n">format_filename</span>
 
-<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">Module</span>
 <span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">NewImageEvent</span><span class="p">,</span> <span class="n">ExposureStatusChangedEvent</span>
 <span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">IAbortable</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> <span class="n">IImageType</span>
 <span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
@@ -83,8 +83,8 @@
     <span class="k">return</span> <span class="n">camera</span><span class="o">.</span><span class="n">get_exposure_time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">30</span>
 
 
-<div class="viewcode-block" id="BaseCamera"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera">[docs]</a><span class="k">class</span> <span class="nc">BaseCamera</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> <span class="n">IImageType</span><span class="p">,</span> <span class="n">IAbortable</span><span class="p">):</span>
-<div class="viewcode-block" id="BaseCamera.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fits_headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">centre</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="BaseCamera"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera">[docs]</a><span class="k">class</span> <span class="nc">BaseCamera</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> <span class="n">IImageType</span><span class="p">,</span> <span class="n">IAbortable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fits_headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">centre</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">rotation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">flip</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                  <span class="n">filenames</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;/cache/pyobs-{DAY-OBS|date:}-{FRAMENUM|string:04d}-{IMAGETYP|type}00.fits.gz&#39;</span><span class="p">,</span>
                  <span class="n">fits_namespaces</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -118,7 +118,7 @@
 
         <span class="c1"># init camera</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ExposureInfo</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">=</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">=</span> <span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span>
 
         <span class="c1"># multi-threading</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_expose_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
@@ -126,9 +126,9 @@
 
         <span class="c1"># night exposure number</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="s1">&#39;/pyobs/modules/</span><span class="si">%s</span><span class="s1">/cache.yaml&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_num</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_num</span> <span class="o">=</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="BaseCamera.open"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseCamera.open"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
         <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -137,7 +137,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">NewImageEvent</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">ExposureStatusChangedEvent</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseCamera.set_exposure_time"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.set_exposure_time">[docs]</a>    <span class="k">def</span> <span class="nf">set_exposure_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseCamera.set_exposure_time"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.set_exposure_time">[docs]</a>    <span class="k">def</span> <span class="nf">set_exposure_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the exposure time in seconds.</span>
 
 <span class="sd">        Args:</span>
@@ -149,7 +149,7 @@
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting exposure time to </span><span class="si">%.5f</span><span class="s1">s...&#39;</span><span class="p">,</span> <span class="n">exposure_time</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span> <span class="o">=</span> <span class="n">exposure_time</span></div>
 
-<div class="viewcode-block" id="BaseCamera.get_exposure_time"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_exposure_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseCamera.get_exposure_time"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.get_exposure_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the exposure time in seconds.</span>
 
 <span class="sd">        Returns:</span>
@@ -157,7 +157,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure_time</span></div>
 
-<div class="viewcode-block" id="BaseCamera.set_image_type"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.set_image_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_image_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_type</span><span class="p">:</span> <span class="n">ImageType</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseCamera.set_image_type"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.set_image_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_image_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_type</span><span class="p">:</span> <span class="n">ImageType</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the image type.</span>
 
 <span class="sd">        Args:</span>
@@ -166,7 +166,7 @@
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting image type to </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">image_type</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_image_type</span> <span class="o">=</span> <span class="n">image_type</span></div>
 
-<div class="viewcode-block" id="BaseCamera.get_image_type"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_image_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageType</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseCamera.get_image_type"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.get_image_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageType</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the current image type.</span>
 
 <span class="sd">        Returns:</span>
@@ -174,7 +174,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_type</span></div>
 
-    <span class="k">def</span> <span class="nf">_change_exposure_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_change_exposure_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">ExposureStatus</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change exposure status and send event,</span>
 
 <span class="sd">        Args:</span>
@@ -188,7 +188,7 @@
         <span class="c1"># set it</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">=</span> <span class="n">status</span>
 
-<div class="viewcode-block" id="BaseCamera.get_exposure_status"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_exposure_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseCamera.get_exposure_status"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.get_exposure_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExposureStatus</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the current status of the camera, which is one of &#39;idle&#39;, &#39;exposing&#39;, or &#39;readout&#39;.</span>
 
 <span class="sd">        Returns:</span>
@@ -196,7 +196,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span></div>
 
-<div class="viewcode-block" id="BaseCamera.get_exposure_time_left"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_exposure_time_left">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_time_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseCamera.get_exposure_time_left"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.get_exposure_time_left">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_time_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the remaining exposure time on the current exposure in seconds.</span>
 
 <span class="sd">        Returns:</span>
@@ -212,7 +212,7 @@
         <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">duration</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">diff</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseCamera.get_exposure_progress"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.get_exposure_progress">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseCamera.get_exposure_progress"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.get_exposure_progress">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the progress of the current exposure in percent.</span>
 
 <span class="sd">        Returns:</span>
@@ -227,7 +227,7 @@
         <span class="n">diff</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># zero exposure time?</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="o">.</span><span class="n">exposure_time</span> <span class="o">==</span> <span class="mf">0.</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">==</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">READOUT</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposure</span><span class="o">.</span><span class="n">exposure_time</span> <span class="o">==</span> <span class="mf">0.</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">==</span> <span class="n">ExposureStatus</span><span class="o">.</span><span class="n">READOUT</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">100.</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># return max of 100</span>
@@ -500,7 +500,7 @@
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished image </span><span class="si">%s</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">filename</span>
 
-<div class="viewcode-block" id="BaseCamera.expose"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.expose">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="n">calc_expose_timeout</span><span class="p">)</span>
+<div class="viewcode-block" id="BaseCamera.expose"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.expose">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="n">calc_expose_timeout</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">expose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broadcast</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Starts exposure and returns reference to image.</span>
 
@@ -520,7 +520,7 @@
         <span class="c1"># make sure that we release the lock</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># are we exposing?</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">!=</span> <span class="n">ICamera</span><span class="o">.</span><span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_status</span> <span class="o">!=</span> <span class="n">ExposureStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">CameraException</span><span class="p">(</span><span class="s1">&#39;Cannot start new exposure because camera is not idle.&#39;</span><span class="p">)</span>
 
             <span class="c1"># expose</span>
@@ -547,7 +547,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="BaseCamera.abort"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.abort">[docs]</a>    <span class="k">def</span> <span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseCamera.abort"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.abort">[docs]</a>    <span class="k">def</span> <span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Aborts the current exposure and sequence.</span>
 
 <span class="sd">        Returns:</span>
@@ -570,7 +570,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not abort exposure.&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseCamera.set_biassec_trimsec"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.set_biassec_trimsec">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="BaseCamera.set_biassec_trimsec"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.set_biassec_trimsec">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">set_biassec_trimsec</span><span class="p">(</span><span class="n">hdr</span><span class="p">:</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="p">,</span> <span class="n">left</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">top</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculates and sets the BIASSEC and TRIMSEC areas.</span>
 
@@ -634,7 +634,7 @@
             <span class="n">bottom_binned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">is_top</span> <span class="o">-</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YORGSUBF&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;YBINNING&#39;</span><span class="p">])</span>
             <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;BIASSEC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;[1:</span><span class="si">%d</span><span class="s1">,1:</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;NAXIS1&#39;</span><span class="p">],</span> <span class="n">bottom_binned</span><span class="p">),</span> <span class="n">c1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseCamera.list_binnings"><a class="viewcode-back" href="../../../../modules/pyobs/camera/basecamera.html#pyobs.modules.camera.BaseCamera.list_binnings">[docs]</a>    <span class="k">def</span> <span class="nf">list_binnings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseCamera.list_binnings"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera.list_binnings">[docs]</a>    <span class="k">def</span> <span class="nf">list_binnings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;List available binnings.</span>
 
 <span class="sd">        Returns:</span>
@@ -676,7 +676,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

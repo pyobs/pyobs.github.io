@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyobs.utils.focusseries.photometry &#8212; pyobs 0.12 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs.utils.focusseries.photometry</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyobs.utils.focusseries.photometry</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pyobs.object</span> <span class="kn">import</span> <span class="n">get_object</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.images.processors.detection</span> <span class="kn">import</span> <span class="n">SourceDetection</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">FocusSeries</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.curvefit</span> <span class="kn">import</span> <span class="n">fit_hyperbola</span>
+<span class="kn">from</span> <span class="nn">pyobs.images</span> <span class="kn">import</span> <span class="n">Image</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PhotometryFocusSeries"><a class="viewcode-back" href="../../../../api/utils/focusseries.html#pyobs.utils.focusseries.PhotometryFocusSeries">[docs]</a><span class="k">class</span> <span class="nc">PhotometryFocusSeries</span><span class="p">(</span><span class="n">FocusSeries</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Focus series based on source detection.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_detection</span><span class="p">:</span> <span class="n">SourceDetection</span><span class="p">,</span> <span class="n">radius_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;radius&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new projection focus series.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source_detection: Photometry to use for estimating PSF sizes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source_detection</span><span class="p">:</span> <span class="n">SourceDetection</span> <span class="o">=</span> <span class="n">get_object</span><span class="p">(</span><span class="n">source_detection</span><span class="p">,</span> <span class="n">SourceDetection</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_radius_col</span> <span class="o">=</span> <span class="n">radius_column</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="PhotometryFocusSeries.reset"><a class="viewcode-back" href="../../../../api/utils/focusseries.html#pyobs.utils.focusseries.PhotometryFocusSeries.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset focus series.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="PhotometryFocusSeries.analyse_image"><a class="viewcode-back" href="../../../../api/utils/focusseries.html#pyobs.utils.focusseries.PhotometryFocusSeries.analyse_image">[docs]</a>    <span class="k">def</span> <span class="nf">analyse_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Analyse given image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: Image to analyse</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># do photometry</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source_detection</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span><span class="p">[</span><span class="n">sources</span><span class="p">[</span><span class="s1">&#39;ellipticity&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">]</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span><span class="p">[</span><span class="n">sources</span><span class="p">[</span><span class="s1">&#39;peak&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">]</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span><span class="p">[</span><span class="n">sources</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># calculate median radius</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">sources</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">])</span>
+        <span class="n">radius_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sources</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">])</span>
+
+        <span class="c1"># log it</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found median radius of </span><span class="si">%.1f</span><span class="s1">+-</span><span class="si">%.1f</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">radius_err</span><span class="p">)</span>
+
+        <span class="c1"># add to list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;focus&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;TEL-FOCU&#39;</span><span class="p">]),</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="n">radius</span><span class="p">,</span> <span class="s1">&#39;rerr&#39;</span><span class="p">:</span> <span class="n">radius_err</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="PhotometryFocusSeries.fit_focus"><a class="viewcode-back" href="../../../../api/utils/focusseries.html#pyobs.utils.focusseries.PhotometryFocusSeries.fit_focus">[docs]</a>    <span class="k">def</span> <span class="nf">fit_focus</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Fit focus from analysed images</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of new focus and its error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get data</span>
+        <span class="n">focus</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;focus&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">]</span>
+        <span class="n">rerr</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;rerr&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">]</span>
+
+        <span class="c1"># fit focus</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">foc</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">fit_hyperbola</span><span class="p">(</span><span class="n">focus</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">rerr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not find best focus.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># get min and max foci</span>
+        <span class="n">min_focus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">focus</span><span class="p">)</span>
+        <span class="n">max_focus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">focus</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">foc</span> <span class="o">&lt;</span> <span class="n">min_focus</span> <span class="ow">or</span> <span class="n">foc</span> <span class="o">&gt;</span> <span class="n">max_focus</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;New focus out of bounds: </span><span class="si">{0:.3f}</span><span class="s2">+-</span><span class="si">{1:.3f}</span><span class="s2">mm.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">foc</span><span class="p">,</span> <span class="n">err</span><span class="p">))</span>
+
+        <span class="c1"># return it</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">foc</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">err</span><span class="p">)</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PhotometryFocusSeries&#39;</span><span class="p">]</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation index</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2021, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>

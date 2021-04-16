@@ -1,9 +1,0 @@
-pyobs.modules.test
-==================
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   standalone
-

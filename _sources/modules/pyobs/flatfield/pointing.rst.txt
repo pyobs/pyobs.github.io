@@ -1,7 +1,0 @@
-FlatFieldPointing
-=================
-
-.. autoclass:: pyobs.modules.flatfield.FlatFieldPointing
-    :members:
-    :special-members: __init__
-

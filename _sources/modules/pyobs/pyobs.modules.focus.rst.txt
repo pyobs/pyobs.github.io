@@ -1,0 +1,4 @@
+.. automodule:: pyobs.modules.focus
+   :members:
+   :imported-members:
+

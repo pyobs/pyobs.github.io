@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.modules.telescope.basetelescope &#8212; pyobs  documentation</title>
+    <title>pyobs.modules.telescope.basetelescope &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs.modules.telescope.basetelescope</a></li> 
       </ul>
@@ -49,20 +49,21 @@
 <span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">IMotion</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span>
-<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">Module</span>
 <span class="kn">from</span> <span class="nn">pyobs.mixins</span> <span class="kn">import</span> <span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">WeatherAwareMixin</span><span class="p">,</span> <span class="n">WaitForMotionMixin</span>
 <span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">MotionStatus</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.threads</span> <span class="kn">import</span> <span class="n">LockWithAbort</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="BaseTelescope"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/basetelescope.html#pyobs.modules.telescope.BaseTelescope">[docs]</a><span class="k">class</span> <span class="nc">BaseTelescope</span><span class="p">(</span><span class="n">WeatherAwareMixin</span><span class="p">,</span> <span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">WaitForMotionMixin</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTelescope"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope">[docs]</a><span class="k">class</span> <span class="nc">BaseTelescope</span><span class="p">(</span><span class="n">WeatherAwareMixin</span><span class="p">,</span> <span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">WaitForMotionMixin</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base class for telescopes.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BaseTelescope.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/basetelescope.html#pyobs.modules.telescope.BaseTelescope.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fits_headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_altitude</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">wait_for_dome</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fits_headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_altitude</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">wait_for_dome</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize a new base telescope.</span>
 
 <span class="sd">        Args:</span>
@@ -93,9 +94,9 @@
         <span class="n">WaitForMotionMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                     <span class="n">wait_for_modules</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">wait_for_dome</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[</span><span class="n">wait_for_dome</span><span class="p">],</span>
                                     <span class="n">wait_for_timeout</span><span class="o">=</span><span class="mi">60000</span><span class="p">,</span>
-                                    <span class="n">wait_for_states</span><span class="o">=</span><span class="p">[</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">TRACKING</span><span class="p">])</span></div>
+                                    <span class="n">wait_for_states</span><span class="o">=</span><span class="p">[</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">TRACKING</span><span class="p">])</span>
 
-<div class="viewcode-block" id="BaseTelescope.open"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/basetelescope.html#pyobs.modules.telescope.BaseTelescope.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTelescope.open"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
         <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -103,7 +104,7 @@
         <span class="n">WeatherAwareMixin</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">MotionStatusMixin</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTelescope.init"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/basetelescope.html#pyobs.modules.telescope.BaseTelescope.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTelescope.init"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize telescope.</span>
 
 <span class="sd">        Raises:</span>
@@ -111,7 +112,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="BaseTelescope.park"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/basetelescope.html#pyobs.modules.telescope.BaseTelescope.park">[docs]</a>    <span class="k">def</span> <span class="nf">park</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseTelescope.park"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope.park">[docs]</a>    <span class="k">def</span> <span class="nf">park</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Park telescope.</span>
 
 <span class="sd">        Raises:</span>
@@ -132,7 +133,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="BaseTelescope.move_radec"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/basetelescope.html#pyobs.modules.telescope.BaseTelescope.move_radec">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">1200</span><span class="p">)</span>
+<div class="viewcode-block" id="BaseTelescope.move_radec"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope.move_radec">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">1200</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">move_radec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ra</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">track</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Starts tracking on given coordinates.</span>
 
@@ -160,7 +161,7 @@
         <span class="c1"># acquire lock</span>
         <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_moving</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">):</span>
             <span class="c1"># log and event</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Moving telescope to RA=</span><span class="si">%s</span><span class="s2"> (</span><span class="si">%.5f</span><span class="s2">°), Dec=</span><span class="si">%s</span><span class="s2"> (</span><span class="si">%.5f</span><span class="s2">°)...&quot;</span><span class="p">,</span>
                      <span class="n">ra_dec</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">ra</span><span class="p">,</span>
                      <span class="n">ra_dec</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">deg</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">dec</span><span class="p">)</span>
@@ -173,7 +174,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_wait_for_motion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">)</span>
 
             <span class="c1"># finish slewing</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">TRACKING</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">TRACKING</span><span class="p">)</span>
 
             <span class="c1"># update headers now</span>
             <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_celestial_headers</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
@@ -192,7 +193,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="BaseTelescope.move_altaz"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/basetelescope.html#pyobs.modules.telescope.BaseTelescope.move_altaz">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">1200</span><span class="p">)</span>
+<div class="viewcode-block" id="BaseTelescope.move_altaz"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope.move_altaz">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">1200</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">move_altaz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">az</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Moves to given coordinates.</span>
 
@@ -213,7 +214,7 @@
         <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_moving</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">):</span>
             <span class="c1"># log and event</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Moving telescope to Alt=</span><span class="si">%.2f</span><span class="s2">°, Az=</span><span class="si">%.2f</span><span class="s2">°...&quot;</span><span class="p">,</span> <span class="n">alt</span><span class="p">,</span> <span class="n">az</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">)</span>
 
             <span class="c1"># move telescope</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_move_altaz</span><span class="p">(</span><span class="n">alt</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">abort_event</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">)</span>
@@ -223,13 +224,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_wait_for_motion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">)</span>
 
             <span class="c1"># finish slewing</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">IMotion</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">)</span>
 
             <span class="c1"># update headers now</span>
             <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_celestial_headers</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished moving telescope.&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseTelescope.get_fits_headers"><a class="viewcode-back" href="../../../../modules/pyobs/telescope/basetelescope.html#pyobs.modules.telescope.BaseTelescope.get_fits_headers">[docs]</a>    <span class="k">def</span> <span class="nf">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<div class="viewcode-block" id="BaseTelescope.get_fits_headers"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope.get_fits_headers">[docs]</a>    <span class="k">def</span> <span class="nf">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;Returns FITS header for the current status of this module.</span>
 
 <span class="sd">        Args:</span>
@@ -363,7 +364,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

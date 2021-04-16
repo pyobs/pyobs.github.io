@@ -1,0 +1,4 @@
+.. automodule:: pyobs_sbig
+   :members:
+   :imported-members:
+

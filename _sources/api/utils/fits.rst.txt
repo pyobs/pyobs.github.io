@@ -1,0 +1,3 @@
+.. automodule:: pyobs.utils.fits
+   :members:
+

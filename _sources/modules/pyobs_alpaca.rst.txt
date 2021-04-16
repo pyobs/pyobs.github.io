@@ -1,0 +1,4 @@
+.. automodule:: pyobs_alpaca
+   :members:
+   :imported-members:
+

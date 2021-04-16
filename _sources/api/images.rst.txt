@@ -1,0 +1,38 @@
+Images
+======
+
+.. automodule:: pyobs.images.image
+
+Image
+-----
+
+.. autoclass:: pyobs.images.Image
+   :members:
+
+Image Processors
+----------------
+
+.. automodule:: pyobs.images.processors.astrometry
+   :members:
+   :imported-members:
+
+.. automodule:: pyobs.images.processors.detection
+   :members:
+   :imported-members:
+
+.. automodule:: pyobs.images.processors.exptime
+   :members:
+   :imported-members:
+
+.. automodule:: pyobs.images.processors.misc
+   :members:
+   :imported-members:
+
+.. automodule:: pyobs.images.processors.offsets
+   :members:
+   :imported-members:
+
+.. automodule:: pyobs.images.processors.photometry
+   :members:
+   :imported-members:
+

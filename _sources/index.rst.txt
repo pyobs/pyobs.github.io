@@ -3,7 +3,7 @@ Welcome to *pyobs*!
 
 *pyobs* is a Python framework for operating remote or autonomous telescope systems.
 
-User's Guide
+User Guide
 ------------
 
 .. toctree::

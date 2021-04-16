@@ -1,0 +1,4 @@
+.. automodule:: pyobs.modules.acquisition
+   :members:
+   :imported-members:
+

@@ -1,0 +1,4 @@
+.. automodule:: pyobs.modules.guiding
+   :members:
+   :imported-members:
+

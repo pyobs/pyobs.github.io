@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.modules.weather.weather &#8212; pyobs  documentation</title>
+    <title>pyobs.modules.weather.weather &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs.modules.weather.weather</a></li> 
       </ul>
@@ -50,32 +50,33 @@
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">WeatherSensors</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
 <span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">BadWeatherEvent</span><span class="p">,</span> <span class="n">GoodWeatherEvent</span>
 <span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IWeather</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span>
-<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">Module</span>
 
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="n">FITS_HEADERS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">TEMPERATURE</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-TEMP&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient temperature average during exposure, C&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
-    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">HUMIDITY</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-HUMID&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient rel. humidity average, %&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
-    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">PRESSURE</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-PRESS&#39;</span><span class="p">,</span> <span class="s1">&#39;Average atmospheric pressure, hPa&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
-    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">WINDDIR</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-AZ&#39;</span><span class="p">,</span> <span class="s1">&#39;Average wind direction, not corrected for overlap, deg&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
-    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">WINDSPEED</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-WIND&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient average wind speed, km/h&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
-    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">RAIN</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-PREC&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient precipitation [0/1]&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
-    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">SKYTEMP</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-SKY&#39;</span><span class="p">,</span> <span class="s1">&#39;Average sky temperature, C&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
-    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">DEWPOINT</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-TDEW&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient dewpoint average during expsoure, C&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
-    <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="o">.</span><span class="n">PARTICLES</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-DUST&#39;</span><span class="p">,</span> <span class="s1">&#39;Average particle count during exposure, ppcm&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="n">WeatherSensors</span><span class="o">.</span><span class="n">TEMPERATURE</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-TEMP&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient temperature average during exposure, C&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">WeatherSensors</span><span class="o">.</span><span class="n">HUMIDITY</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-HUMID&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient rel. humidity average, %&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">WeatherSensors</span><span class="o">.</span><span class="n">PRESSURE</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-PRESS&#39;</span><span class="p">,</span> <span class="s1">&#39;Average atmospheric pressure, hPa&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">WeatherSensors</span><span class="o">.</span><span class="n">WINDDIR</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-AZ&#39;</span><span class="p">,</span> <span class="s1">&#39;Average wind direction, not corrected for overlap, deg&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">WeatherSensors</span><span class="o">.</span><span class="n">WINDSPEED</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-WIND&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient average wind speed, km/h&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">WeatherSensors</span><span class="o">.</span><span class="n">RAIN</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-PREC&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient precipitation [0/1]&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+    <span class="n">WeatherSensors</span><span class="o">.</span><span class="n">SKYTEMP</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-SKY&#39;</span><span class="p">,</span> <span class="s1">&#39;Average sky temperature, C&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">WeatherSensors</span><span class="o">.</span><span class="n">DEWPOINT</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-TDEW&#39;</span><span class="p">,</span> <span class="s1">&#39;Ambient dewpoint average during expsoure, C&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+    <span class="n">WeatherSensors</span><span class="o">.</span><span class="n">PARTICLES</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;WS-DUST&#39;</span><span class="p">,</span> <span class="s1">&#39;Average particle count during exposure, ppcm&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="Weather"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather">[docs]</a><span class="k">class</span> <span class="nc">Weather</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IWeather</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">):</span>
+<div class="viewcode-block" id="Weather"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather">[docs]</a><span class="k">class</span> <span class="nc">Weather</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IWeather</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Connection to pyobs-weather.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Weather.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">system_init_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">system_init_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize a new pyobs-weather connector.</span>
 
 <span class="sd">        Args:</span>
@@ -97,9 +98,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_status_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
 
         <span class="c1"># add thread func</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Weather.open"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Weather.open"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
         <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -153,15 +154,15 @@
             <span class="c1"># sleep a little</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">60</span> <span class="k">if</span> <span class="n">error</span> <span class="k">else</span> <span class="mi">5</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Weather.get_weather_status"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.get_weather_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_weather_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="viewcode-block" id="Weather.get_weather_status"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather.get_weather_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_weather_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns status of object in form of a dictionary. See other interfaces for details.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="Weather.is_weather_good"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.is_weather_good">[docs]</a>    <span class="k">def</span> <span class="nf">is_weather_good</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="Weather.is_weather_good"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather.is_weather_good">[docs]</a>    <span class="k">def</span> <span class="nf">is_weather_good</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Whether the weather is good to observe.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">False</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_good</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_good</span></div>
 
-<div class="viewcode-block" id="Weather.get_current_weather"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.get_current_weather">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_weather</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="viewcode-block" id="Weather.get_current_weather"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather.get_current_weather">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_weather</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns current weather.</span>
 
 <span class="sd">        Returns:</span>
@@ -171,7 +172,7 @@
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status_lock</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span></div>
 
-<div class="viewcode-block" id="Weather.get_sensor_value"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.get_sensor_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_sensor_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">station</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sensor</span><span class="p">:</span> <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="Weather.get_sensor_value"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather.get_sensor_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_sensor_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">station</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sensor</span><span class="p">:</span> <span class="n">WeatherSensors</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return value for given sensor.</span>
 
 <span class="sd">        Args:</span>
@@ -196,7 +197,7 @@
         <span class="c1"># return time and value</span>
         <span class="k">return</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Weather.get_fits_headers"><a class="viewcode-back" href="../../../../modules/pyobs/weather/weather.html#pyobs.modules.weather.Weather.get_fits_headers">[docs]</a>    <span class="k">def</span> <span class="nf">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<div class="viewcode-block" id="Weather.get_fits_headers"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather.get_fits_headers">[docs]</a>    <span class="k">def</span> <span class="nf">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;Returns FITS header for the current status of this module.</span>
 
 <span class="sd">        Args:</span>
@@ -218,7 +219,7 @@
 
         <span class="c1"># loop sensor types</span>
         <span class="n">header</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">sensor_type</span> <span class="ow">in</span> <span class="n">IWeather</span><span class="o">.</span><span class="n">Sensors</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">sensor_type</span> <span class="ow">in</span> <span class="n">WeatherSensors</span><span class="p">:</span>
             <span class="c1"># got a value for this type?</span>
             <span class="k">if</span> <span class="n">sensor_type</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="n">sensors</span><span class="p">:</span>
                 <span class="c1"># get value</span>
@@ -266,7 +267,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

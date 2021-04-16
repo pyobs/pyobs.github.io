@@ -1,9 +1,0 @@
-pyobs.modules.filecache
-=======================
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   http
-

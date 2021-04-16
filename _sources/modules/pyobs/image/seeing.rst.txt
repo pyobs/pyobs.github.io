@@ -1,7 +1,0 @@
-Seeing
-======
-
-.. autoclass:: pyobs.modules.image.Seeing
-    :members:
-    :special-members: __init__
-

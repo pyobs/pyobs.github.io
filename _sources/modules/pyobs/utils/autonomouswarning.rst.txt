@@ -1,7 +1,0 @@
-AutonomousWarning
-=================
-
-.. autoclass:: pyobs.modules.utils.AutonomousWarning
-    :members:
-    :special-members: __init__
-

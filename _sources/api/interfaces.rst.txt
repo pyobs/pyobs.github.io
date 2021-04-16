@@ -2,239 +2,279 @@ Interfaces
 ==========
 
 .. autoclass:: pyobs.interfaces.Interface
-    :members:
+   :members:
+   :show-inheritance:
 
 IAbortable
 ----------
 
 .. autoclass:: pyobs.interfaces.IAbortable
-    :members:
+   :members:
+   :show-inheritance:
 
 IAcquisition
 ------------
 
 .. autoclass:: pyobs.interfaces.IAcquisition
-    :members:
+   :members:
+   :show-inheritance:
 
 IAltAz
 ------
 
 .. autoclass:: pyobs.interfaces.IAltAz
-    :members:
+   :members:
+   :show-inheritance:
 
 IAltAzOffsets
 -------------
 
 .. autoclass:: pyobs.interfaces.IAltAzOffsets
-    :members:
+   :members:
+   :show-inheritance:
 
 IAutoFocus
 ----------
 
 .. autoclass:: pyobs.interfaces.IAutoFocus
-    :members:
+   :members:
+   :show-inheritance:
 
 IAutoGuiding
 ------------
 
 .. autoclass:: pyobs.interfaces.IAutoGuiding
-    :members:
+   :members:
+   :show-inheritance:
 
 IAutonomous
 -----------
 
 .. autoclass:: pyobs.interfaces.IAutonomous
-    :members:
+   :members:
+   :show-inheritance:
 
 ICalibrate
 ----------
 
 .. autoclass:: pyobs.interfaces.ICalibrate
-    :members:
+   :members:
+   :show-inheritance:
 
 ICamera
 -------
 
 .. autoclass:: pyobs.interfaces.ICamera
-    :members:
+   :members:
+   :show-inheritance:
 
 ICameraBinning
 --------------
 
 .. autoclass:: pyobs.interfaces.ICameraBinning
-    :members:
+   :members:
+   :show-inheritance:
 
 ICameraExposureTime
 -------------------
 
 .. autoclass:: pyobs.interfaces.ICameraExposureTime
-    :members:
+   :members:
+   :show-inheritance:
 
 ICameraWindow
 -------------
 
 .. autoclass:: pyobs.interfaces.ICameraWindow
-    :members:
+   :members:
+   :show-inheritance:
 
 IConfig
 -------
 
 .. autoclass:: pyobs.interfaces.IConfig
-    :members:
+   :members:
+   :show-inheritance:
 
 ICooling
 --------
 
 .. autoclass:: pyobs.interfaces.ICooling
-    :members:
+   :members:
+   :show-inheritance:
 
 ICoordinatesQuery
 -----------------
 
 .. autoclass:: pyobs.interfaces.ICoordinatesQuery
-    :members:
+   :members:
+   :show-inheritance:
 
 IDome
 -----
 
 .. autoclass:: pyobs.interfaces.IDome
-    :members:
+   :members:
+   :show-inheritance:
 
 IFilters
 --------
 
 .. autoclass:: pyobs.interfaces.IFilters
-    :members:
+   :members:
+   :show-inheritance:
 
 IFitsHeaderProvider
 -------------------
 
 .. autoclass:: pyobs.interfaces.IFitsHeaderProvider
-    :members:
+   :members:
+   :show-inheritance:
 
 IFlatField
 ----------
 
 .. autoclass:: pyobs.interfaces.IFlatField
-    :members:
+   :members:
+   :show-inheritance:
 
 IFocusModel
 -----------
 
 .. autoclass:: pyobs.interfaces.IFocusModel
-    :members:
+   :members:
+   :show-inheritance:
 
 IFocuser
 --------
 
 .. autoclass:: pyobs.interfaces.IFocuser
-    :members:
+   :members:
+   :show-inheritance:
 
 IImageFormat
 ------------
 
 .. autoclass:: pyobs.interfaces.IImageFormat
-    :members:
+   :members:
+   :show-inheritance:
 
 IImageType
 ----------
 
 .. autoclass:: pyobs.interfaces.IImageType
-    :members:
+   :members:
+   :show-inheritance:
 
 ILatLon
 -------
 
 .. autoclass:: pyobs.interfaces.ILatLon
-    :members:
+   :members:
+   :show-inheritance:
 
 IModule
 -------
 
 .. autoclass:: pyobs.interfaces.IModule
-    :members:
+   :members:
+   :show-inheritance:
 
 IMotion
 -------
 
 .. autoclass:: pyobs.interfaces.IMotion
-    :members:
+   :members:
+   :show-inheritance:
 
 IPipeline
 ---------
 
 .. autoclass:: pyobs.interfaces.IPipeline
-    :members:
+   :members:
+   :show-inheritance:
 
 IRaDec
 ------
 
 .. autoclass:: pyobs.interfaces.IRaDec
-    :members:
+   :members:
+   :show-inheritance:
 
 IRaDecOffsets
 -------------
 
 .. autoclass:: pyobs.interfaces.IRaDecOffsets
-    :members:
+   :members:
+   :show-inheritance:
 
 IReady
 ------
 
 .. autoclass:: pyobs.interfaces.IReady
-    :members:
+   :members:
+   :show-inheritance:
 
 IRoof
 -----
 
 .. autoclass:: pyobs.interfaces.IRoof
-    :members:
+   :members:
+   :show-inheritance:
 
 IRotation
 ---------
 
 .. autoclass:: pyobs.interfaces.IRotation
-    :members:
+   :members:
+   :show-inheritance:
 
 IRunnable
 ---------
 
 .. autoclass:: pyobs.interfaces.IRunnable
-    :members:
+   :members:
+   :show-inheritance:
 
 IScriptRunner
 -------------
 
 .. autoclass:: pyobs.interfaces.IScriptRunner
-    :members:
+   :members:
+   :show-inheritance:
 
 IStoppable
 ----------
 
 .. autoclass:: pyobs.interfaces.IStoppable
-    :members:
+   :members:
+   :show-inheritance:
 
 ISyncTarget
 -----------
 
 .. autoclass:: pyobs.interfaces.ISyncTarget
-    :members:
+   :members:
+   :show-inheritance:
 
 ITelescope
 ----------
 
 .. autoclass:: pyobs.interfaces.ITelescope
-    :members:
+   :members:
+   :show-inheritance:
 
 ITemperatures
 -------------
 
 .. autoclass:: pyobs.interfaces.ITemperatures
-    :members:
+   :members:
+   :show-inheritance:
 
 IWeather
 --------
 
 .. autoclass:: pyobs.interfaces.IWeather
-    :members:
+   :members:
+   :show-inheritance:
 

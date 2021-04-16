@@ -3,8 +3,16 @@ Modules
 
 .. automodule:: pyobs.modules.module
 
+Module
+------
 .. autoclass:: pyobs.modules.Module
-    :members:
+   :members:
+   :special-members: __init__
+   :show-inheritance:
 
-.. autoclass:: pyobs.modules.MultiModule
-    :members:
+MultiModule
+-----------
+.. autoclass:: pyobs.modules.module.MultiModule
+   :members:
+   :special-members: __init__
+   :show-inheritance:

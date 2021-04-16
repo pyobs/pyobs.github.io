@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyobs_alpaca.telescope &#8212; pyobs 0.12 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs_alpaca.telescope</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyobs_alpaca.telescope</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.mixins</span> <span class="kn">import</span> <span class="n">FitsNamespaceMixin</span>
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">IMotion</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">,</span> <span class="n">ISyncTarget</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules.telescope.basetelescope</span> <span class="kn">import</span> <span class="n">BaseTelescope</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">MotionStatus</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.threads</span> <span class="kn">import</span> <span class="n">LockWithAbort</span>
+<span class="kn">from</span> <span class="nn">.device</span> <span class="kn">import</span> <span class="n">AlpacaDevice</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;pyobs&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AlpacaTelescope"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope">[docs]</a><span class="k">class</span> <span class="nc">AlpacaTelescope</span><span class="p">(</span><span class="n">BaseTelescope</span><span class="p">,</span> <span class="n">FitsNamespaceMixin</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">,</span> <span class="n">ISyncTarget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settle_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new ASCOM Alpaca telescope.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            settle_time: Time in seconds to wait after slew before finishing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseTelescope</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">motion_status_interfaces</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ITelescope&#39;</span><span class="p">])</span>
+
+        <span class="c1"># device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">AlpacaDevice</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
+
+        <span class="c1"># variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_settle_time</span> <span class="o">=</span> <span class="n">settle_time</span>
+
+        <span class="c1"># offsets in ra/dec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset_ra</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset_dec</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="c1"># mixins</span>
+        <span class="n">FitsNamespaceMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AlpacaTelescope.open"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If cannot connect to device.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseTelescope</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># initial status</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_status</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not fetch initial status from telescope.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MotionStatus</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get status of telescope.&quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;AtPark&#39;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKED</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Slewing&#39;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">SLEWING</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Tracking&#39;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">TRACKING</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">IDLE</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+    <span class="k">def</span> <span class="nf">_check_status_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Periodically check status of telescope.&quot;&quot;&quot;</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># only check, if status is unknown</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_motion_status</span><span class="p">()</span> <span class="o">==</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_status</span><span class="p">())</span>
+
+            <span class="c1"># wait a little</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AlpacaTelescope.init"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.init">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">60000</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize telescope.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If telescope could not be initialized.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># acquire lock</span>
+        <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_moving</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">):</span>
+            <span class="c1"># not connected</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Not connected to ASCOM.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># change status</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Initializing telescope...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">INITIALIZING</span><span class="p">)</span>
+
+            <span class="c1"># move to init position</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_move_altaz</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">180.</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Telescope initialized.&#39;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not init telescope.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AlpacaTelescope.park"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.park">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">60000</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">park</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Park telescope.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If telescope could not be parked.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># acquire lock</span>
+        <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_moving</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">):</span>
+            <span class="c1"># not connected</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Not connected to ASCOM.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># change status</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Parking telescope...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKING</span><span class="p">)</span>
+
+            <span class="c1"># park telescope</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;Park&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKED</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Telescope parked.&#39;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not park telescope.&#39;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_move_altaz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">az</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Actually moves to given coordinates. Must be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alt: Alt in deg to move to.</span>
+<span class="sd">            az: Az in deg to move to.</span>
+<span class="sd">            abort_event: Event that gets triggered when movement should be aborted.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: On error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># reset offsets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset_ra</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset_dec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># start slewing</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;Tracking&#39;</span><span class="p">,</span> <span class="n">Tracking</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;SlewToAltAzAsync&#39;</span><span class="p">,</span> <span class="n">Azimuth</span><span class="o">=</span><span class="n">az</span><span class="p">,</span> <span class="n">Altitude</span><span class="o">=</span><span class="n">alt</span><span class="p">)</span>
+
+            <span class="c1"># wait for it</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Slewing&#39;</span><span class="p">):</span>
+                <span class="n">abort_event</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;Tracking&#39;</span><span class="p">,</span> <span class="n">Tracking</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># wait settle time</span>
+            <span class="n">abort_event</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settle_time</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not move telescope to Alt/Az.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_move_radec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ra</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">abort_event</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Actually starts tracking on given coordinates. Must be implemented by derived classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ra: RA in deg to track.</span>
+<span class="sd">            dec: Dec in deg to track.</span>
+<span class="sd">            abort_event: Event that gets triggered when movement should be aborted.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: On any error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># reset offsets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset_ra</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset_dec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># start slewing</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;Tracking&#39;</span><span class="p">,</span> <span class="n">Tracking</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;SlewToCoordinatesAsync&#39;</span><span class="p">,</span> <span class="n">RightAscension</span><span class="o">=</span><span class="n">ra</span> <span class="o">/</span> <span class="mf">15.</span><span class="p">,</span> <span class="n">Declination</span><span class="o">=</span><span class="n">dec</span><span class="p">)</span>
+
+            <span class="c1"># wait for it</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Slewing&#39;</span><span class="p">):</span>
+                <span class="n">abort_event</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;Tracking&#39;</span><span class="p">,</span> <span class="n">Tracking</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># wait settle time</span>
+            <span class="n">abort_event</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settle_time</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not move telescope to RA/Dec.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AlpacaTelescope.set_radec_offsets"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.set_radec_offsets">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_radec_offsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dra</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ddec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Move an RA/Dec offset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dra: RA offset in degrees.</span>
+<span class="sd">            ddec: Dec offset in degrees.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If offset could not be set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># acquire lock</span>
+        <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_moving</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">):</span>
+            <span class="c1"># not connected</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Not connected to ASCOM.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># start slewing</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting telescope offsets to dRA=</span><span class="si">%.2f</span><span class="s1">&quot;, dDec=</span><span class="si">%.2f</span><span class="s1">&quot;...&#39;</span><span class="p">,</span> <span class="n">dra</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">,</span> <span class="n">ddec</span> <span class="o">*</span> <span class="mf">3600.</span><span class="p">)</span>
+
+            <span class="c1"># get current coordinates (with old offsets)</span>
+            <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_radec</span><span class="p">()</span>
+
+            <span class="c1"># store offsets</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offset_ra</span> <span class="o">=</span> <span class="n">dra</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offset_dec</span> <span class="o">=</span> <span class="n">ddec</span>
+
+            <span class="c1"># add offset</span>
+            <span class="n">ra</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offset_ra</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">dec</span><span class="p">)))</span>
+            <span class="n">dec</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offset_dec</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># start slewing</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;Tracking&#39;</span><span class="p">,</span> <span class="n">Tracking</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;SlewToCoordinatesAsync&#39;</span><span class="p">,</span> <span class="n">RightAscension</span><span class="o">=</span><span class="n">ra</span> <span class="o">/</span> <span class="mf">15.</span><span class="p">,</span> <span class="n">Declination</span><span class="o">=</span><span class="n">dec</span><span class="p">)</span>
+
+                <span class="c1"># wait for it</span>
+                <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Slewing&#39;</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;Tracking&#39;</span><span class="p">,</span> <span class="n">Tracking</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="c1"># wait settle time</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settle_time</span><span class="p">)</span>
+
+                <span class="c1"># finish slewing</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">TRACKING</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Reached destination.&#39;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not move telescope to RA/Dec offset.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlpacaTelescope.get_radec_offsets"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.get_radec_offsets">[docs]</a>    <span class="k">def</span> <span class="nf">get_radec_offsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get RA/Dec offset.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with RA and Dec offsets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset_ra</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset_dec</span></div>
+
+<div class="viewcode-block" id="AlpacaTelescope.get_radec"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.get_radec">[docs]</a>    <span class="k">def</span> <span class="nf">get_radec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current RA and Dec.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of current RA and Dec in degrees.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># get position</span>
+            <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;RightAscension&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Declination&#39;</span><span class="p">)</span>
+
+            <span class="c1"># correct ra offset by decl</span>
+            <span class="n">ra_off</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset_ra</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">dec</span><span class="p">))</span>
+
+            <span class="c1"># return coordinates without offsets</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">ra</span> <span class="o">*</span> <span class="mi">15</span> <span class="o">-</span> <span class="n">ra_off</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">dec</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset_dec</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not fetch Alt/Az.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlpacaTelescope.get_altaz"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.get_altaz">[docs]</a>    <span class="k">def</span> <span class="nf">get_altaz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current Alt and Az.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of current Alt and Az in degrees.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># correct az</span>
+            <span class="n">az</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Azimuth&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">180</span>
+            <span class="k">if</span> <span class="n">az</span> <span class="o">&gt;</span> <span class="mi">360</span><span class="p">:</span>
+                <span class="n">az</span> <span class="o">-=</span> <span class="mi">360</span>
+
+            <span class="c1"># create sky coordinates</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Altitude&#39;</span><span class="p">),</span> <span class="n">az</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not fetch Alt/Az.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlpacaTelescope.stop_motion"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.stop_motion">[docs]</a>    <span class="k">def</span> <span class="nf">stop_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop the motion.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            device: Name of device to stop, or None for all.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># stop telescope</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;AbortSlew&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;Tracking&#39;</span><span class="p">,</span> <span class="n">Tracking</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not stop telescope.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlpacaTelescope.is_ready"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.is_ready">[docs]</a>    <span class="k">def</span> <span class="nf">is_ready</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the device is &quot;ready&quot;, whatever that means for the specific device.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Whether device is ready</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check that motion is not in one of the states listed below</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">connected</span> <span class="ow">and</span> \
+               <span class="bp">self</span><span class="o">.</span><span class="n">get_motion_status</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKED</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">INITIALIZING</span><span class="p">,</span>
+                                                <span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKING</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="AlpacaTelescope.sync_target"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.sync_target">[docs]</a>    <span class="k">def</span> <span class="nf">sync_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Synchronize telescope on current target using current offsets.&quot;&quot;&quot;</span>
+
+        <span class="c1"># get current RA/Dec without offsets</span>
+        <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_radec</span><span class="p">()</span>
+
+        <span class="c1"># sync</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;SyncToCoordinates&#39;</span><span class="p">,</span> <span class="n">RightAscension</span><span class="o">=</span><span class="n">ra</span> <span class="o">/</span> <span class="mf">15.</span><span class="p">,</span> <span class="n">Declination</span><span class="o">=</span><span class="n">dec</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlpacaTelescope.get_fits_headers"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.get_fits_headers">[docs]</a>    <span class="k">def</span> <span class="nf">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns FITS header for the current status of this module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            namespaces: If given, only return FITS headers for the given namespaces.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary containing FITS headers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get headers from base</span>
+        <span class="n">hdr</span> <span class="o">=</span> <span class="n">BaseTelescope</span><span class="o">.</span><span class="n">get_fits_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># get offsets</span>
+            <span class="n">ra_off</span><span class="p">,</span> <span class="n">dec_off</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_radec_offsets</span><span class="p">()</span>
+
+            <span class="c1"># define values to request</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;RAOFF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ra_off</span><span class="p">,</span> <span class="s1">&#39;RA offset [deg]&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;DECOFF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dec_off</span><span class="p">,</span> <span class="s1">&#39;Dec offset [deg]&#39;</span><span class="p">)</span>
+
+            <span class="c1"># return it</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_fits_namespace</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="n">namespaces</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AlpacaTelescope&#39;</span><span class="p">]</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation index</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2021, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>

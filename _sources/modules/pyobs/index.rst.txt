@@ -1,21 +1,19 @@
-pyobs
-=========================
+Core modules (pyobs.modules)
+============================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   filecache/index
-   image/index
-   weather/index
-   acquisition/index
-   robotic/index
-   telescope/index
-   roof/index
-   flatfield/index
-   camera/index
-   utils/index
-   focus/index
-   test/index
-   guiding/index
-
+   pyobs.modules.acquisition
+   pyobs.modules.camera
+   pyobs.modules.flatfield
+   pyobs.modules.focus
+   pyobs.modules.guiding
+   pyobs.modules.image
+   pyobs.modules.robotic
+   pyobs.modules.roof
+   pyobs.modules.telescope
+   pyobs.modules.test
+   pyobs.modules.utils
+   pyobs.modules.weather

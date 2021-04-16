@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Images &#8212; pyobs 0.12 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utilities" href="utils/index.html" />
+    <link rel="prev" title="Events" href="events.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utils/index.html" title="Utilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="Events"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.12 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Images</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyobs.images.image">
+<span id="images"></span><h1>Images<a class="headerlink" href="#module-pyobs.images.image" title="Permalink to this headline">¶</a></h1>
+<p>Image class.</p>
+<div class="section" id="image">
+<h2>Image<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.images.Image">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Image</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">astropy.io.fits.header.Header</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.Image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image class.</p>
+<dl class="py class">
+<dt id="pyobs.images.Image.CombineMethod">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">CombineMethod</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/images/image.html#Image.CombineMethod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.images.Image.CombineMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enumeration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.images.Image.pixel_scale">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pixel_scale</span></code><a class="headerlink" href="#pyobs.images.Image.pixel_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns pixel scale in arcsec/pixel.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.images.Image.to_jpeg">
+<code class="sig-name descname"><span class="pre">to_jpeg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bytes</span><a class="reference internal" href="../_modules/pyobs/images/image.html#Image.to_jpeg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.images.Image.to_jpeg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a JPEG image created from this image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyobs.images.processors.astrometry">
+<span id="image-processors"></span><h2>Image Processors<a class="headerlink" href="#module-pyobs.images.processors.astrometry" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="astrometry">
+<h3>Astrometry<a class="headerlink" href="#astrometry" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="pyobs.images.processors.astrometry.Astrometry">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Astrometry</span></code><a class="headerlink" href="#pyobs.images.processors.astrometry.Astrometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for astrometry processors</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyobs.images.processors.astrometry.AstrometryDotNet">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AstrometryDotNet</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.astrometry.AstrometryDotNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform astrometry using astrometry.net</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pyobs.images.processors.detection"></span><div class="section" id="source-detection">
+<h3>Source Detection<a class="headerlink" href="#source-detection" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="pyobs.images.processors.detection.SepSourceDetection">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SepSourceDetection</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minarea</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_nthresh</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_cont</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_param</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.detection.SepSourceDetection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect sources using SEP.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyobs.images.processors.detection.SourceDetection">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SourceDetection</span></code><a class="headerlink" href="#pyobs.images.processors.detection.SourceDetection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for source detection.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pyobs.images.processors.exptime"></span><div class="section" id="exposure-time-estimators">
+<h3>Exposure Time estimators<a class="headerlink" href="#exposure-time-estimators" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="pyobs.images.processors.exptime.ExpTimeEstimator">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ExpTimeEstimator</span></code><a class="headerlink" href="#pyobs.images.processors.exptime.ExpTimeEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate exposure time.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyobs.images.processors.exptime.StarExpTimeEstimator">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">StarExpTimeEstimator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_detection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#pyobs.images.processors.detection.SourceDetection" title="pyobs.images.processors.detection.SourceDetection"><span class="pre">pyobs.images.processors.detection.SourceDetection</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturated</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.exptime.StarExpTimeEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate exposure time from a star.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pyobs.images.processors.misc"></span><div class="section" id="misc">
+<h3>Misc<a class="headerlink" href="#misc" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="pyobs.images.processors.misc.SoftBin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SoftBin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.misc.SoftBin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bin an image.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pyobs.images.processors.offsets"></span><div class="section" id="offsets">
+<h3>Offsets<a class="headerlink" href="#offsets" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="pyobs.images.processors.offsets.Offsets">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Offsets</span></code><a class="headerlink" href="#pyobs.images.processors.offsets.Offsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for determining offsets.</p>
+<dl class="py method">
+<dt id="pyobs.images.processors.offsets.Offsets.reset">
+<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/images/processors/offsets/offsets.html#Offsets.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.images.processors.offsets.Offsets.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets guiding.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyobs.images.processors.offsets.ProjectedOffsets">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ProjectedOffsets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.offsets.ProjectedOffsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>An auto-guiding system based on comparing collapsed images along the x&amp;y axes with a reference image.</p>
+<dl class="py method">
+<dt id="pyobs.images.processors.offsets.ProjectedOffsets.reset">
+<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/images/processors/offsets/projected.html#ProjectedOffsets.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.images.processors.offsets.ProjectedOffsets.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets guiding.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-pyobs.images.processors.photometry"></span><div class="section" id="source-extraction">
+<h3>Source extraction<a class="headerlink" href="#source-extraction" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="pyobs.images.processors.photometry.PhotUtilsPhotometry">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">PhotUtilsPhotometry</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minarea</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_nthresh</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_cont</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_param</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.photometry.PhotUtilsPhotometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform photometry using PhotUtils.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyobs.images.processors.photometry.Photometry">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Photometry</span></code><a class="headerlink" href="#pyobs.images.processors.photometry.Photometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for photometry processors.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyobs.images.processors.photometry.SepPhotometry">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SepPhotometry</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minarea</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_nthresh</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_cont</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_param</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.photometry.SepPhotometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform photometry using SEP.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Images</a><ul>
+<li><a class="reference internal" href="#image">Image</a></li>
+<li><a class="reference internal" href="#module-pyobs.images.processors.astrometry">Image Processors</a><ul>
+<li><a class="reference internal" href="#astrometry">Astrometry</a></li>
+<li><a class="reference internal" href="#source-detection">Source Detection</a></li>
+<li><a class="reference internal" href="#exposure-time-estimators">Exposure Time estimators</a></li>
+<li><a class="reference internal" href="#misc">Misc</a></li>
+<li><a class="reference internal" href="#offsets">Offsets</a></li>
+<li><a class="reference internal" href="#source-extraction">Source extraction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="index.html">API</a><ul>
+      <li>Previous: <a href="events.html" title="previous chapter">Events</a></li>
+      <li>Next: <a href="utils/index.html" title="next chapter">Utilities</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/images.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2021, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>

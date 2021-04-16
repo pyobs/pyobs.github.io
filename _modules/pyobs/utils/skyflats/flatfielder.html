@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyobs.utils.skyflats.flatfielder &#8212; pyobs 0.12 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs.utils.skyflats.flatfielder</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyobs.utils.skyflats.flatfielder</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
+<span class="kn">from</span> <span class="nn">astroplan</span> <span class="kn">import</span> <span class="n">Observer</span>
+<span class="kn">from</span> <span class="nn">astropy.time</span> <span class="kn">import</span> <span class="n">TimeDelta</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">py_expression_eval</span> <span class="kn">import</span> <span class="n">Parser</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> \
+    <span class="n">IImageType</span>
+<span class="kn">from</span> <span class="nn">pyobs.object</span> <span class="kn">import</span> <span class="n">get_object</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">ImageType</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.fits</span> <span class="kn">import</span> <span class="n">fitssec</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.skyflats.pointing.base</span> <span class="kn">import</span> <span class="n">SkyFlatsBasePointing</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.threads</span> <span class="kn">import</span> <span class="n">Future</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
+<span class="kn">from</span> <span class="nn">pyobs.vfs</span> <span class="kn">import</span> <span class="n">VirtualFileSystem</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FlatFielder"><a class="viewcode-back" href="../../../../api/utils/skyflats.html#pyobs.utils.skyflats.FlatFielder">[docs]</a><span class="k">class</span> <span class="nc">FlatFielder</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Automatized flat-fielding.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FlatFielder.Twilight"><a class="viewcode-back" href="../../../../api/utils/skyflats.html#pyobs.utils.skyflats.FlatFielder.Twilight">[docs]</a>    <span class="k">class</span> <span class="nc">Twilight</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="n">DUSK</span> <span class="o">=</span> <span class="s1">&#39;dusk&#39;</span>
+        <span class="n">DAWN</span> <span class="o">=</span> <span class="s1">&#39;dawn&#39;</span></div>
+
+<div class="viewcode-block" id="FlatFielder.State"><a class="viewcode-back" href="../../../../api/utils/skyflats.html#pyobs.utils.skyflats.FlatFielder.State">[docs]</a>    <span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="n">INIT</span> <span class="o">=</span> <span class="s1">&#39;init&#39;</span>
+        <span class="n">WAITING</span> <span class="o">=</span> <span class="s1">&#39;waiting&#39;</span>
+        <span class="n">TESTING</span> <span class="o">=</span> <span class="s1">&#39;testing&#39;</span>
+        <span class="n">RUNNING</span> <span class="o">=</span> <span class="s1">&#39;running&#39;</span>
+        <span class="n">FINISHED</span> <span class="o">=</span> <span class="s1">&#39;finished&#39;</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">functions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">target_count</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">30000</span><span class="p">,</span> <span class="n">min_exptime</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">max_exptime</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+                 <span class="n">test_frame</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">counts_frame</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">allowed_offset_frac</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+                 <span class="n">min_counts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">pointing</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">SkyFlatsBasePointing</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">combine_binnings</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">observer</span><span class="p">:</span> <span class="n">Observer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vfs</span><span class="p">:</span> <span class="n">VirtualFileSystem</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a new flat fielder.</span>
+
+<span class="sd">        Depending on the value of combine_binnings, functions must be in a specific format:</span>
+
+<span class="sd">            1. combine_binnings=True:</span>
+<span class="sd">                functions must be a dictionary of filter-&gt;function pairs, like</span>
+<span class="sd">                {&#39;clear&#39;: &#39;exp(-0.9*(h+3.9))&#39;}</span>
+<span class="sd">                In this case it is assumed that the average flux per pixel is directly correlated to the binning,</span>
+<span class="sd">                i.e. a flat with 3x3 binning hast on average 9 times as much flux per pixel.</span>
+<span class="sd">            2. combine_binnings=False:</span>
+<span class="sd">                functions must be nested one level deeper within the binning, like</span>
+<span class="sd">                {&#39;1x1&#39;: {&#39;clear&#39;: &#39;exp(-0.9*(h+3.9))&#39;}}</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            functions: Function f(h) for each filter to describe ideal exposure time as a function of solar</span>
+<span class="sd">                elevation h, i.e. something like exp(-0.9*(h+3.9))</span>
+<span class="sd">            target_count: Count rate to aim for.</span>
+<span class="sd">            min_exptime: Minimum exposure time.</span>
+<span class="sd">            max_exptime: Maximum exposure time.</span>
+<span class="sd">            test_frame: Tupel (left, top, width, height) in percent that describe the frame for on-sky testing.</span>
+<span class="sd">            counts_frame: Tupel (left, top, width, height) in percent that describe the frame for calculating mean</span>
+<span class="sd">                count rate.</span>
+<span class="sd">            allowed_offset_frac: Offset from target_count (given in fraction of it) that&#39;s still allowed for good</span>
+<span class="sd">                flat-field</span>
+<span class="sd">            min_counts: Minimum counts in frames.</span>
+<span class="sd">            combine_binnings: Whether different binnings use the same functions.</span>
+<span class="sd">            observer: Observer to use.</span>
+<span class="sd">            vfs: VFS to use.</span>
+<span class="sd">            callback: Callback function for statistics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># store stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target_count</span> <span class="o">=</span> <span class="n">target_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_exptime</span> <span class="o">=</span> <span class="n">min_exptime</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_exptime</span> <span class="o">=</span> <span class="n">max_exptime</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_test_frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">test_frame</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">test_frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_counts_frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span> <span class="k">if</span> <span class="n">counts_frame</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">counts_frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allowed_offset_frac</span> <span class="o">=</span> <span class="n">allowed_offset_frac</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_counts</span> <span class="o">=</span> <span class="n">min_counts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_combine_binnings</span> <span class="o">=</span> <span class="n">combine_binnings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observer</span> <span class="o">=</span> <span class="n">observer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vfs</span> <span class="o">=</span> <span class="n">vfs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span> <span class="o">=</span> <span class="n">callback</span>
+
+        <span class="c1"># parse function</span>
+        <span class="k">if</span> <span class="n">functions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">functions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">Any</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">combine_binnings</span><span class="p">:</span>
+            <span class="c1"># in the simple case, the key is just the filter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span> <span class="o">=</span> <span class="p">{</span><span class="n">filter_name</span><span class="p">:</span> <span class="n">Parser</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="k">for</span> <span class="n">filter_name</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">functions</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># in case of separate binnings, the key to the functions dict is a tuple of binning and filter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">binning</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">functions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># func must be a dict</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">filter_name</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span><span class="p">[</span><span class="n">binning</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parser</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;functions must be a dict of binnings, of combine_binnings is False.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># abort event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+        <span class="c1"># pointing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pointing</span> <span class="o">=</span> <span class="n">get_object</span><span class="p">(</span><span class="n">pointing</span><span class="p">,</span> <span class="n">SkyFlatsBasePointing</span><span class="p">,</span> <span class="n">observer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_observer</span><span class="p">)</span>
+
+        <span class="c1"># state machine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">INIT</span>
+
+        <span class="c1"># current exposure time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># median of last image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_median</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># exposures to do</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_done</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exptime_done</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># bias level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bias_level</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># which twilight are we in?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># current request</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur_filter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">telescope</span><span class="p">:</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">],</span> <span class="n">filters</span><span class="p">:</span> <span class="n">IFilters</span><span class="p">,</span>
+                 <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">binning</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Calls next step in state machine.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            telescope: Telescope to use.</span>
+<span class="sd">            camera: Camera to use.</span>
+<span class="sd">            filters: Filter wheel to use.</span>
+<span class="sd">            filter_name: Name of filter to do flat fields in.</span>
+<span class="sd">            count: Number of flat fields to take.</span>
+<span class="sd">            binning: Binning for flat fields.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Current state of flat fielder.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># camera must support exposure times</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Camera must support exposure times.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur_filter</span> <span class="o">=</span> <span class="n">filter_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span> <span class="o">=</span> <span class="n">binning</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_total</span> <span class="o">=</span> <span class="n">count</span>
+
+        <span class="c1"># which state are we in?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">INIT</span><span class="p">:</span>
+            <span class="c1"># init task</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_system</span><span class="p">(</span><span class="n">telescope</span><span class="p">,</span> <span class="n">camera</span><span class="p">,</span> <span class="n">filters</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">WAITING</span><span class="p">:</span>
+            <span class="c1"># wait until exposure time reaches good time</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_wait</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">TESTING</span><span class="p">:</span>
+            <span class="c1"># do actual tests on sky for exposure time</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_testing</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
+            <span class="c1"># take flat fields</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flat_field</span><span class="p">(</span><span class="n">telescope</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
+
+        <span class="c1"># return current state</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+
+<div class="viewcode-block" id="FlatFielder.reset"><a class="viewcode-back" href="../../../../api/utils/skyflats.html#pyobs.utils.skyflats.FlatFielder.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset flat fielder&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">INIT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_done</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exptime_done</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pointing</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">image_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_done</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">total_exptime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime_done</span>
+
+    <span class="k">def</span> <span class="nf">_initial_check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Do a quick initial check.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            False, if flat-field time for this filter is over, True otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get solar elevation and evaluate function</span>
+        <span class="n">sun_alt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_function</span><span class="p">(</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Calculated optimal exposure time of </span><span class="si">%.2f</span><span class="s1">s in </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1"> at solar elevation of </span><span class="si">%.2f</span><span class="s1">°.&#39;</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">,</span> <span class="n">sun_alt</span><span class="p">)</span>
+
+        <span class="c1"># then evaluate exposure time within a larger range</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_exptime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_exptime</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_exptime</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Missed flat-fielding time, finishing task...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">FINISHED</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Flat-field time is still coming, keep going...&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_init_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">telescope</span><span class="p">:</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">],</span> <span class="n">filters</span><span class="p">:</span> <span class="n">IFilters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize whole system.&quot;&quot;&quot;</span>
+
+        <span class="c1"># which twilight are we in?</span>
+        <span class="n">sun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observer</span><span class="o">.</span><span class="n">sun_altaz</span><span class="p">(</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">sun_10min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observer</span><span class="o">.</span><span class="n">sun_altaz</span><span class="p">(</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">TimeDelta</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">minute</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">Twilight</span><span class="o">.</span><span class="n">DUSK</span> \
+            <span class="k">if</span> <span class="n">sun_10min</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span> <span class="o">&lt;</span> <span class="n">sun</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span> <span class="k">else</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">Twilight</span><span class="o">.</span><span class="n">DAWN</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;We are currently in </span><span class="si">%s</span><span class="s1"> twilight.&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># do initial check</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_check</span><span class="p">():</span>
+            <span class="k">return</span>
+
+        <span class="c1"># set binning</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting binning to </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">)</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">set_binning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">)</span>
+
+        <span class="c1"># get bias level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bias_level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bias</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
+
+        <span class="c1"># move telescope</span>
+        <span class="n">future_track</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pointing</span><span class="p">(</span><span class="n">telescope</span><span class="p">)</span>
+
+        <span class="c1"># get filter from first step and set it</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting filter to </span><span class="si">%s</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_filter</span><span class="p">)</span>
+        <span class="n">future_filter</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">set_filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_filter</span><span class="p">)</span>
+
+        <span class="c1"># wait for both</span>
+        <span class="n">Future</span><span class="o">.</span><span class="n">wait_all</span><span class="p">([</span><span class="n">future_track</span><span class="p">,</span> <span class="n">future_filter</span><span class="p">])</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished initializing system.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># change stats</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Waiting for flat-field time...&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">WAITING</span>
+
+    <span class="k">def</span> <span class="nf">_get_bias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Take bias image to determine bias level.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Median bias level.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Taking BIAS image to determine median level...&#39;</span><span class="p">)</span>
+
+        <span class="c1"># set full frame</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">):</span>
+            <span class="n">full_frame</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">get_full_frame</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">set_window</span><span class="p">(</span><span class="o">*</span><span class="n">full_frame</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+        <span class="c1"># take image</span>
+        <span class="n">camera</span><span class="o">.</span><span class="n">set_exposure_time</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">IImageType</span><span class="p">):</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">set_image_type</span><span class="p">(</span><span class="n">ImageType</span><span class="o">.</span><span class="n">BIAS</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">broadcast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+        <span class="c1"># download image</span>
+        <span class="n">bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vfs</span><span class="o">.</span><span class="n">read_image</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+
+        <span class="c1"># return it</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Found median BIAS level of </span><span class="si">%.2f</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">avg</span>
+
+    <span class="k">def</span> <span class="nf">_wait</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Wait for flat-field time.&quot;&quot;&quot;</span>
+
+        <span class="c1"># get solar elevation and evaluate function</span>
+        <span class="n">sun_alt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_function</span><span class="p">(</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Calculated optimal exposure time of </span><span class="si">%.2f</span><span class="s1">s in </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1"> at solar elevation of </span><span class="si">%.2f</span><span class="s1">°.&#39;</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">,</span> <span class="n">sun_alt</span><span class="p">)</span>
+
+        <span class="c1"># then evaluate exposure time within a larger range</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_exptime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_exptime</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_exptime</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Sleeping a little...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting to take test flat-fields...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">TESTING</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Missed flat-fielding time, finish task...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">FINISHED</span>
+
+    <span class="k">def</span> <span class="nf">_eval_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">Time</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Evaluate function for given filter at given time.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            time: Time to evaluate function at.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Estimated exposure time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get solar elevation</span>
+        <span class="n">sun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observer</span><span class="o">.</span><span class="n">sun_altaz</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+        <span class="c1"># evaluate function depending on whether we combine binnings or not</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_combine_binnings</span><span class="p">:</span>
+            <span class="c1"># evaluate filter function without binning</span>
+            <span class="n">exptime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_filter</span><span class="p">]</span><span class="o">.</span><span class="n">evaluate</span><span class="p">({</span><span class="s1">&#39;h&#39;</span><span class="p">:</span> <span class="n">sun</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span><span class="p">})</span>
+
+            <span class="c1"># scale with binning</span>
+            <span class="n">exptime</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># get binnind and evaluate correct function</span>
+            <span class="n">binning</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">)</span>
+            <span class="n">exptime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span><span class="p">[</span><span class="n">binning</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_filter</span><span class="p">]</span><span class="o">.</span><span class="n">evaluate</span><span class="p">({</span><span class="s1">&#39;h&#39;</span><span class="p">:</span> <span class="n">sun</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span><span class="p">})</span>
+
+        <span class="c1"># return solar altitude and exposure time</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">sun</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span><span class="p">),</span> <span class="n">exptime</span>
+
+    <span class="k">def</span> <span class="nf">_eval_exptime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_exptime</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_exptime</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Evaluates current exposure time. Sets new state or waits of necessary.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            -1, if we have to wait, 0 during flat-field time and 1 if it has passed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># no min/max given?</span>
+        <span class="k">if</span> <span class="n">min_exptime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">min_exptime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_exptime</span>
+        <span class="k">if</span> <span class="n">max_exptime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">max_exptime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_exptime</span>
+
+        <span class="c1"># need to wait, change status or are we finished?</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span> <span class="o">==</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">Twilight</span><span class="o">.</span><span class="n">DUSK</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span> <span class="o">&gt;</span> <span class="n">max_exptime</span><span class="p">)</span> <span class="ow">or</span> \
+           <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span> <span class="o">==</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">Twilight</span><span class="o">.</span><span class="n">DAWN</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span> <span class="o">&lt;</span> <span class="n">min_exptime</span><span class="p">):</span>
+            <span class="c1"># in DUSK, if exptime is greater than max exptime, we&#39;re past flatfielding time</span>
+            <span class="c1"># in DAWN, if exptime is less than min exptime, we&#39;re past flatfielding time</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span> <span class="o">==</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">Twilight</span><span class="o">.</span><span class="n">DUSK</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span> <span class="o">&lt;</span> <span class="n">min_exptime</span><span class="p">)</span> <span class="ow">or</span> \
+             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_twilight</span> <span class="o">==</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">Twilight</span><span class="o">.</span><span class="n">DAWN</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span> <span class="o">&gt;</span> <span class="n">max_exptime</span><span class="p">):</span>
+            <span class="c1"># in DUSK, if exptime is less than max exptime, we still need to wait</span>
+            <span class="c1"># in DAWN, if exptime is greater than min exptime, we still need to wait</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># otherwise it seems that we&#39;re in the middle of flat-fielding time</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">_testing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Take flat-fields but don&#39;t store them.&quot;&quot;&quot;</span>
+
+        <span class="c1"># set window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_window</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">testing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># do exposures, do not broadcast while testing</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Exposing test flat field for </span><span class="si">%.2f</span><span class="s1">s...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span><span class="p">)</span>
+        <span class="n">camera</span><span class="o">.</span><span class="n">set_exposure_time</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">IImageType</span><span class="p">):</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">set_image_type</span><span class="p">(</span><span class="n">ImageType</span><span class="o">.</span><span class="n">SKYFLAT</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">expose</span><span class="p">(</span><span class="n">broadcast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+        <span class="c1"># analyse image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_analyse_image</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="c1"># then evaluate exposure time</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_exptime</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Sleeping a little...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting to store flat-fields...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">RUNNING</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Missed flat-fielding time, finish task...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">FINISHED</span>
+
+    <span class="k">def</span> <span class="nf">_set_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">],</span> <span class="n">testing</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set camera window.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            testing: Whether we&#39;re in testing mode or not.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">):</span>
+            <span class="c1"># get full frame</span>
+            <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">get_full_frame</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+            <span class="c1"># if testing, take test frame, otherwise use full frame</span>
+            <span class="k">if</span> <span class="n">testing</span><span class="p">:</span>
+                <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">width</span><span class="p">),</span>\
+                                           <span class="nb">int</span><span class="p">(</span><span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_frame</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">width</span><span class="p">),</span>\
+                                           <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_test_frame</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">width</span><span class="p">),</span>\
+                                           <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_test_frame</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">height</span><span class="p">)</span>
+
+            <span class="c1"># set it</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting camera window to </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1"> at </span><span class="si">%d</span><span class="s1">,</span><span class="si">%d</span><span class="s1">...&#39;</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">set_window</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_analyse_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Analyze image and return whether it&#39;s okay.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename: Filename of image.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Whether flat-field is okay.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># download image</span>
+        <span class="n">flat_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vfs</span><span class="o">.</span><span class="n">read_image</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flat_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># get median from image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_median</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_image_median</span><span class="p">(</span><span class="n">flat_field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_counts_frame</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Got a flat field with median counts of </span><span class="si">%.2f</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_median</span><span class="p">)</span>
+
+        <span class="c1"># if count rate is too low, don&#39;t use this image to calculate new exposure time</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_median</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_counts</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Median counts (</span><span class="si">%d</span><span class="s1">) too low, retrying last image with same exposure time...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_median</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># calculate deviation from target counts</span>
+            <span class="n">frac</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_median</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_count</span><span class="p">)</span>
+
+            <span class="c1"># calculate new exposure time</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calc_new_exptime</span><span class="p">()</span>
+
+            <span class="c1"># log and return</span>
+            <span class="k">if</span> <span class="n">frac</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_count</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Deviation from target count (</span><span class="si">%.1f%%</span><span class="s1">) is larger than allowed, retrying last image...&#39;</span><span class="p">,</span> <span class="n">frac</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Calculated new exposure time to be </span><span class="si">%.2f</span><span class="s1">s.&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_image_median</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns median of image after trimming it to TRIMSEC and to given frame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: Image to calculate median for.</span>
+<span class="sd">            frame: Frame coordinates as (width, top, width, height) in percent of full frame.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Median of image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># trim image to TRIMSEC</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">fitssec</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s1">&#39;TRIMSEC&#39;</span><span class="p">)</span>
+
+        <span class="c1"># cut to frame</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">width</span><span class="p">):</span><span class="nb">int</span><span class="p">((</span><span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">frame</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">width</span><span class="p">),</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">height</span><span class="p">):</span><span class="nb">int</span><span class="p">((</span><span class="n">frame</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">frame</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">height</span><span class="p">)]</span>
+
+        <span class="c1"># return median</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_calc_new_exptime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculate new exposure time.&quot;&quot;&quot;</span>
+        <span class="c1"># calculate factor for new exposure time</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_target_count</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bias_level</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_median</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bias_level</span><span class="p">)</span>
+
+        <span class="c1"># limit factor to 0.1-10</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">factor</span><span class="p">))</span>
+
+        <span class="c1"># calculate next exposure time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span> <span class="o">*=</span> <span class="n">factor</span>
+
+    <span class="k">def</span> <span class="nf">_flat_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">telescope</span><span class="p">:</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">ICamera</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Take flat-fields.&quot;&quot;&quot;</span>
+
+        <span class="c1"># set window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_window</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">testing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># move telescope</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pointing</span><span class="p">(</span><span class="n">telescope</span><span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+        <span class="c1"># do exposures, do not broadcast while testing</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Exposing flat field </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1"> for </span><span class="si">%.2f</span><span class="s1">s...&#39;</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_done</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_total</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span><span class="p">)</span>
+        <span class="n">camera</span><span class="o">.</span><span class="n">set_exposure_time</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="n">camera</span><span class="o">.</span><span class="n">set_image_type</span><span class="p">(</span><span class="n">ImageType</span><span class="o">.</span><span class="n">SKYFLAT</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">expose</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+        <span class="c1"># analyse image</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyse_image</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="c1"># increase count and quite here, if finished</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_exptime_done</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_done</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_done</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exposures_total</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished all requested flat-fields..&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">FINISHED</span>
+                <span class="k">return</span>
+
+            <span class="c1"># call callback</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">sun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observer</span><span class="o">.</span><span class="n">sun_altaz</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">(</span><span class="n">datetime</span><span class="o">=</span><span class="n">now</span><span class="p">,</span> <span class="n">solalt</span><span class="o">=</span><span class="n">sun</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span> <span class="n">exptime</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_exptime</span><span class="p">,</span> <span class="n">counts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_target_count</span><span class="p">,</span>
+                               <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_filter</span><span class="p">,</span> <span class="n">binning</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_binning</span><span class="p">)</span>
+
+        <span class="c1"># then evaluate exposure time</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_exptime</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Going back to testing...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">TESTING</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Missed flat-fielding time, finish task...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">FlatFielder</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">FINISHED</span>
+
+<div class="viewcode-block" id="FlatFielder.abort"><a class="viewcode-back" href="../../../../api/utils/skyflats.html#pyobs.utils.skyflats.FlatFielder.abort">[docs]</a>    <span class="k">def</span> <span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abort current actions.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FlatFielder&#39;</span><span class="p">]</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation index</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2021, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>

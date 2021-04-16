@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.modules.flatfield.flatfield &#8212; pyobs  documentation</title>
+    <title>pyobs.modules.flatfield.flatfield &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyobs.modules.flatfield.flatfield</a></li> 
       </ul>
@@ -49,7 +49,8 @@
 
 <span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">BadWeatherEvent</span><span class="p">,</span> <span class="n">RoofClosingEvent</span><span class="p">,</span> <span class="n">Event</span>
 <span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">IFlatField</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">ITelescope</span>
-<span class="kn">from</span> <span class="nn">pyobs</span> <span class="kn">import</span> <span class="n">Module</span><span class="p">,</span> <span class="n">get_object</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">pyobs.object</span> <span class="kn">import</span> <span class="n">get_object</span>
 <span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.publisher</span> <span class="kn">import</span> <span class="n">CsvPublisher</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.skyflats.flatfielder</span> <span class="kn">import</span> <span class="n">FlatFielder</span>
@@ -57,21 +58,21 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="FlatField"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField">[docs]</a><span class="k">class</span> <span class="nc">FlatField</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IFlatField</span><span class="p">):</span>
+<div class="viewcode-block" id="FlatField"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField">[docs]</a><span class="k">class</span> <span class="nc">FlatField</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IFlatField</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Module for auto-focusing a telescope.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="FlatField.Twilight"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.Twilight">[docs]</a>    <span class="k">class</span> <span class="nc">Twilight</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="FlatField.Twilight"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.Twilight">[docs]</a>    <span class="k">class</span> <span class="nc">Twilight</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
         <span class="n">DUSK</span> <span class="o">=</span> <span class="s1">&#39;dusk&#39;</span>
         <span class="n">DAWN</span> <span class="o">=</span> <span class="s1">&#39;dawn&#39;</span></div>
 
-<div class="viewcode-block" id="FlatField.State"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.State">[docs]</a>    <span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="FlatField.State"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.State">[docs]</a>    <span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
         <span class="n">INIT</span> <span class="o">=</span> <span class="s1">&#39;init&#39;</span>
         <span class="n">WAITING</span> <span class="o">=</span> <span class="s1">&#39;waiting&#39;</span>
         <span class="n">TESTING</span> <span class="o">=</span> <span class="s1">&#39;testing&#39;</span>
         <span class="n">RUNNING</span> <span class="o">=</span> <span class="s1">&#39;running&#39;</span>
         <span class="n">FINISHED</span> <span class="o">=</span> <span class="s1">&#39;finished&#39;</span></div>
 
-<div class="viewcode-block" id="FlatField.__init__"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">telescope</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">],</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">],</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">telescope</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">],</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">],</span>
                  <span class="n">filters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">],</span> <span class="n">flat_fielder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">FlatFielder</span><span class="p">],</span>
                  <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize a new flat fielder.</span>
@@ -96,9 +97,9 @@
                                         <span class="n">observer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">observer</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">)</span>
 
         <span class="c1"># init log file</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">log_file</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">CsvPublisher</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">log_file</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">CsvPublisher</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FlatField.open"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FlatField.open"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open module&quot;&quot;&quot;</span>
         <span class="n">Module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -115,19 +116,19 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">BadWeatherEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_weather</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">register_event</span><span class="p">(</span><span class="n">RoofClosingEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_weather</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FlatField.close"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FlatField.close"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Close module.&quot;&quot;&quot;</span>
         <span class="n">Module</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="FlatField.callback"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.callback">[docs]</a>    <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datetime</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">solalt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">exptime</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">counts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">filter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">binning</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<div class="viewcode-block" id="FlatField.callback"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.callback">[docs]</a>    <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datetime</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">solalt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">exptime</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">counts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">filter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">binning</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Callback for flat-field class to call with statistics.&quot;&quot;&quot;</span>
         <span class="c1"># write log</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_publisher</span><span class="p">(</span><span class="n">datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">,</span> <span class="n">solalt</span><span class="o">=</span><span class="n">solalt</span><span class="p">,</span> <span class="n">exptime</span><span class="o">=</span><span class="n">exptime</span><span class="p">,</span> <span class="n">counts</span><span class="o">=</span><span class="n">counts</span><span class="p">,</span>
                             <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">,</span> <span class="n">binning</span><span class="o">=</span><span class="n">binning</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FlatField.flat_field"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.flat_field">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+<div class="viewcode-block" id="FlatField.flat_field"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.flat_field">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">flat_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">binning</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Do a series of flat fields in the given filter.</span>
 
@@ -179,12 +180,12 @@
         <span class="c1"># return number of taken images</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="o">.</span><span class="n">image_count</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flat_fielder</span><span class="o">.</span><span class="n">total_exptime</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FlatField.abort"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.abort">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<div class="viewcode-block" id="FlatField.abort"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.abort">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Abort current actions.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="FlatField.flat_field_status"><a class="viewcode-back" href="../../../../modules/pyobs/flatfield/flatfield.html#pyobs.modules.flatfield.FlatField.flat_field_status">[docs]</a>    <span class="k">def</span> <span class="nf">flat_field_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="viewcode-block" id="FlatField.flat_field_status"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.flat_field_status">[docs]</a>    <span class="k">def</span> <span class="nf">flat_field_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns current status of auto focus.</span>
 
 <span class="sd">        Returned dictionary contains a list of focus/fwhm pairs in X and Y direction.</span>
@@ -229,7 +230,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   

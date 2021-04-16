@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyobs_alpaca.dome &#8212; pyobs 0.12 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs_alpaca.dome</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyobs_alpaca.dome</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.events</span> <span class="kn">import</span> <span class="n">RoofOpenedEvent</span><span class="p">,</span> <span class="n">RoofClosingEvent</span>
+<span class="kn">from</span> <span class="nn">pyobs.mixins</span> <span class="kn">import</span> <span class="n">FollowMixin</span>
+
+<span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">IMotion</span><span class="p">,</span> <span class="n">IAltAz</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules</span> <span class="kn">import</span> <span class="n">timeout</span>
+<span class="kn">from</span> <span class="nn">pyobs.modules.roof</span> <span class="kn">import</span> <span class="n">BaseDome</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">MotionStatus</span>
+<span class="kn">from</span> <span class="nn">pyobs.utils.threads</span> <span class="kn">import</span> <span class="n">LockWithAbort</span>
+<span class="kn">from</span> <span class="nn">.device</span> <span class="kn">import</span> <span class="n">AlpacaDevice</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;pyobs&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AlpacaDome"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome">[docs]</a><span class="k">class</span> <span class="nc">AlpacaDome</span><span class="p">(</span><span class="n">FollowMixin</span><span class="p">,</span> <span class="n">BaseDome</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">park_az</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">180</span><span class="p">,</span> <span class="n">follow</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes a new ASCOM Alpaca telescope.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tolerance: Tolerance for azimuth.</span>
+<span class="sd">            park_az: Azimuth for park position.</span>
+<span class="sd">            follow: Name of other device (e.g. telescope) to follow.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaseDome</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">motion_status_interfaces</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;IDome&#39;</span><span class="p">])</span>
+
+        <span class="c1"># device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">AlpacaDevice</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
+        
+        <span class="c1"># store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_park_az</span> <span class="o">=</span> <span class="n">park_az</span>
+
+        <span class="c1"># move locks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock_shutter</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort_shutter</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock_move</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+        <span class="c1"># status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shutter</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_altitude</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_az</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># start thread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_status</span><span class="p">)</span>
+
+        <span class="c1"># mixins</span>
+        <span class="n">FollowMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">follow</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">IAltAz</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AlpacaDome.open"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
+        <span class="n">BaseDome</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># init status to IDLE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">IDLE</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlpacaDome.init"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome.init">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">1200000</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open dome.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If dome cannot be opened.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># acquire lock</span>
+        <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_shutter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_shutter</span><span class="p">):</span>
+            <span class="c1"># log</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Opening dome...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">INITIALIZING</span><span class="p">)</span>
+
+            <span class="c1"># execute command</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;OpenShutter&#39;</span><span class="p">)</span>
+
+            <span class="c1"># wait for it</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">while</span> <span class="n">status</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># error?</span>
+                <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not open dome.&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+                    <span class="k">return</span>
+
+                <span class="c1"># wait a little and update</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_abort_shutter</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ShutterStatus&#39;</span><span class="p">)</span>
+
+            <span class="c1"># set new status</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Dome opened.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">RoofOpenedEvent</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="AlpacaDome.park"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome.park">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">1200000</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">park</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close dome.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If dome cannot be opened.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># acquire lock</span>
+        <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_shutter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_shutter</span><span class="p">):</span>
+            <span class="c1"># log</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Closing dome...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKING</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">send_event</span><span class="p">(</span><span class="n">RoofClosingEvent</span><span class="p">())</span>
+
+            <span class="c1"># send command for closing shutter and rotate to South</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;CloseShutter&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;SlewToAzimuth&#39;</span><span class="p">,</span> <span class="n">Azimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># wait for it</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">while</span> <span class="n">status</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># error?</span>
+                <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not close dome.&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
+                    <span class="k">return</span>
+
+                <span class="c1"># wait a little and update</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_abort_shutter</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ShutterStatus&#39;</span><span class="p">)</span>
+
+            <span class="c1"># set new status</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Dome closed.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKED</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">az</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">abort</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Move the roof and wait for it.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            az: Azimuth to move to.</span>
+<span class="sd">            abort: Abort event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># execute command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;SlewToAzimuth&#39;</span><span class="p">,</span> <span class="n">Azimuth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_adjust_azimuth</span><span class="p">(</span><span class="n">az</span><span class="p">))</span>
+
+        <span class="c1"># wait for it</span>
+        <span class="n">log_timer</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="mi">180</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">az</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span><span class="p">:</span>
+            <span class="c1"># abort?</span>
+            <span class="k">if</span> <span class="n">abort</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="k">return</span>
+
+            <span class="c1"># log?</span>
+            <span class="k">if</span> <span class="n">log_timer</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Moving dome from current az=</span><span class="si">%.2f</span><span class="s1">° to </span><span class="si">%.2f</span><span class="s1">° (</span><span class="si">%.2f</span><span class="s1">° left)...&#39;</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="mi">180</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">az</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span><span class="p">)</span> <span class="o">-</span> <span class="mi">180</span><span class="p">))</span>
+            <span class="n">log_timer</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">log_timer</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">log_timer</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># wait a little</span>
+            <span class="n">abort</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># finished</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Moved to az=</span><span class="si">%.2f</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">az</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AlpacaDome.move_altaz"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome.move_altaz">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">1200000</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">move_altaz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">az</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Moves to given coordinates.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alt: Alt in deg to move to.</span>
+<span class="sd">            az: Az in deg to move to.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If device could not move.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># only move, when ready</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_ready</span><span class="p">():</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Dome not ready, ignoring slew command.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># destination az already set?</span>
+        <span class="k">if</span> <span class="n">az</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_az</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_az</span> <span class="o">=</span> <span class="n">az</span>
+
+        <span class="c1"># is this a larger move?</span>
+        <span class="n">large_move</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">az</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">2.</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span>
+
+        <span class="c1"># decide, whether we&#39;re tracking or just slewing</span>
+        <span class="n">tracking</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_following</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">large_move</span>
+
+        <span class="c1"># acquire lock</span>
+        <span class="k">with</span> <span class="n">LockWithAbort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock_move</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">):</span>
+            <span class="c1"># store altitude</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_altitude</span> <span class="o">=</span> <span class="n">alt</span>
+
+            <span class="c1"># change status to TRACKING or SLEWING, depending on whether we&#39;re tracking</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">TRACKING</span> <span class="k">if</span> <span class="n">tracking</span> <span class="k">else</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">SLEWING</span><span class="p">)</span>
+
+            <span class="c1"># move dome</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_move</span><span class="p">(</span><span class="n">az</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_abort_move</span><span class="p">)</span>
+
+            <span class="c1"># change status to TRACKING or POSITIONED, depending on whether we&#39;re tracking</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_motion_status</span><span class="p">(</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">TRACKING</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_following</span> <span class="k">else</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">POSITIONED</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlpacaDome.get_altaz"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome.get_altaz">[docs]</a>    <span class="k">def</span> <span class="nf">get_altaz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current Alt and Az.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of current Alt and Az in degrees.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_altitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span></div>
+
+<div class="viewcode-block" id="AlpacaDome.stop_motion"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome.stop_motion">[docs]</a>    <span class="k">def</span> <span class="nf">stop_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop the motion.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            device: Name of device to stop, or None for all.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># not supported, but don&#39;t want to raise an exception</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="AlpacaDome.is_ready"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome.is_ready">[docs]</a>    <span class="k">def</span> <span class="nf">is_ready</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the device is &quot;ready&quot;, whatever that means for the specific device.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Whether device is ready</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check that motion is not in one of the states listed below</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">connected</span> <span class="ow">and</span> \
+               <span class="bp">self</span><span class="o">.</span><span class="n">get_motion_status</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKED</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">INITIALIZING</span><span class="p">,</span>
+                                                <span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKING</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_update_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update status from dome.&quot;&quot;&quot;</span>
+
+        <span class="c1"># loop forever</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># get azimuth</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adjust_azimuth</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Azimuth&#39;</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="c1"># ignore it</span>
+                <span class="k">pass</span>
+
+            <span class="c1"># sleep a little</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_adjust_azimuth</span><span class="p">(</span><span class="n">az</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Baader measures azimuth as West of South, so we need to convert it. This works both ways.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            az: Azimuth.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Converted azimuth.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">az</span> <span class="o">+=</span> <span class="mi">180</span>
+        <span class="k">if</span> <span class="n">az</span> <span class="o">&gt;=</span> <span class="mi">360</span><span class="p">:</span>
+            <span class="n">az</span> <span class="o">-=</span> <span class="mi">360</span>
+        <span class="k">return</span> <span class="n">az</span></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AlpacaDome&#39;</span><span class="p">]</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation index</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2021, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>

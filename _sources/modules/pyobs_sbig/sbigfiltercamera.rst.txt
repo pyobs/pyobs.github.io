@@ -1,7 +1,0 @@
-SbigFilterCamera
-================
-
-.. autoclass:: pyobs_sbig.SbigFilterCamera
-    :members:
-    :special-members: __init__
-

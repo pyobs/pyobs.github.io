@@ -59,8 +59,8 @@ If the configuration file is saved as ``standalone.yaml``, one can easily start 
 The program quits gracefully when it receives an interrupt, so you can stop it by simply pressing ``Ctrl+c``.
 
 
-Module
-------
+Modules
+-------
 
 A Module defines a single process in *pyobs*, as defined in :class:`~pyobs.modules.Module`. Modules can work
 completely independent of each other, but usually they want to communicate and call methods on other modules.
@@ -68,8 +68,8 @@ The functionality that a module exports for remote calling is defined by its bas
 derived from :class:`~pyobs.interfaces.Interface`.
 
 
-Environment
------------
+Location of observatory
+-----------------------
 
 There is some functionality that is required in many modules, including those concerning the environment,
 especially the location of the telescope and the local time. For this, the :class:`~pyobs.application.Application` class
@@ -90,11 +90,11 @@ property, e.g.::
         print(self.environment.location)
 
 
-Comm
-----
+Communication between modules
+-----------------------------
 
 In case the module is supposed to communicate with others, we need another module of type
-:class:`~pyobs.comm.Comm`, which can be defined in the application's configuration like this::
+:class:`~pyobs.comm.comm.Comm`, which can be defined in the application's configuration like this::
 
     comm:
       class: pyobs.comm.xmpp.XmppComm

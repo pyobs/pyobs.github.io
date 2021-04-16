@@ -1,0 +1,12 @@
+.. automodule:: pyobs.utils.skyflats
+   :members:
+   :imported-members:
+
+.. automodule:: pyobs.utils.skyflats.pointing
+   :members:
+   :imported-members:
+
+.. automodule:: pyobs.utils.skyflats.priorities
+   :members:
+   :imported-members:
+

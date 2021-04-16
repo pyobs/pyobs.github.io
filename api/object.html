@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Object &#8212; pyobs  documentation</title>
+    <title>Objects &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,8 +14,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Virtual File System" href="vfs.html" />
-    <link rel="prev" title="Modules" href="module.html" />
+    <link rel="next" title="Modules" href="module.html" />
+    <link rel="prev" title="API" href="index.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -33,14 +33,14 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="vfs.html" title="Virtual File System"
+          <a href="module.html" title="Modules"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="module.html" title="Modules"
+          <a href="index.html" title="API"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyobs  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">API</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Object</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Objects</a></li> 
       </ul>
     </div>  
 
@@ -49,12 +49,44 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="object">
-<h1>Object<a class="headerlink" href="#object" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.object">
+<span id="objects"></span><h1>Objects<a class="headerlink" href="#module-pyobs.object" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="#pyobs.object.Object" title="pyobs.object.Object"><code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code></a> is the base class for almost all classe in <em>pyobs</em>. It adds some convenience methods
+and helper methods for creating other Objects.</p>
+<p><a class="reference internal" href="#pyobs.object.get_object" title="pyobs.object.get_object"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_object()</span></code></a> is a convenience function for creating objects from dictionaries.</p>
+<div class="section" id="object">
+<h2>Object<a class="headerlink" href="#object" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.object.Object">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyobs.object.</span></code><code class="sig-name descname"><span class="pre">Object</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vfs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">VirtualFileSystem</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">datetime.tzinfo</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'utc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">astropy.coordinates.earth.EarthLocation</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/object.html#Object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.object.Object" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for all pyobs objects.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Object</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vfs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="vfs.html#pyobs.vfs.VirtualFileSystem" title="pyobs.vfs.VirtualFileSystem"><span class="pre">pyobs.vfs.VirtualFileSystem</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">datetime.tzinfo</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'utc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">EarthLocation</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/object.html#Object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.object.Object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all objects in <em>pyobs</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Objects must always be opened and closed using <a class="reference internal" href="#pyobs.object.Object.open" title="pyobs.object.Object.open"><code class="xref py py-meth docutils literal notranslate"><span class="pre">open()</span></code></a> and
+<a class="reference internal" href="#pyobs.object.Object.close" title="pyobs.object.Object.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a>, respectively.</p>
+</div>
+<p>This class provides a <a class="reference internal" href="vfs.html#pyobs.vfs.VirtualFileSystem" title="pyobs.vfs.VirtualFileSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">VirtualFileSystem</span></code></a>, a timezone and a location. From the latter two, an
+observer object is automatically created.</p>
+<p>Object also adds support for easily adding threads using the <a class="reference internal" href="#pyobs.object.Object._add_thread_func" title="pyobs.object.Object._add_thread_func"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_add_thread_func()</span></code></a>
+method as well as a watchdog thread that automatically restarts threads, if requested.</p>
+<p>Using <a class="reference internal" href="#pyobs.object.Object._add_child_object" title="pyobs.object.Object._add_child_object"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_add_child_object()</span></code></a>, other objects can be (created an) attached to this object,
+which then automatically handles calls to <a class="reference internal" href="#pyobs.object.Object.open" title="pyobs.object.Object.open"><code class="xref py py-meth docutils literal notranslate"><span class="pre">open()</span></code></a> and <a class="reference internal" href="#pyobs.object.Object.close" title="pyobs.object.Object.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a>
+on those objects.</p>
+<dl class="py method">
+<dt id="pyobs.object.Object.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vfs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="vfs.html#pyobs.vfs.VirtualFileSystem" title="pyobs.vfs.VirtualFileSystem"><span class="pre">pyobs.vfs.VirtualFileSystem</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">datetime.tzinfo</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'utc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">EarthLocation</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/object.html#Object.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.object.Object.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a new object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vfs</strong> – VFS to use (either object or config)</p></li>
+<li><p><strong>timezone</strong> – Timezone at observatory.</p></li>
+<li><p><strong>location</strong> – Location of observatory, either a name or a dict containing latitude, longitude, and elevation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="pyobs.object.Object._add_child_object">
 <code class="sig-name descname"><span class="pre">_add_child_object</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_or_object</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">object</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_class</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ObjectClass</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">ObjectClass</span><a class="reference internal" href="../_modules/pyobs/object.html#Object._add_child_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.object.Object._add_child_object" title="Permalink to this definition">¶</a></dt>
@@ -72,7 +104,7 @@
 <dl class="py method">
 <dt id="pyobs.object.Object._add_thread_func">
 <code class="sig-name descname"><span class="pre">_add_thread_func</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/object.html#Object._add_thread_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.object.Object._add_thread_func" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a new thread func.</p>
+<dd><p>Add a new function that should be run in a thread.</p>
 <p>MUST be called in constructor of derived class or at least before calling open() on the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -124,8 +156,39 @@
 <dd><p>Open module.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt id="pyobs.object.Object.opened">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">opened</span></code><a class="headerlink" href="#pyobs.object.Object.opened" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether object has been opened.</p>
 </dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="get-object">
+<h2>get_object<a class="headerlink" href="#get-object" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="pyobs.object.get_object">
+<code class="sig-name descname"><span class="pre">get_object</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_or_object</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_class</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ObjectClass</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">ObjectClass</span><a class="reference internal" href="../_modules/pyobs/object.html#get_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.object.get_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates object from config or returns object directly, both optionally after check of type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_or_object</strong> – A configuration dict or an object itself to create/check. If a dict with a class key
+is given, a new object is created.</p></li>
+<li><p><strong>object_class</strong> – Class to check object against.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(New) object (created from config) that optionally passed class check.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – If the object does not match the given class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -134,12 +197,21 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Objects</a><ul>
+<li><a class="reference internal" href="#object">Object</a></li>
+<li><a class="reference internal" href="#get-object">get_object</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="index.html">API</a><ul>
-      <li>Previous: <a href="module.html" title="previous chapter">Modules</a></li>
-      <li>Next: <a href="vfs.html" title="next chapter">Virtual File System</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">API</a></li>
+      <li>Next: <a href="module.html" title="next chapter">Modules</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -165,7 +237,7 @@
       <div class="clearer"></div>
     </div>
   <div class="footer">
-    &copy; Copyright 2019, Tim-Oliver Husser.
+    &copy; Copyright 2021, Tim-Oliver Husser.
     Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   
