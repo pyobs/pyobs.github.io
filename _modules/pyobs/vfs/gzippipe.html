@@ -59,7 +59,7 @@
 <span class="sd">    decompressing data on the fly.&quot;&quot;&quot;</span>
     <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.vfs&#39;</span>
 
-<div class="viewcode-block" id="GzipReader.__init__"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.GzipReader.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">close_fd</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">close_fd</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a new GZIP reader pipe.</span>
 
 <span class="sd">        Args:</span>
@@ -83,7 +83,7 @@
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Error from gzip: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">stdout</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
 <div class="viewcode-block" id="GzipReader.readable"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.GzipReader.readable">[docs]</a>    <span class="k">def</span> <span class="nf">readable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stream is readable.&quot;&quot;&quot;</span>
@@ -153,7 +153,7 @@
     <span class="sd">&quot;&quot;&quot;A pipe object that takes a file-like object as input and acts itself like a stream,</span>
 <span class="sd">    compressing data on the fly.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GzipWriter.__init__"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.GzipWriter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">close_fd</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">close_fd</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a new GZIP writer pipe.</span>
 
 <span class="sd">        Args:</span>
@@ -168,7 +168,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_close_fd</span> <span class="o">=</span> <span class="n">close_fd</span>
 
         <span class="c1"># does gzip exist?</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_use_shell</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;/bin/gzip&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_use_shell</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;/bin/gzip&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GzipWriter.writable"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.GzipWriter.writable">[docs]</a>    <span class="k">def</span> <span class="nf">writable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stream is writable.&quot;&quot;&quot;</span>

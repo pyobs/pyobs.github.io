@@ -58,7 +58,7 @@
     <span class="sd">&quot;&quot;&quot;Global buffer.&quot;&quot;&quot;</span>
     <span class="n">_buffer</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="MemoryFile.__init__"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.MemoryFile.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open/create a file in memory.</span>
 
 <span class="sd">        Args:</span>
@@ -77,7 +77,7 @@
 
         <span class="c1"># overwrite?</span>
         <span class="k">if</span> <span class="s1">&#39;w&#39;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
-            <span class="n">MemoryFile</span><span class="o">.</span><span class="n">_buffer</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span></div>
+            <span class="n">MemoryFile</span><span class="o">.</span><span class="n">_buffer</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
 
 <div class="viewcode-block" id="MemoryFile.readable"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.MemoryFile.readable">[docs]</a>    <span class="k">def</span> <span class="nf">readable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stream is readable if it was opened in &#39;r&#39; mode.&quot;&quot;&quot;</span>

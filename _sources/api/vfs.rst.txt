@@ -1,72 +1,8 @@
-Virtual File System
-===================
+.. automodule:: pyobs.vfs
+   :members:
+   :imported-members:
 
-.. autoclass:: pyobs.vfs.VirtualFileSystem
-    :members:
-    :special-members: __init__
-
-.. autoclass:: pyobs.vfs.VFSFile
-
-ArchiveFile
------------
-
-.. autoclass:: pyobs.vfs.ArchiveFile
-    :members:
-    :special-members: __init__
-
-GzipReader
-----------
-
-.. autoclass:: pyobs.vfs.GzipReader
-    :members:
-    :special-members: __init__
-
-GzipWriter
-----------
-
-.. autoclass:: pyobs.vfs.GzipWriter
-    :members:
-    :special-members: __init__
-
-HttpFile
---------
-
-.. autoclass:: pyobs.vfs.HttpFile
-    :members:
-    :special-members: __init__
-
-LocalFile
----------
-
-.. autoclass:: pyobs.vfs.LocalFile
-    :members:
-    :special-members: __init__
-
-MemoryFile
-----------
-
-.. autoclass:: pyobs.vfs.MemoryFile
-    :members:
-    :special-members: __init__
-
-SSHFile
--------
-
-.. autoclass:: pyobs.vfs.SSHFile
-    :members:
-    :special-members: __init__
-
-TarFile
--------
-
-.. autoclass:: pyobs.vfs.TarFile
-    :members:
-    :special-members: __init__
-
-TempFile
---------
-
-.. autoclass:: pyobs.vfs.TempFile
-    :members:
-    :special-members: __init__
+.. automodule:: pyobs.vfs.filelists
+   :members:
+   :imported-members:
 

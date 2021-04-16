@@ -7,7 +7,6 @@ Object
 ------
 .. autoclass:: pyobs.object.Object
    :members:
-   :special-members: __init__
    :private-members:
 
 get_object

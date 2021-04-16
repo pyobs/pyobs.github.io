@@ -90,6 +90,12 @@
 <dt id="pyobs.utils.focusseries.PhotometryFocusSeries">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">PhotometryFocusSeries</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_detection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../images.html#pyobs.images.processors.detection.SourceDetection" title="pyobs.images.processors.detection.SourceDetection"><span class="pre">pyobs.images.processors.detection.SourceDetection</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius_column</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'radius'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/focusseries/photometry.html#PhotometryFocusSeries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.focusseries.PhotometryFocusSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Focus series based on source detection.</p>
+<p>Initialize a new projection focus series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source_detection</strong> – Photometry to use for estimating PSF sizes</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="pyobs.utils.focusseries.PhotometryFocusSeries.analyse_image">
 <code class="sig-name descname"><span class="pre">analyse_image</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../images.html#pyobs.images.Image" title="pyobs.images.Image"><span class="pre">pyobs.images.Image</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/focusseries/photometry.html#PhotometryFocusSeries.analyse_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.focusseries.PhotometryFocusSeries.analyse_image" title="Permalink to this definition">¶</a></dt>
@@ -124,6 +130,16 @@
 <dt id="pyobs.utils.focusseries.ProjectionFocusSeries">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ProjectionFocusSeries</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backsub</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xbad</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ybad</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/focusseries/projection.html#ProjectionFocusSeries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.focusseries.ProjectionFocusSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Focus series from projected x/y.</p>
+<p>Initialize a new projection focus series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backsub</strong> – Do background subtraction?</p></li>
+<li><p><strong>xbad</strong> – Bad rows</p></li>
+<li><p><strong>ybad</strong> – Bad columns</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="pyobs.utils.focusseries.ProjectionFocusSeries.analyse_image">
 <code class="sig-name descname"><span class="pre">analyse_image</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../images.html#pyobs.images.Image" title="pyobs.images.Image"><span class="pre">pyobs.images.Image</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/focusseries/projection.html#ProjectionFocusSeries.analyse_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.focusseries.ProjectionFocusSeries.analyse_image" title="Permalink to this definition">¶</a></dt>

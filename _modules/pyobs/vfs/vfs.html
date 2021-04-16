@@ -66,7 +66,7 @@
     <span class="sd">&quot;&quot;&quot;Base for a virtual file system.&quot;&quot;&quot;</span>
     <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.vfs&#39;</span>
 
-<div class="viewcode-block" id="VirtualFileSystem.__init__"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.VirtualFileSystem.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roots</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">compression</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roots</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">compression</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a new VFS.</span>
 
 <span class="sd">        Args:</span>
@@ -83,7 +83,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_roots</span><span class="p">[</span><span class="s1">&#39;pyobs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;pyobs.vfs.LocalFile&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/.pyobs/&#39;</span><span class="p">)</span>
-            <span class="p">}</span></div>
+            <span class="p">}</span>
 
 <div class="viewcode-block" id="VirtualFileSystem.split_root"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.VirtualFileSystem.split_root">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">split_root</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>

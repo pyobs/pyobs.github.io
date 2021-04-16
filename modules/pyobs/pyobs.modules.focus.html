@@ -58,6 +58,17 @@ TODO: write doc</p>
 <dt id="pyobs.modules.focus.AutoFocusProjection">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AutoFocusProjection</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">focuser</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFocuser" title="pyobs.interfaces.IFocuser"><span class="pre">pyobs.interfaces.IFocuser</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><span class="pre">pyobs.interfaces.ICamera</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFilters" title="pyobs.interfaces.IFilters"><span class="pre">pyobs.interfaces.IFilters</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/focus/projection.html#AutoFocusProjection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Module for auto-focusing a telescope.</p>
+<p>Initialize a new auto focus system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>focuser</strong> – Name of IFocuser.</p></li>
+<li><p><strong>camera</strong> – Name of ICamera.</p></li>
+<li><p><strong>filters</strong> – Name of IFilters, if any.</p></li>
+<li><p><strong>offset</strong> – If True, offsets are used instead of absolute focus values.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="pyobs.modules.focus.AutoFocusProjection.abort">
 <code class="sig-name descname"><span class="pre">abort</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/focus/projection.html#AutoFocusProjection.abort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusProjection.abort" title="Permalink to this definition">¶</a></dt>
@@ -112,6 +123,17 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.modules.focus.AutoFocusSeries">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AutoFocusSeries</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">focuser</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFocuser" title="pyobs.interfaces.IFocuser"><span class="pre">pyobs.interfaces.IFocuser</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><span class="pre">pyobs.interfaces.ICamera</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFilters" title="pyobs.interfaces.IFilters"><span class="pre">pyobs.interfaces.IFilters</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs.utils.focusseries.base.FocusSeries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/focus/focusseries.html#AutoFocusSeries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Module for auto-focusing a telescope.</p>
+<p>Initialize a new auto focus system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>focuser</strong> – Name of IFocuser.</p></li>
+<li><p><strong>camera</strong> – Name of ICamera.</p></li>
+<li><p><strong>filters</strong> – Name of IFilters, if any.</p></li>
+<li><p><strong>offset</strong> – If True, offsets are used instead of absolute focus values.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="pyobs.modules.focus.AutoFocusSeries.abort">
 <code class="sig-name descname"><span class="pre">abort</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/focus/focusseries.html#AutoFocusSeries.abort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.AutoFocusSeries.abort" title="Permalink to this definition">¶</a></dt>
@@ -207,6 +229,26 @@ d: 41.694895</p>
 </dl>
 </div></blockquote>
 <p>Only this way it is possible to automatically re-calculate the model.</p>
+<p>Initialize a focus model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>focuser</strong> – Name of focuser.</p></li>
+<li><p><strong>weather</strong> – Name of weather station.</p></li>
+<li><p><strong>interval</strong> – Interval for setting focus or None, if no regular setting of focus is required.</p></li>
+<li><p><strong>model</strong> – Focus model to use.</p></li>
+<li><p><strong>coefficients</strong> – Coefficients in model, mainly used when updating it.</p></li>
+<li><p><strong>update</strong> – Whether to update the model on new focus values.</p></li>
+<li><p><strong>log_file</strong> – Path to file containing all focus measurements.</p></li>
+<li><p><strong>min_measurements</strong> – Minimum number of measurements to update model.</p></li>
+<li><p><strong>enabled</strong> – If False, no focus is set.</p></li>
+<li><p><strong>temp_sensor</strong> – Name of sensor at weather station to provide ambient temperature.</p></li>
+<li><p><strong>default_filter</strong> – Name of default filter. If None, filters are ignored.</p></li>
+<li><p><strong>filter_offsets</strong> – Offsets for different filters. If None, they are not modeled.</p></li>
+<li><p><strong>filter_wheel</strong> – Name of filter wheel module to use for fetching filter before setting focus.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="pyobs.modules.focus.FocusModel.get_optimal_focus">
 <code class="sig-name descname"><span class="pre">get_optimal_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../../_modules/pyobs/modules/focus/focusmodel.html#FocusModel.get_optimal_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.focus.FocusModel.get_optimal_focus" title="Permalink to this definition">¶</a></dt>

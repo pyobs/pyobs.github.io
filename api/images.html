@@ -107,6 +107,21 @@
 <dt id="pyobs.images.processors.detection.SepSourceDetection">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SepSourceDetection</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minarea</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_nthresh</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_cont</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_param</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.detection.SepSourceDetection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detect sources using SEP.</p>
+<p>Initializes a wrapper for SEP. See its documentation for details.</p>
+<p>Highly inspired by LCO’s wrapper for SEP, see:
+<a class="reference external" href="https://github.com/LCOGT/banzai/blob/master/banzai/photometry.py">https://github.com/LCOGT/banzai/blob/master/banzai/photometry.py</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>threshold</strong> – Threshold pixel value for detection.</p></li>
+<li><p><strong>minarea</strong> – Minimum number of pixels required for detection.</p></li>
+<li><p><strong>deblend_nthresh</strong> – Number of thresholds used for object deblending.</p></li>
+<li><p><strong>deblend_cont</strong> – Minimum contrast ratio used for object deblending.</p></li>
+<li><p><strong>clean</strong> – Perform cleaning?</p></li>
+<li><p><strong>clean_param</strong> – Cleaning parameter (see SExtractor manual).</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -128,6 +143,17 @@
 <dt id="pyobs.images.processors.exptime.StarExpTimeEstimator">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">StarExpTimeEstimator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_detection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#pyobs.images.processors.detection.SourceDetection" title="pyobs.images.processors.detection.SourceDetection"><span class="pre">pyobs.images.processors.detection.SourceDetection</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturated</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.exptime.StarExpTimeEstimator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate exposure time from a star.</p>
+<p>Create new exp time estimator from single star.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_detection</strong> – Source detection to use.</p></li>
+<li><p><strong>edge</strong> – Fraction of image to ignore at each border.</p></li>
+<li><p><strong>bias</strong> – Bias level of image.</p></li>
+<li><p><strong>saturated</strong> – Fraction of saturation that is used as brightness limit.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -137,6 +163,12 @@
 <dt id="pyobs.images.processors.misc.SoftBin">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SoftBin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.misc.SoftBin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin an image.</p>
+<p>Init a new software binning pipeline step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>binning</strong> – Binning to apply to image.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -158,6 +190,7 @@
 <dt id="pyobs.images.processors.offsets.ProjectedOffsets">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ProjectedOffsets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.offsets.ProjectedOffsets" title="Permalink to this definition">¶</a></dt>
 <dd><p>An auto-guiding system based on comparing collapsed images along the x&amp;y axes with a reference image.</p>
+<p>Initializes a new auto guiding system.</p>
 <dl class="py method">
 <dt id="pyobs.images.processors.offsets.ProjectedOffsets.reset">
 <code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/images/processors/offsets/projected.html#ProjectedOffsets.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.images.processors.offsets.ProjectedOffsets.reset" title="Permalink to this definition">¶</a></dt>
@@ -173,6 +206,21 @@
 <dt id="pyobs.images.processors.photometry.PhotUtilsPhotometry">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">PhotUtilsPhotometry</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minarea</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_nthresh</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_cont</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_param</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.photometry.PhotUtilsPhotometry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform photometry using PhotUtils.</p>
+<p>Initializes an aperture photometry based on PhotUtils.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>threshold</strong> – Threshold pixel value for detection.</p></li>
+<li><p><strong>minarea</strong> – Minimum number of pixels required for detection.</p></li>
+<li><p><strong>deblend_nthresh</strong> – Number of thresholds used for object deblending.</p></li>
+<li><p><strong>deblend_cont</strong> – Minimum contrast ratio used for object deblending.</p></li>
+<li><p><strong>clean</strong> – Perform cleaning?</p></li>
+<li><p><strong>clean_param</strong> – Cleaning parameter (see SExtractor manual).</p></li>
+<li><p><strong>*args</strong></p></li>
+<li><p><strong>**kwargs</strong></p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -185,6 +233,23 @@
 <dt id="pyobs.images.processors.photometry.SepPhotometry">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SepPhotometry</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minarea</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_nthresh</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deblend_cont</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_param</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.images.processors.photometry.SepPhotometry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform photometry using SEP.</p>
+<p>Initializes a wrapper for SEP. See its documentation for details.</p>
+<p>Highly inspired by LCO’s wrapper for SEP, see:
+<a class="reference external" href="https://github.com/LCOGT/banzai/blob/master/banzai/photometry.py">https://github.com/LCOGT/banzai/blob/master/banzai/photometry.py</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>threshold</strong> – Threshold pixel value for detection.</p></li>
+<li><p><strong>minarea</strong> – Minimum number of pixels required for detection.</p></li>
+<li><p><strong>deblend_nthresh</strong> – Number of thresholds used for object deblending.</p></li>
+<li><p><strong>deblend_cont</strong> – Minimum contrast ratio used for object deblending.</p></li>
+<li><p><strong>clean</strong> – Perform cleaning?</p></li>
+<li><p><strong>clean_param</strong> – Cleaning parameter (see SExtractor manual).</p></li>
+<li><p><strong>*args</strong></p></li>
+<li><p><strong>**kwargs</strong></p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

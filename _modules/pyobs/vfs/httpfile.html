@@ -58,7 +58,7 @@
 <span class="sd">    Especially useful in combination with :class:`pyobs.modules.utils.HttpFileCache`.&quot;&quot;&quot;</span>
     <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.vfs&#39;</span>
 
-<div class="viewcode-block" id="HttpFile.__init__"><a class="viewcode-back" href="../../../api/vfs.html#pyobs.vfs.HttpFile.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">download</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">upload</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">download</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">upload</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verify_tls</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates a new HTTP file.</span>
 
@@ -102,7 +102,7 @@
 
         <span class="c1"># load file</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">readable</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_download</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_download</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_download</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;For read access, download the file into a local buffer.</span>

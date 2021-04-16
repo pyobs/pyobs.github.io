@@ -58,8 +58,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dateobs</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="Archive"><a class="viewcode-back" href="../../../../api/utils/archive.html#pyobs.utils.archive.Archive">[docs]</a><span class="k">class</span> <span class="nc">Archive</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">Archive</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Base class for image archives.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.utils.archive&#39;</span>
+
     <span class="k">def</span> <span class="nf">list_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">Time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="n">Time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">night</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">site</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">telescope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">instrument</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                      <span class="n">image_type</span><span class="p">:</span> <span class="n">ImageType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">binning</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">filter_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -76,7 +78,7 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="k">def</span> <span class="nf">upload_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">]):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FrameInfo&#39;</span><span class="p">,</span> <span class="s1">&#39;Archive&#39;</span><span class="p">]</span>

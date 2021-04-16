@@ -100,7 +100,13 @@
 <dl class="py class">
 <dt id="pyobs.events.GoodWeatherEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">GoodWeatherEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/time.html#pyobs.utils.time.Time" title="pyobs.utils.time.Time"><span class="pre">pyobs.utils.time.Time</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.GoodWeatherEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Initializes a new good weather event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>eta</strong> – Predicted ETA for when the telescope will be fully operational</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="initializedevent">
@@ -148,7 +154,17 @@
 <dl class="py class">
 <dt id="pyobs.events.NewImageEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">NewImageEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/enums.html#pyobs.utils.enums.ImageType" title="pyobs.utils.enums.ImageType"><span class="pre">pyobs.utils.enums.ImageType</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.NewImageEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Initializes new NewImageEvent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – Name of new image file.</p></li>
+<li><p><strong>image_type</strong> – Type of image.</p></li>
+<li><p><strong>raw</strong> – Only for reduced images, references raw frame.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="roofclosingevent">
@@ -172,7 +188,16 @@
 <dl class="py class">
 <dt id="pyobs.events.TaskFinishedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TaskFinishedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.TaskFinishedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Initializes a new task finished event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of task that just finished</p></li>
+<li><p><strong>id</strong> – Unique identifier for task</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="taskstartedevent">
@@ -180,7 +205,17 @@
 <dl class="py class">
 <dt id="pyobs.events.TaskStartedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TaskStartedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/time.html#pyobs.utils.time.Time" title="pyobs.utils.time.Time"><span class="pre">pyobs.utils.time.Time</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.TaskStartedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Initializes a new task started event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of task that just started</p></li>
+<li><p><strong>id</strong> – Unique identifier for task</p></li>
+<li><p><strong>eta</strong> – Predicted ETA for when the task will finish</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="telescopemovingevent">
@@ -188,7 +223,20 @@
 <dl class="py class">
 <dt id="pyobs.events.TelescopeMovingEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TelescopeMovingEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">az</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.TelescopeMovingEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Initializes a new telescope moving event.</p>
+<p>Either the pair ra/dec, or alt/az should be set, never both. The former implies tracking on the given
+coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ra</strong> – Right ascension of coordinates for tracking.</p></li>
+<li><p><strong>dec</strong> – Declination of coordinates for tracking.</p></li>
+<li><p><strong>alt</strong> – Altitude of fixed position to move to.</p></li>
+<li><p><strong>az</strong> – Azimuth of fixed position to move to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="testevent">

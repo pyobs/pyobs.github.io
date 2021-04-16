@@ -42,17 +42,15 @@
           <div class="body" role="main">
             
   <h1>Source code for pyobs.utils.skyflats.flatfielder</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">io</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
-
 <span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 <span class="kn">from</span> <span class="nn">astroplan</span> <span class="kn">import</span> <span class="n">Observer</span>
 <span class="kn">from</span> <span class="nn">astropy.time</span> <span class="kn">import</span> <span class="n">TimeDelta</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">py_expression_eval</span> <span class="kn">import</span> <span class="n">Parser</span>
 
 <span class="kn">from</span> <span class="nn">pyobs.interfaces</span> <span class="kn">import</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraExposureTime</span><span class="p">,</span> \
@@ -60,10 +58,10 @@
 <span class="kn">from</span> <span class="nn">pyobs.object</span> <span class="kn">import</span> <span class="n">get_object</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.enums</span> <span class="kn">import</span> <span class="n">ImageType</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.fits</span> <span class="kn">import</span> <span class="n">fitssec</span>
-<span class="kn">from</span> <span class="nn">pyobs.utils.skyflats.pointing.base</span> <span class="kn">import</span> <span class="n">SkyFlatsBasePointing</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.threads</span> <span class="kn">import</span> <span class="n">Future</span>
 <span class="kn">from</span> <span class="nn">pyobs.utils.time</span> <span class="kn">import</span> <span class="n">Time</span>
 <span class="kn">from</span> <span class="nn">pyobs.vfs</span> <span class="kn">import</span> <span class="n">VirtualFileSystem</span>
+<span class="kn">from</span> <span class="nn">.pointing</span> <span class="kn">import</span> <span class="n">SkyFlatsBasePointing</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 

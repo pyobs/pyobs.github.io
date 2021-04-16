@@ -55,7 +55,17 @@
 <dl class="py class">
 <dt id="pyobs_alpaca.AlpacaDome">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AlpacaDome</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">park_az</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">180</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_alpaca/dome.html#AlpacaDome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_alpaca.AlpacaDome" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Initializes a new ASCOM Alpaca telescope.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tolerance</strong> – Tolerance for azimuth.</p></li>
+<li><p><strong>park_az</strong> – Azimuth for park position.</p></li>
+<li><p><strong>follow</strong> – Name of other device (e.g. telescope) to follow.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="pyobs_alpaca.AlpacaDome.get_altaz">
 <code class="sig-name descname"><span class="pre">get_altaz</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs_alpaca/dome.html#AlpacaDome.get_altaz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_alpaca.AlpacaDome.get_altaz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns current Alt and Az.</p>
@@ -138,7 +148,13 @@
 <dl class="py class">
 <dt id="pyobs_alpaca.AlpacaFocuser">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AlpacaFocuser</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_alpaca/focuser.html#AlpacaFocuser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_alpaca.AlpacaFocuser" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Initializes the mixin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interfaces</strong> – List of interfaces to handle or None</p>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="pyobs_alpaca.AlpacaFocuser.get_fits_headers">
 <code class="sig-name descname"><span class="pre">get_fits_headers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs_alpaca/focuser.html#AlpacaFocuser.get_fits_headers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_alpaca.AlpacaFocuser.get_fits_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns FITS header for the current status of this module.</p>
@@ -254,7 +270,13 @@
 <dl class="py class">
 <dt id="pyobs_alpaca.AlpacaTelescope">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AlpacaTelescope</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settle_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_alpaca/telescope.html#AlpacaTelescope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_alpaca.AlpacaTelescope" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Initializes a new ASCOM Alpaca telescope.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>settle_time</strong> – Time in seconds to wait after slew before finishing.</p>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="pyobs_alpaca.AlpacaTelescope.get_altaz">
 <code class="sig-name descname"><span class="pre">get_altaz</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs_alpaca/telescope.html#AlpacaTelescope.get_altaz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_alpaca.AlpacaTelescope.get_altaz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns current Alt and Az.</p>

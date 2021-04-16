@@ -56,6 +56,15 @@
 <dt id="pyobs_asi.AsiCamera">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AsiCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sdk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'/usr/local/lib/libASICamera2.so'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_asi/asicamera.html#AsiCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_asi.AsiCamera" title="Permalink to this definition">¶</a></dt>
 <dd><p>A pyobs module for ASI cameras.</p>
+<p>Initializes a new AsiCamera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camera</strong> – Name of camera to use.</p></li>
+<li><p><strong>sdk</strong> – Path to .so file from ASI SDK.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="pyobs_asi.AsiCamera.close">
 <code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_asi/asicamera.html#AsiCamera.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_asi.AsiCamera.close" title="Permalink to this definition">¶</a></dt>
@@ -154,6 +163,12 @@
 <dt id="pyobs_asi.AsiCoolCamera">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AsiCoolCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setpoint</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_asi/asicamera.html#AsiCoolCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_asi.AsiCoolCamera" title="Permalink to this definition">¶</a></dt>
 <dd><p>A pyobs module for ASI cameras with cooling.</p>
+<p>Initializes a new AsiCoolCamera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>setpoint</strong> – Cooling temperature setpoint.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="pyobs_asi.AsiCoolCamera.get_cooling_status">
 <code class="sig-name descname"><span class="pre">get_cooling_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs_asi/asicamera.html#AsiCoolCamera.get_cooling_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_asi.AsiCoolCamera.get_cooling_status" title="Permalink to this definition">¶</a></dt>
