@@ -62,9 +62,10 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="DummyTelescope"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.DummyTelescope">[docs]</a><span class="k">class</span> <span class="nc">DummyTelescope</span><span class="p">(</span><span class="n">BaseTelescope</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">ITemperatures</span><span class="p">,</span>
+<span class="k">class</span> <span class="nc">DummyTelescope</span><span class="p">(</span><span class="n">BaseTelescope</span><span class="p">,</span> <span class="n">IRaDecOffsets</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">ITemperatures</span><span class="p">,</span>
                      <span class="n">FitsNamespaceMixin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A dummy telescope for testing.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.modules.telescope&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">:</span> <span class="s1">&#39;SimWorld&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates a new dummy telescope.&quot;&quot;&quot;</span>
@@ -73,7 +74,7 @@
 
         <span class="c1"># init world and get telescope</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_world</span> <span class="o">=</span> <span class="n">world</span> <span class="k">if</span> <span class="n">world</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> \
-            <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">({</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;pyobs.utils.simulation.world.SimWorld&#39;</span><span class="p">})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_child_object</span><span class="p">({</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;pyobs.utils.simulation.world.SimWorld&#39;</span><span class="p">})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_telescope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_world</span><span class="o">.</span><span class="n">telescope</span>
 
         <span class="c1"># automatically send status updates</span>
@@ -345,7 +346,7 @@
         <span class="k">return</span> <span class="p">{</span>
             <span class="s1">&#39;M1&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
             <span class="s1">&#39;M2&#39;</span><span class="p">:</span> <span class="mi">12</span>
-        <span class="p">}</span></div></div>
+        <span class="p">}</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DummyTelescope&#39;</span><span class="p">]</span>

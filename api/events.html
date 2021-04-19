@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Events &#8212; pyobs 0.12 documentation</title>
+    <title>Events (pyobs.events) &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,8 +14,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Images" href="images.html" />
-    <link rel="prev" title="Interfaces" href="interfaces.html" />
+    <link rel="next" title="Images (pyobs.images)" href="images.html" />
+    <link rel="prev" title="Interfaces (pyobs.interfaces)" href="interfaces.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -33,14 +33,14 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="images.html" title="Images"
+          <a href="images.html" title="Images (pyobs.images)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="interfaces.html" title="Interfaces"
+          <a href="interfaces.html" title="Interfaces (pyobs.interfaces)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">API</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Events</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Events (pyobs.events)</a></li> 
       </ul>
     </div>  
 
@@ -49,25 +49,25 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="events">
-<h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="pyobs.events.Event">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Event</span></code><a class="headerlink" href="#pyobs.events.Event" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
-<dt id="pyobs.events.Event.to_json">
-<code class="sig-name descname"><span class="pre">to_json</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/events/event.html#Event.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.events.Event.to_json" title="Permalink to this definition">¶</a></dt>
-<dd><p>JSON representation of event.</p>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="module-pyobs.events">
+<span id="events-pyobs-events"></span><h1>Events (pyobs.events)<a class="headerlink" href="#module-pyobs.events" title="Permalink to this headline">¶</a></h1>
+<p>TODO: write doc</p>
 <div class="section" id="badweatherevent">
 <h2>BadWeatherEvent<a class="headerlink" href="#badweatherevent" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.events.BadWeatherEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BadWeatherEvent</span></code><a class="headerlink" href="#pyobs.events.BadWeatherEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent on bad weather.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="event">
+<h2>Event<a class="headerlink" href="#event" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.events.Event">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Event</span></code><a class="headerlink" href="#pyobs.events.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all events.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="exposurestatuschangedevent">
@@ -75,7 +75,8 @@
 <dl class="py class">
 <dt id="pyobs.events.ExposureStatusChangedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ExposureStatusChangedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/enums.html#pyobs.utils.enums.ExposureStatus" title="pyobs.utils.enums.ExposureStatus"><span class="pre">pyobs.utils.enums.ExposureStatus</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/enums.html#pyobs.utils.enums.ExposureStatus" title="pyobs.utils.enums.ExposureStatus"><span class="pre">pyobs.utils.enums.ExposureStatus</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.ExposureStatusChangedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent, when the exposure status of a device changes.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="filterchangedevent">
@@ -83,7 +84,8 @@
 <dl class="py class">
 <dt id="pyobs.events.FilterChangedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">FilterChangedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.FilterChangedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent when a filter has been changed.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="focusfoundevent">
@@ -100,7 +102,8 @@
 <dl class="py class">
 <dt id="pyobs.events.GoodWeatherEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">GoodWeatherEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/time.html#pyobs.utils.time.Time" title="pyobs.utils.time.Time"><span class="pre">pyobs.utils.time.Time</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.GoodWeatherEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes a new good weather event.</p>
+<dd><p>Event to be sent on good weather.</p>
+<p>Initializes a new good weather event.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>eta</strong> – Predicted ETA for when the telescope will be fully operational</p>
@@ -114,7 +117,8 @@
 <dl class="py class">
 <dt id="pyobs.events.InitializedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">InitializedEvent</span></code><a class="headerlink" href="#pyobs.events.InitializedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent when a device has been initialized.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="logevent">
@@ -122,7 +126,8 @@
 <dl class="py class">
 <dt id="pyobs.events.LogEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">LogEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.LogEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event for log entries.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="moduleclosedevent">
@@ -130,7 +135,8 @@
 <dl class="py class">
 <dt id="pyobs.events.ModuleClosedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ModuleClosedEvent</span></code><a class="headerlink" href="#pyobs.events.ModuleClosedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent when a module has closed.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="moduleopenedevent">
@@ -138,7 +144,8 @@
 <dl class="py class">
 <dt id="pyobs.events.ModuleOpenedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ModuleOpenedEvent</span></code><a class="headerlink" href="#pyobs.events.ModuleOpenedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent when a module has opened.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="motionstatuschangedevent">
@@ -146,7 +153,8 @@
 <dl class="py class">
 <dt id="pyobs.events.MotionStatusChangedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">MotionStatusChangedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/enums.html#pyobs.utils.enums.MotionStatus" title="pyobs.utils.enums.MotionStatus"><span class="pre">pyobs.utils.enums.MotionStatus</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interfaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="utils/enums.html#pyobs.utils.enums.MotionStatus" title="pyobs.utils.enums.MotionStatus"><span class="pre">pyobs.utils.enums.MotionStatus</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.MotionStatusChangedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent when the motion status of a device has changed.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="newimageevent">
@@ -154,7 +162,8 @@
 <dl class="py class">
 <dt id="pyobs.events.NewImageEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">NewImageEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/enums.html#pyobs.utils.enums.ImageType" title="pyobs.utils.enums.ImageType"><span class="pre">pyobs.utils.enums.ImageType</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.NewImageEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes new NewImageEvent.</p>
+<dd><p>Event to be sent on a new image.</p>
+<p>Initializes new NewImageEvent.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -172,7 +181,8 @@
 <dl class="py class">
 <dt id="pyobs.events.RoofClosingEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">RoofClosingEvent</span></code><a class="headerlink" href="#pyobs.events.RoofClosingEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent when the roof starts closing.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="roofopenedevent">
@@ -180,7 +190,8 @@
 <dl class="py class">
 <dt id="pyobs.events.RoofOpenedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">RoofOpenedEvent</span></code><a class="headerlink" href="#pyobs.events.RoofOpenedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent when the roof has finished opening.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="taskfinishedevent">
@@ -188,7 +199,8 @@
 <dl class="py class">
 <dt id="pyobs.events.TaskFinishedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TaskFinishedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.TaskFinishedEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes a new task finished event.</p>
+<dd><p>Event to be sent when a task has finished.</p>
+<p>Initializes a new task finished event.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -205,7 +217,8 @@
 <dl class="py class">
 <dt id="pyobs.events.TaskStartedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TaskStartedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/time.html#pyobs.utils.time.Time" title="pyobs.utils.time.Time"><span class="pre">pyobs.utils.time.Time</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.TaskStartedEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes a new task started event.</p>
+<dd><p>Event to be sent when a task has started.</p>
+<p>Initializes a new task started event.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -223,7 +236,8 @@
 <dl class="py class">
 <dt id="pyobs.events.TelescopeMovingEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TelescopeMovingEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">az</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.TelescopeMovingEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes a new telescope moving event.</p>
+<dd><p>Event to be sent when the telescope has started moving.</p>
+<p>Initializes a new telescope moving event.</p>
 <p>Either the pair ra/dec, or alt/az should be set, never both. The former implies tracking on the given
 coordinates.</p>
 <dl class="field-list simple">
@@ -244,7 +258,8 @@ coordinates.</p>
 <dl class="py class">
 <dt id="pyobs.events.TestEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TestEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.TestEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Just a test event.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="variablechangedevent">
@@ -252,7 +267,8 @@ coordinates.</p>
 <dl class="py class">
 <dt id="pyobs.events.VariableChangedEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">VariableChangedEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.VariableChangedEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be sent when a variable has changed its value.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="variablesupdateevent">
@@ -260,7 +276,8 @@ coordinates.</p>
 <dl class="py class">
 <dt id="pyobs.events.VariablesUpdateEvent">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">VariablesUpdateEvent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.events.VariablesUpdateEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event to be signal a variable update request.</p>
+</dd></dl>
 
 </div>
 </div>
@@ -274,8 +291,9 @@ coordinates.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Events</a><ul>
+<li><a class="reference internal" href="#">Events (pyobs.events)</a><ul>
 <li><a class="reference internal" href="#badweatherevent">BadWeatherEvent</a></li>
+<li><a class="reference internal" href="#event">Event</a></li>
 <li><a class="reference internal" href="#exposurestatuschangedevent">ExposureStatusChangedEvent</a></li>
 <li><a class="reference internal" href="#filterchangedevent">FilterChangedEvent</a></li>
 <li><a class="reference internal" href="#focusfoundevent">FocusFoundEvent</a></li>
@@ -301,8 +319,8 @@ coordinates.</p>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="index.html">API</a><ul>
-      <li>Previous: <a href="interfaces.html" title="previous chapter">Interfaces</a></li>
-      <li>Next: <a href="images.html" title="next chapter">Images</a></li>
+      <li>Previous: <a href="interfaces.html" title="previous chapter">Interfaces (pyobs.interfaces)</a></li>
+      <li>Next: <a href="images.html" title="next chapter">Images (pyobs.images)</a></li>
   </ul></li>
   </ul></li>
 </ul>

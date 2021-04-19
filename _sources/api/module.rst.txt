@@ -1,5 +1,5 @@
-Modules
-=======
+Modules (pyobs.modules)
+=======================
 
 .. automodule:: pyobs.modules.module
 
@@ -14,3 +14,4 @@ MultiModule
 .. autoclass:: pyobs.modules.module.MultiModule
    :members:
    :show-inheritance:
+

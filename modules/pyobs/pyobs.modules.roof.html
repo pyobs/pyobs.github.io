@@ -50,14 +50,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs.modules.roof"></span><div class="section" id="roofs-pyobs-modules-roof">
-<h1>Roofs (pyobs.modules.roof)<a class="headerlink" href="#roofs-pyobs-modules-roof" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.modules.roof">
+<span id="roofs-pyobs-modules-roof"></span><h1>Roofs (pyobs.modules.roof)<a class="headerlink" href="#module-pyobs.modules.roof" title="Permalink to this headline">¶</a></h1>
 <p>Modules for roofs.
 TODO: write doc</p>
+<div class="section" id="basedome">
+<h2>BaseDome<a class="headerlink" href="#basedome" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.roof.BaseDome">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseDome</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/roof/basedome.html#BaseDome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.roof.BaseDome" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for domes.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseDome</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.roof.BaseDome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IDome" title="pyobs.interfaces.IDome"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IDome</span></code></a>, <a class="reference internal" href="#pyobs.modules.roof.BaseRoof" title="pyobs.modules.roof.BaseRoof"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.roof.BaseRoof</span></code></a></p>
+<p>Base class for domes.</p>
 <p>Initialize a new base dome.</p>
 <dl class="py method">
 <dt id="pyobs.modules.roof.BaseDome.get_fits_headers">
@@ -75,10 +78,14 @@ TODO: write doc</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="baseroof">
+<h2>BaseRoof<a class="headerlink" href="#baseroof" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.roof.BaseRoof">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseRoof</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/roof/baseroof.html#BaseRoof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.roof.BaseRoof" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for roofs.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseRoof</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.roof.BaseRoof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.weatheraware.WeatherAwareMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.motionstatus.MotionStatusMixin</span></code>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IRoof" title="pyobs.interfaces.IRoof"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IRoof</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFitsHeaderProvider" title="pyobs.interfaces.IFitsHeaderProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFitsHeaderProvider</span></code></a>, <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a></p>
+<p>Base class for roofs.</p>
 <p>Initialize a new base roof.</p>
 <dl class="py method">
 <dt id="pyobs.modules.roof.BaseRoof.get_fits_headers">
@@ -113,10 +120,14 @@ TODO: write doc</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="dummyroof">
+<h2>DummyRoof<a class="headerlink" href="#dummyroof" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.roof.DummyRoof">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">DummyRoof</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/roof/dummyroof.html#DummyRoof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.roof.DummyRoof" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dummy camera for testing.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">DummyRoof</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.roof.DummyRoof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyobs.modules.roof.BaseRoof" title="pyobs.modules.roof.BaseRoof"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.roof.BaseRoof</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IRoof" title="pyobs.interfaces.IRoof"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IRoof</span></code></a></p>
+<p>A dummy camera for testing.</p>
 <p>Creates a new dummy root.</p>
 <dl class="py method">
 <dt id="pyobs.modules.roof.DummyRoof.close_roof">
@@ -163,6 +174,7 @@ TODO: write doc</p>
 </dd></dl>
 
 </div>
+</div>
 
 
             <div class="clearer"></div>
@@ -170,7 +182,17 @@ TODO: write doc</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Roofs (pyobs.modules.roof)</a><ul>
+<li><a class="reference internal" href="#basedome">BaseDome</a></li>
+<li><a class="reference internal" href="#baseroof">BaseRoof</a></li>
+<li><a class="reference internal" href="#dummyroof">DummyRoof</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">Modules</a><ul>

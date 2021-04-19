@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Utilities &#8212; pyobs 0.12 documentation</title>
+    <title>Utilities (pyobs.utils) &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Image archives (pyobs.utils.archive)" href="archive.html" />
-    <link rel="prev" title="Images" href="../images.html" />
+    <link rel="prev" title="Images (pyobs.images)" href="../images.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -36,11 +36,11 @@
           <a href="archive.html" title="Image archives (pyobs.utils.archive)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../images.html" title="Images"
+          <a href="../images.html" title="Images (pyobs.images)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">API</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Utilities</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Utilities (pyobs.utils)</a></li> 
       </ul>
     </div>  
 
@@ -49,20 +49,44 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="utilities">
-<h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="utilities-pyobs-utils">
+<h1>Utilities (pyobs.utils)<a class="headerlink" href="#utilities-pyobs-utils" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="archive.html">Image archives (pyobs.utils.archive)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="enums.html">Enumerations (pyobs.utils.enums)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fits.html">FITS utilities (pyobs.utils.fits)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="focusseries.html">Focus series (pyobs.utils.focusseries)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulation.html">Simulations (pyobs.utils.simulations)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skyflats.html">Skyflats (pyobs.utils.skyflats)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skyflats.html#sky-flat-pointings-pyobs-utils-skyflats-pointing">Sky flat pointings (pyobs.utils.skyflats.pointing)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skyflats.html#sky-flat-priorities-pyobs-utils-skyflats-priorities">Sky flat priorities (pyobs.utils.skyflats.priorities)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time (pyobs.utils.time)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="archive.html">Image archives (pyobs.utils.archive)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="archive.html#archive">Archive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="archive.html#pyobsarchive">PyobsArchive</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">Enumerations (pyobs.utils.enums)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#exposurestatus">ExposureStatus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#imageformat">ImageFormat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#imagetype">ImageType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#motionstatus">MotionStatus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enums.html#weathersensors">WeatherSensors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fits.html">FITS utilities (pyobs.utils.fits)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fits.html#filenameformatter">FilenameFormatter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="focusseries.html">Focus series (pyobs.utils.focusseries)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="focusseries.html#focusseries">FocusSeries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="focusseries.html#photometryfocusseries">PhotometryFocusSeries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="focusseries.html#projectionfocusseries">ProjectionFocusSeries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simulation.html">Simulations (pyobs.utils.simulation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skyflats.html">Sky flats (pyobs.utils.skyflats)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="skyflats.html#module-pyobs.utils.skyflats.pointing">Sky flat pointings (pyobs.utils.skyflats.pointing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skyflats.html#module-pyobs.utils.skyflats.priorities">Sky flat priorities (pyobs.utils.skyflats.priorities)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="time.html">Time (pyobs.utils.time)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="time.html#time">Time</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -77,7 +101,7 @@
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">API</a><ul>
-      <li>Previous: <a href="../images.html" title="previous chapter">Images</a></li>
+      <li>Previous: <a href="../images.html" title="previous chapter">Images (pyobs.images)</a></li>
       <li>Next: <a href="archive.html" title="next chapter">Image archives (pyobs.utils.archive)</a></li>
   </ul></li>
   </ul></li>

@@ -43,11 +43,9 @@
             
   <h1>Source code for pyobs.utils.time</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Time (pyobs.utils.time)</span>
-<span class="sd">-----------------------</span>
-
 <span class="sd">TODO: write doc</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__title__</span> <span class="o">=</span> <span class="s1">&#39;Time&#39;</span>
 
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">astropy.time</span>
@@ -69,7 +67,7 @@
     <span class="k">def</span> <span class="nf">set_offset_to_now</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="n">astropy</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">TimeDelta</span><span class="p">):</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">_now_offset</span> <span class="o">=</span> <span class="n">delta</span>
 
-<div class="viewcode-block" id="Time.now"><a class="viewcode-back" href="../../../api/utils/time.html#pyobs.utils.time.Time.now">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">now</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a new object corresponding to the instant in time this</span>
@@ -87,9 +85,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># call `utcnow` immediately to be sure it&#39;s ASAP</span>
         <span class="n">dtnow</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">val</span><span class="o">=</span><span class="n">dtnow</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;utc&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_now_offset</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">val</span><span class="o">=</span><span class="n">dtnow</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;utc&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_now_offset</span>
 
-<div class="viewcode-block" id="Time.night_obs"><a class="viewcode-back" href="../../../api/utils/time.html#pyobs.utils.time.Time.night_obs">[docs]</a>    <span class="k">def</span> <span class="nf">night_obs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observer</span><span class="p">:</span> <span class="n">Observer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">night_obs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observer</span><span class="p">:</span> <span class="n">Observer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the night for this time, i.e. the date of the start of the current night.</span>
 
 <span class="sd">        Args:</span>
@@ -109,7 +107,7 @@
         <span class="c1"># get night</span>
         <span class="k">if</span> <span class="n">loc_dt</span><span class="o">.</span><span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">15</span><span class="p">:</span>
             <span class="n">loc_dt</span> <span class="o">+=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">loc_dt</span><span class="o">.</span><span class="n">date</span><span class="p">()</span></div></div>
+        <span class="k">return</span> <span class="n">loc_dt</span><span class="o">.</span><span class="n">date</span><span class="p">()</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>

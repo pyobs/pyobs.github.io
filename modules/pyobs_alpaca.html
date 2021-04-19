@@ -49,13 +49,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs_alpaca"></span><div class="section" id="ascom-alpaca-modules-pyobs-alpaca">
-<h1>ASCOM Alpaca modules (pyobs_alpaca)<a class="headerlink" href="#ascom-alpaca-modules-pyobs-alpaca" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs_alpaca">
+<span id="ascom-alpaca-modules-pyobs-alpaca"></span><h1>ASCOM Alpaca modules (pyobs_alpaca)<a class="headerlink" href="#module-pyobs_alpaca" title="Permalink to this headline">¶</a></h1>
 <p>TODO: write doc</p>
+<div class="section" id="alpacadome">
+<h2>AlpacaDome<a class="headerlink" href="#alpacadome" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs_alpaca.AlpacaDome">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AlpacaDome</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">park_az</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">180</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_alpaca/dome.html#AlpacaDome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_alpaca.AlpacaDome" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes a new ASCOM Alpaca telescope.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AlpacaDome</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">park_az</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">180</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_alpaca.AlpacaDome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.follow.FollowMixin</span></code>, <a class="reference internal" href="pyobs/pyobs.modules.roof.html#pyobs.modules.roof.BaseDome" title="pyobs.modules.roof.BaseDome"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.roof.BaseDome</span></code></a></p>
+<p>Initializes a new ASCOM Alpaca telescope.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -145,10 +148,14 @@
 
 </dd></dl>
 
+</div>
+<div class="section" id="alpacafocuser">
+<h2>AlpacaFocuser<a class="headerlink" href="#alpacafocuser" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs_alpaca.AlpacaFocuser">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AlpacaFocuser</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_alpaca/focuser.html#AlpacaFocuser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_alpaca.AlpacaFocuser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes the mixin.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AlpacaFocuser</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_alpaca.AlpacaFocuser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.motionstatus.MotionStatusMixin</span></code>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.IFocuser" title="pyobs.interfaces.IFocuser"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFocuser</span></code></a>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.IFitsHeaderProvider" title="pyobs.interfaces.IFitsHeaderProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFitsHeaderProvider</span></code></a>, <a class="reference internal" href="../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a></p>
+<p>Initializes the mixin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>interfaces</strong> – List of interfaces to handle or None</p>
@@ -267,10 +274,14 @@
 
 </dd></dl>
 
+</div>
+<div class="section" id="alpacatelescope">
+<h2>AlpacaTelescope<a class="headerlink" href="#alpacatelescope" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs_alpaca.AlpacaTelescope">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AlpacaTelescope</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settle_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_alpaca/telescope.html#AlpacaTelescope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_alpaca.AlpacaTelescope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes a new ASCOM Alpaca telescope.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AlpacaTelescope</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settle_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_alpaca.AlpacaTelescope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope" title="pyobs.modules.telescope.BaseTelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.telescope.BaseTelescope</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.fitsnamespace.FitsNamespaceMixin</span></code>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.IFitsHeaderProvider" title="pyobs.interfaces.IFitsHeaderProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFitsHeaderProvider</span></code></a>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.IRaDecOffsets" title="pyobs.interfaces.IRaDecOffsets"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IRaDecOffsets</span></code></a>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.ISyncTarget" title="pyobs.interfaces.ISyncTarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ISyncTarget</span></code></a></p>
+<p>Initializes a new ASCOM Alpaca telescope.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>settle_time</strong> – Time in seconds to wait after slew before finishing.</p>
@@ -404,6 +415,7 @@
 </dd></dl>
 
 </div>
+</div>
 
 
             <div class="clearer"></div>
@@ -411,7 +423,17 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ASCOM Alpaca modules (pyobs_alpaca)</a><ul>
+<li><a class="reference internal" href="#alpacadome">AlpacaDome</a></li>
+<li><a class="reference internal" href="#alpacafocuser">AlpacaFocuser</a></li>
+<li><a class="reference internal" href="#alpacatelescope">AlpacaTelescope</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="index.html">Modules</a><ul>

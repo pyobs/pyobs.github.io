@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modules &#8212; pyobs 0.12 documentation</title>
+    <title>Modules (pyobs.modules) &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,8 +14,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Communication between modules" href="comm.html" />
-    <link rel="prev" title="Objects" href="object.html" />
+    <link rel="next" title="Communication between modules (pyobs.comm)" href="comm.html" />
+    <link rel="prev" title="Objects (pyobs.object)" href="object.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -33,14 +33,14 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="comm.html" title="Communication between modules"
+          <a href="comm.html" title="Communication between modules (pyobs.comm)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="object.html" title="Objects"
+          <a href="object.html" title="Objects (pyobs.object)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">API</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Modules</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Modules (pyobs.modules)</a></li> 
       </ul>
     </div>  
 
@@ -50,9 +50,47 @@
           <div class="body" role="main">
             
   <div class="section" id="module-pyobs.modules.module">
-<span id="modules"></span><h1>Modules<a class="headerlink" href="#module-pyobs.modules.module" title="Permalink to this headline">¶</a></h1>
+<span id="modules-pyobs-modules"></span><h1>Modules (pyobs.modules)<a class="headerlink" href="#module-pyobs.modules.module" title="Permalink to this headline">¶</a></h1>
 <p>A module in <em>pyobs</em> is the smalles executable unit. The base class for all modules is
+<a class="reference internal" href="#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a>, so all modules should derive from this class and, usually, implement
+one or more <a class="reference internal" href="interfaces.html#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">Interface</span></code></a>s.</p>
+<p>Modules are usually not created directly in code, but via a configuration file, which is a YAML file that directly
+maps to the constructor of the module plus an additional entry <code class="docutils literal notranslate"><span class="pre">class</span></code> containing the full reference to the class
+of the module to instantiate.</p>
+<p>Take, for instance, the <a class="reference internal" href="../modules/pyobs/pyobs.modules.test.html#pyobs.modules.test.StandAlone" title="pyobs.modules.test.StandAlone"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandAlone</span></code></a> class, which has two parameters in its
+constructor: <code class="docutils literal notranslate"><span class="pre">message</span></code> and <code class="docutils literal notranslate"><span class="pre">interval</span></code>. So a valid configuration file would look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">Standalone</span>
+<span class="n">message</span><span class="p">:</span> <span class="n">Test</span>
+<span class="n">interval</span><span class="p">:</span> <span class="mi">5</span>
+</pre></div>
+</div>
+<p>Note that both parameters have default values, so both could be omitted from the configuration. So, this would also
+work:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">Standalone</span>
+<span class="n">message</span><span class="p">:</span> <span class="n">Test</span>
+</pre></div>
+</div>
+<p>In this case, interval would have to its default value of 10.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Remember that the <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> are always forwarded to the super class(es), so the constructor of
+a module <em>always</em> also provides the parameters from <a class="reference internal" href="object.html#pyobs.object.Object" title="pyobs.object.Object"><code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code></a> and
 <a class="reference internal" href="#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a>.</p>
+</div>
+<p>Quite often, a parameter will accept both an object of a given type and a dict. If this is the case, the dict must
+be another class definition with a <code class="docutils literal notranslate"><span class="pre">class</span></code> keyword, referring to a class of the given type. See, for example, the
+<code class="docutils literal notranslate"><span class="pre">comm</span></code> parameter of <a class="reference internal" href="#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a>: it takes both a dict and a <a class="reference internal" href="comm.html#pyobs.comm.comm.Comm" title="pyobs.comm.comm.Comm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.comm.comm.Comm</span></code></a>.
+So in a configuration file, we can always specify a Comm object like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comm</span><span class="p">:</span>
+    <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+    <span class="n">jid</span><span class="p">:</span> <span class="n">someone</span><span class="nd">@example</span><span class="o">.</span><span class="n">com</span>
+    <span class="n">password</span><span class="p">:</span> <span class="n">secret</span>
+</pre></div>
+</div>
+<p>An object of type <a class="reference internal" href="comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm" title="pyobs.comm.xmpp.xmppcomm.XmppComm"><code class="xref py py-class docutils literal notranslate"><span class="pre">XmppComm</span></code></a> (which is a class derived from
+<a class="reference internal" href="comm.html#pyobs.comm.comm.Comm" title="pyobs.comm.comm.Comm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comm</span></code></a>) will automatically be created.</p>
+<p>Sometimes, multiple modules have to run in a single process, so that they can access a common resource. For this case
+a <code class="xref py py-class docutils literal notranslate"><span class="pre">MultiModule</span></code> can contain multiple module descriptions.</p>
 <div class="section" id="module">
 <h2>Module<a class="headerlink" href="#module" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
@@ -60,7 +98,6 @@
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Module</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="comm.html#pyobs.comm.comm.Comm" title="pyobs.comm.comm.Comm"><span class="pre">pyobs.comm.comm.Comm</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.Module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="object.html#pyobs.object.Object" title="pyobs.object.Object"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.object.Object</span></code></a>, <a class="reference internal" href="interfaces.html#pyobs.interfaces.IModule" title="pyobs.interfaces.IModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IModule</span></code></a>, <a class="reference internal" href="interfaces.html#pyobs.interfaces.IConfig" title="pyobs.interfaces.IConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IConfig</span></code></a></p>
 <p>Base class for all pyobs modules.</p>
-<p>Initializes a new pyobs module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -233,10 +270,9 @@ automatically as well.</p>
 <h2>MultiModule<a class="headerlink" href="#multimodule" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.module.MultiModule">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">MultiModule</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyobs.modules.Module" title="pyobs.modules.Module"><span class="pre">pyobs.modules.Module</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/modules/module.html#MultiModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.module.MultiModule" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">MultiModule</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyobs.modules.Module" title="pyobs.modules.Module"><span class="pre">pyobs.modules.Module</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.module.MultiModule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a></p>
 <p>Wrapper for running multiple modules in a single process.</p>
-<p>Initializes a new pyobs multi module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -259,7 +295,7 @@ automatically as well.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Modules</a><ul>
+<li><a class="reference internal" href="#">Modules (pyobs.modules)</a><ul>
 <li><a class="reference internal" href="#module">Module</a></li>
 <li><a class="reference internal" href="#multimodule">MultiModule</a></li>
 </ul>
@@ -269,8 +305,8 @@ automatically as well.</p>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="index.html">API</a><ul>
-      <li>Previous: <a href="object.html" title="previous chapter">Objects</a></li>
-      <li>Next: <a href="comm.html" title="next chapter">Communication between modules</a></li>
+      <li>Previous: <a href="object.html" title="previous chapter">Objects (pyobs.object)</a></li>
+      <li>Next: <a href="comm.html" title="next chapter">Communication between modules (pyobs.comm)</a></li>
   </ul></li>
   </ul></li>
 </ul>

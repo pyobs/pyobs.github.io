@@ -1,8 +1,71 @@
-.. automodule:: pyobs.vfs
-   :members:
-   :imported-members:
+Virtual File System (pyobs.vfs)
+===============================
 
-.. automodule:: pyobs.vfs.filelists
-   :members:
-   :imported-members:
+.. automodule:: pyobs.vfs
+
+VirtualFileSystem
+-----------------
+
+.. autoclass:: pyobs.vfs.VirtualFileSystem
+
+File Access Classes
+-------------------
+
+ArchiveFile
+~~~~~~~~~~~
+
+.. autoclass:: pyobs.vfs.ArchiveFile
+
+GzipReader
+~~~~~~~~~~
+
+.. autoclass:: pyobs.vfs.GzipReader
+
+HttpFile
+~~~~~~~~
+
+.. autoclass:: pyobs.vfs.HttpFile
+
+LocalFile
+~~~~~~~~~
+
+.. autoclass:: pyobs.vfs.LocalFile
+
+MemoryFile
+~~~~~~~~~~
+
+.. autoclass:: pyobs.vfs.MemoryFile
+
+SSHFile
+~~~~~~~
+
+.. autoclass:: pyobs.vfs.SSHFile
+
+TarFile
+~~~~~~~
+
+.. autoclass:: pyobs.vfs.TarFile
+
+TempFile
+~~~~~~~~
+
+.. autoclass:: pyobs.vfs.TempFile
+
+VFSFile
+~~~~~~~
+
+.. autoclass:: pyobs.vfs.VFSFile
+
+File Lists
+----------
+
+FileList
+~~~~~~~~
+
+.. autoclass:: pyobs.vfs.filelists.FileList
+
+TestingFileList
+~~~~~~~~~~~~~~~
+
+.. autoclass:: pyobs.vfs.filelists.TestingFileList
 

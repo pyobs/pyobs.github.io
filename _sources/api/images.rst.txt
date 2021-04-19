@@ -1,38 +1,49 @@
-Images
-======
+Images (pyobs.images)
+=====================
 
-.. automodule:: pyobs.images.image
+.. automodule:: pyobs.images
 
 Image
 -----
 
 .. autoclass:: pyobs.images.Image
-   :members:
 
-Image Processors
-----------------
+Image Processors (pyobs.images.processors)
+------------------------------------------
 
 .. automodule:: pyobs.images.processors.astrometry
-   :members:
-   :imported-members:
+
+.. autoclass:: pyobs.images.processors.astrometry.Astrometry
+
+.. autoclass:: pyobs.images.processors.astrometry.AstrometryDotNet
 
 .. automodule:: pyobs.images.processors.detection
-   :members:
-   :imported-members:
+
+.. autoclass:: pyobs.images.processors.detection.SepSourceDetection
+
+.. autoclass:: pyobs.images.processors.detection.SourceDetection
 
 .. automodule:: pyobs.images.processors.exptime
-   :members:
-   :imported-members:
+
+.. autoclass:: pyobs.images.processors.exptime.ExpTimeEstimator
+
+.. autoclass:: pyobs.images.processors.exptime.StarExpTimeEstimator
 
 .. automodule:: pyobs.images.processors.misc
-   :members:
-   :imported-members:
+
+.. autoclass:: pyobs.images.processors.misc.SoftBin
 
 .. automodule:: pyobs.images.processors.offsets
-   :members:
-   :imported-members:
+
+.. autoclass:: pyobs.images.processors.offsets.Offsets
+
+.. autoclass:: pyobs.images.processors.offsets.ProjectedOffsets
 
 .. automodule:: pyobs.images.processors.photometry
-   :members:
-   :imported-members:
+
+.. autoclass:: pyobs.images.processors.photometry.PhotUtilsPhotometry
+
+.. autoclass:: pyobs.images.processors.photometry.Photometry
+
+.. autoclass:: pyobs.images.processors.photometry.SepPhotometry
 

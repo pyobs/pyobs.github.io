@@ -92,8 +92,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="Kiosk"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Kiosk">[docs]</a><span class="k">class</span> <span class="nc">Kiosk</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">,</span> <span class="n">IStoppable</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Kiosk</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">,</span> <span class="n">IStoppable</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A kiosk mode for a pyobs camera that takes images and published them via HTTP.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.modules.utils&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ICamera</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">37077</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes file cache.</span>
@@ -105,8 +106,8 @@
         <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># add thread funcs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_http_thread</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_thread</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_http_thread</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_thread</span><span class="p">)</span>
 
         <span class="c1"># init tornado web server</span>
         <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">[</span>
@@ -217,7 +218,7 @@
 <div class="viewcode-block" id="Kiosk.image"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Kiosk.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return image data.&quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span></div></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Kiosk&#39;</span><span class="p">]</span>

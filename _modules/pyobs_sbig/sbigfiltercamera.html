@@ -60,8 +60,9 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="SbigFilterCamera"><a class="viewcode-back" href="../../modules/pyobs_sbig.html#pyobs_sbig.SbigFilterCamera">[docs]</a><span class="k">class</span> <span class="nc">SbigFilterCamera</span><span class="p">(</span><span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">SbigCamera</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SbigFilterCamera</span><span class="p">(</span><span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">SbigCamera</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A pyobs module for SBIG cameras.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs_sbig&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes a new SbigCamera.</span>
@@ -222,7 +223,7 @@
             <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
         <span class="c1"># return names</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_names</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span></div></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_names</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SbigFilterCamera&#39;</span><span class="p">]</span>

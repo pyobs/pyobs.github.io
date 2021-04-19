@@ -1,4 +1,19 @@
+Cameras (pyobs.modules.camera)
+------------------------------
+
 .. automodule:: pyobs.modules.camera
+
+BaseCamera
+~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.camera.BaseCamera
    :members:
-   :imported-members:
+   :show-inheritance:
+
+DummyCamera
+~~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.camera.DummyCamera
+   :members:
+   :show-inheritance:
 

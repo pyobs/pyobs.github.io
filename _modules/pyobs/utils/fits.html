@@ -43,11 +43,9 @@
             
   <h1>Source code for pyobs.utils.fits</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">FITS utilities (pyobs.utils.fits)</span>
-<span class="sd">---------------------------------</span>
-
 <span class="sd">TODO: write doc</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__title__</span> <span class="o">=</span> <span class="s1">&#39;FITS utilities&#39;</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -93,7 +91,7 @@
     <span class="k">return</span> <span class="n">hdu</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">y0</span><span class="p">:</span><span class="n">y1</span><span class="p">,</span> <span class="n">x0</span><span class="p">:</span><span class="n">x1</span><span class="p">]</span>
 
 
-<span class="k">class</span> <span class="nc">FilenameFormatter</span><span class="p">:</span>
+<div class="viewcode-block" id="FilenameFormatter"><a class="viewcode-back" href="../../../api/utils/fits.html#pyobs.utils.fits.FilenameFormatter">[docs]</a><span class="k">class</span> <span class="nc">FilenameFormatter</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">keys</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes a new filename formatter.</span>
 
@@ -306,10 +304,10 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;dark&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;d&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;e&#39;</span>
+            <span class="k">return</span> <span class="s1">&#39;e&#39;</span></div>
 
 
-<div class="viewcode-block" id="format_filename"><a class="viewcode-back" href="../../../api/utils/fits.html#pyobs.utils.fits.format_filename">[docs]</a><span class="k">def</span> <span class="nf">format_filename</span><span class="p">(</span><span class="n">hdr</span><span class="p">:</span> <span class="n">Header</span><span class="p">,</span> <span class="n">fmt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">keys</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">format_filename</span><span class="p">(</span><span class="n">hdr</span><span class="p">:</span> <span class="n">Header</span><span class="p">,</span> <span class="n">fmt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">keys</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Formats a filename given a format template and a FITS header.</span>
 
 <span class="sd">    Args:</span>
@@ -325,7 +323,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ff</span> <span class="o">=</span> <span class="n">FilenameFormatter</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">keys</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ff</span><span class="p">(</span><span class="n">hdr</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">ff</span><span class="p">(</span><span class="n">hdr</span><span class="p">)</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;format_filename&#39;</span><span class="p">,</span> <span class="s1">&#39;FilenameFormatter&#39;</span><span class="p">]</span>

@@ -60,8 +60,9 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="BaseTelescope"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope">[docs]</a><span class="k">class</span> <span class="nc">BaseTelescope</span><span class="p">(</span><span class="n">WeatherAwareMixin</span><span class="p">,</span> <span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">WaitForMotionMixin</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">BaseTelescope</span><span class="p">(</span><span class="n">WeatherAwareMixin</span><span class="p">,</span> <span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">WaitForMotionMixin</span><span class="p">,</span> <span class="n">ITelescope</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base class for telescopes.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.modules.telescope&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fits_headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_altitude</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">wait_for_dome</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize a new base telescope.</span>
@@ -86,7 +87,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_celestial_headers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># add thread func</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_celestial</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_celestial</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># init mixins</span>
         <span class="n">WeatherAwareMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -331,7 +332,7 @@
                 <span class="s1">&#39;MOONDIST&#39;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">moon_dist</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">moon_dist</span><span class="o">.</span><span class="n">degree</span><span class="p">),</span> <span class="s1">&#39;Lunar distance from target&#39;</span><span class="p">),</span>
                 <span class="s1">&#39;SUNALT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">sun_altaz</span><span class="o">.</span><span class="n">alt</span><span class="o">.</span><span class="n">degree</span><span class="p">),</span> <span class="s1">&#39;Solar altitude&#39;</span><span class="p">),</span>
                 <span class="s1">&#39;SUNDIST&#39;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">sun_dist</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">sun_dist</span><span class="o">.</span><span class="n">degree</span><span class="p">),</span> <span class="s1">&#39;Solar Distance from Target&#39;</span><span class="p">)</span>
-            <span class="p">}</span></div>
+            <span class="p">}</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BaseTelescope&#39;</span><span class="p">]</span>

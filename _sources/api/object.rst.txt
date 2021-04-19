@@ -1,14 +1,5 @@
-Objects
-=======
+Objects (pyobs.object)
+======================
 
 .. automodule:: pyobs.object
-
-Object
-------
-.. autoclass:: pyobs.object.Object
    :members:
-   :private-members:
-
-get_object
-----------
-.. autofunction:: pyobs.object.get_object

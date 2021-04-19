@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interfaces &#8212; pyobs 0.12 documentation</title>
+    <title>Interfaces (pyobs.interfaces) &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,7 +14,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Events" href="events.html" />
+    <link rel="next" title="Events (pyobs.events)" href="events.html" />
     <link rel="prev" title="Virtual File System (pyobs.vfs)" href="vfs.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -33,14 +33,14 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="events.html" title="Events"
+          <a href="events.html" title="Events (pyobs.events)"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="vfs.html" title="Virtual File System (pyobs.vfs)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">API</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Interfaces</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Interfaces (pyobs.interfaces)</a></li> 
       </ul>
     </div>  
 
@@ -49,15 +49,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="interfaces">
-<h1>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.interfaces">
+<span id="interfaces-pyobs-interfaces"></span><h1>Interfaces (pyobs.interfaces)<a class="headerlink" href="#module-pyobs.interfaces" title="Permalink to this headline">¶</a></h1>
+<p>Using interface, a <a class="reference internal" href="module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a> signals another one, what functionality it provides for remote
+procedure calls. The base class for all interfaces in <em>pyobs</em> is:</p>
 <dl class="py class">
 <dt id="pyobs.interfaces.Interface">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Interface</span></code><a class="headerlink" href="#pyobs.interfaces.Interface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Base class for all interfaces in pyobs.</p>
+<dd><p>Base class for all interfaces in pyobs.</p>
 </dd></dl>
 
+<p>Modules need to implement the required interfaces. For instance, if a module operates a camera, it probably should
+implement <a class="reference internal" href="#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">ICamera</span></code></a>.</p>
+<div class="section" id="list-of-interfaces">
+<h2>List of interfaces<a class="headerlink" href="#list-of-interfaces" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="iabortable">
 <h2>IAbortable<a class="headerlink" href="#iabortable" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
@@ -1322,7 +1328,8 @@ with sensor information, which contain a value and a good flag.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Interfaces</a><ul>
+<li><a class="reference internal" href="#">Interfaces (pyobs.interfaces)</a><ul>
+<li><a class="reference internal" href="#list-of-interfaces">List of interfaces</a></li>
 <li><a class="reference internal" href="#iabortable">IAbortable</a></li>
 <li><a class="reference internal" href="#iacquisition">IAcquisition</a></li>
 <li><a class="reference internal" href="#ialtaz">IAltAz</a></li>
@@ -1370,7 +1377,7 @@ with sensor information, which contain a value and a good flag.</p>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="index.html">API</a><ul>
       <li>Previous: <a href="vfs.html" title="previous chapter">Virtual File System (pyobs.vfs)</a></li>
-      <li>Next: <a href="events.html" title="next chapter">Events</a></li>
+      <li>Next: <a href="events.html" title="next chapter">Events (pyobs.events)</a></li>
   </ul></li>
   </ul></li>
 </ul>

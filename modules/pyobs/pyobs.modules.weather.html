@@ -50,14 +50,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs.modules.weather"></span><div class="section" id="weather-pyobs-modules-weather">
-<h1>Weather (pyobs.modules.weather)<a class="headerlink" href="#weather-pyobs-modules-weather" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.modules.weather">
+<span id="weather-pyobs-modules-weather"></span><h1>Weather (pyobs.modules.weather)<a class="headerlink" href="#module-pyobs.modules.weather" title="Permalink to this headline">¶</a></h1>
 <p>Weather modules.
 TODO: write doc</p>
+<div class="section" id="weather">
+<h2>Weather<a class="headerlink" href="#weather" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.weather.Weather">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Weather</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_init_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/weather/weather.html#Weather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.weather.Weather" title="Permalink to this definition">¶</a></dt>
-<dd><p>Connection to pyobs-weather.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Weather</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_init_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.weather.Weather" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IWeather" title="pyobs.interfaces.IWeather"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IWeather</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFitsHeaderProvider" title="pyobs.interfaces.IFitsHeaderProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFitsHeaderProvider</span></code></a></p>
+<p>Connection to pyobs-weather.</p>
 <p>Initialize a new pyobs-weather connector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -131,6 +134,7 @@ with sensor information, which contain a value and a good flag.</p>
 </dd></dl>
 
 </div>
+</div>
 
 
             <div class="clearer"></div>
@@ -138,7 +142,15 @@ with sensor information, which contain a value and a good flag.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Weather (pyobs.modules.weather)</a><ul>
+<li><a class="reference internal" href="#weather">Weather</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">Modules</a><ul>

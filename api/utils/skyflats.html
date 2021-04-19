@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skyflats (pyobs.utils.skyflats) &#8212; pyobs 0.12 documentation</title>
+    <title>Sky flats (pyobs.utils.skyflats) &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Time (pyobs.utils.time)" href="time.html" />
-    <link rel="prev" title="Simulations (pyobs.utils.simulations)" href="simulation.html" />
+    <link rel="prev" title="Simulations (pyobs.utils.simulation)" href="simulation.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -36,12 +36,12 @@
           <a href="time.html" title="Time (pyobs.utils.time)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="simulation.html" title="Simulations (pyobs.utils.simulations)"
+          <a href="simulation.html" title="Simulations (pyobs.utils.simulation)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilities</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Skyflats (pyobs.utils.skyflats)</a></li> 
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilities (pyobs.utils)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sky flats (pyobs.utils.skyflats)</a></li> 
       </ul>
     </div>  
 
@@ -50,119 +50,23 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs.utils.skyflats"></span><div class="section" id="skyflats-pyobs-utils-skyflats">
-<h1>Skyflats (pyobs.utils.skyflats)<a class="headerlink" href="#skyflats-pyobs-utils-skyflats" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.utils.skyflats">
+<span id="sky-flats-pyobs-utils-skyflats"></span><h1>Sky flats (pyobs.utils.skyflats)<a class="headerlink" href="#module-pyobs.utils.skyflats" title="Permalink to this headline">¶</a></h1>
 <p>TODO: write docs</p>
-<dl class="py class">
-<dt id="pyobs.utils.skyflats.FlatFielder">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">FlatFielder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">30000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_exptime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_exptime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts_frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_offset_frac</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_counts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#pyobs.utils.skyflats.pointing.SkyFlatsBasePointing" title="pyobs.utils.skyflats.pointing.SkyFlatsBasePointing"><span class="pre">pyobs.utils.skyflats.pointing.SkyFlatsBasePointing</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_binnings</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">astroplan.observer.Observer</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../vfs.html#pyobs.vfs.VirtualFileSystem" title="pyobs.vfs.VirtualFileSystem"><span class="pre">pyobs.vfs.VirtualFileSystem</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/skyflats/flatfielder.html#FlatFielder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.skyflats.FlatFielder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Automatized flat-fielding.</p>
-<p>Initialize a new flat fielder.</p>
-<p>Depending on the value of combine_binnings, functions must be in a specific format:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><dl class="simple">
-<dt>combine_binnings=True:</dt><dd><p>functions must be a dictionary of filter-&gt;function pairs, like
-{‘clear’: ‘exp(-0.9*(h+3.9))’}
-In this case it is assumed that the average flux per pixel is directly correlated to the binning,
-i.e. a flat with 3x3 binning hast on average 9 times as much flux per pixel.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>combine_binnings=False:</dt><dd><p>functions must be nested one level deeper within the binning, like
-{‘1x1’: {‘clear’: ‘exp(-0.9*(h+3.9))’}}</p>
-</dd>
-</dl>
-</li>
-</ol>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>functions</strong> – Function f(h) for each filter to describe ideal exposure time as a function of solar
-elevation h, i.e. something like exp(-0.9*(h+3.9))</p></li>
-<li><p><strong>target_count</strong> – Count rate to aim for.</p></li>
-<li><p><strong>min_exptime</strong> – Minimum exposure time.</p></li>
-<li><p><strong>max_exptime</strong> – Maximum exposure time.</p></li>
-<li><p><strong>test_frame</strong> – Tupel (left, top, width, height) in percent that describe the frame for on-sky testing.</p></li>
-<li><p><strong>counts_frame</strong> – Tupel (left, top, width, height) in percent that describe the frame for calculating mean
-count rate.</p></li>
-<li><p><strong>allowed_offset_frac</strong> – Offset from target_count (given in fraction of it) that’s still allowed for good
-flat-field</p></li>
-<li><p><strong>min_counts</strong> – Minimum counts in frames.</p></li>
-<li><p><strong>combine_binnings</strong> – Whether different binnings use the same functions.</p></li>
-<li><p><strong>observer</strong> – Observer to use.</p></li>
-<li><p><strong>vfs</strong> – VFS to use.</p></li>
-<li><p><strong>callback</strong> – Callback function for statistics.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py class">
-<dt id="pyobs.utils.skyflats.FlatFielder.State">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">State</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/skyflats/flatfielder.html#FlatFielder.State"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.skyflats.FlatFielder.State" title="Permalink to this definition">¶</a></dt>
-<dd><p>An enumeration.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyobs.utils.skyflats.FlatFielder.Twilight">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Twilight</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/skyflats/flatfielder.html#FlatFielder.Twilight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.skyflats.FlatFielder.Twilight" title="Permalink to this definition">¶</a></dt>
-<dd><p>An enumeration.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.utils.skyflats.FlatFielder.abort">
-<code class="sig-name descname"><span class="pre">abort</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/skyflats/flatfielder.html#FlatFielder.abort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.skyflats.FlatFielder.abort" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abort current actions.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.utils.skyflats.FlatFielder.reset">
-<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/skyflats/flatfielder.html#FlatFielder.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.skyflats.FlatFielder.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset flat fielder</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyobs.utils.skyflats.Scheduler">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Scheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priorities</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#pyobs.utils.skyflats.priorities.SkyflatPriorities" title="pyobs.utils.skyflats.priorities.SkyflatPriorities"><span class="pre">pyobs.utils.skyflats.priorities.SkyflatPriorities</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">observer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">astroplan.observer.Observer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_exptime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_exptime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timespan</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">7200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_change</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_binnings</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readout</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/skyflats/scheduler.html#Scheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.skyflats.Scheduler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Scheduler for taking flat fields</p>
-<p>Initializes a new scheduler for taking flat fields</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>functions</strong> – Flat field functions</p></li>
-<li><p><strong>priorities</strong> – Class handling priorities</p></li>
-<li><p><strong>observer</strong> – Observer to use</p></li>
-<li><p><strong>min_exptime</strong> – Minimum exposure time for flats</p></li>
-<li><p><strong>max_exptime</strong> – Maximum exposure time for flats</p></li>
-<li><p><strong>timespan</strong> – Timespan from now that should be scheduled [s]</p></li>
-<li><p><strong>filter_change</strong> – Time required for filter change [s]</p></li>
-<li><p><strong>count</strong> – Number of flats to schedule</p></li>
-<li><p><strong>combine_binnings</strong> – Whether different binnings use the same functions.</p></li>
-<li><p><strong>readout</strong> – Dictionary with readout times (in sec) per binning (as BxB).</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<span class="target" id="module-pyobs.utils.skyflats.pointing"></span><div class="section" id="sky-flat-pointings-pyobs-utils-skyflats-pointing">
-<h1>Sky flat pointings (pyobs.utils.skyflats.pointing)<a class="headerlink" href="#sky-flat-pointings-pyobs-utils-skyflats-pointing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-pyobs.utils.skyflats.pointing">
+<span id="sky-flat-pointings-pyobs-utils-skyflats-pointing"></span><h2>Sky flat pointings (pyobs.utils.skyflats.pointing)<a class="headerlink" href="#module-pyobs.utils.skyflats.pointing" title="Permalink to this headline">¶</a></h2>
 <p>TODO: write docs</p>
+<div class="section" id="skyflatsbasepointing">
+<h3>SkyFlatsBasePointing<a class="headerlink" href="#skyflatsbasepointing" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.utils.skyflats.pointing.SkyFlatsBasePointing">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SkyFlatsBasePointing</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">astroplan.observer.Observer</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.utils.skyflats.pointing.SkyFlatsBasePointing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for flat poinings.</p>
-<dl class="py method">
-<dt id="pyobs.utils.skyflats.pointing.SkyFlatsBasePointing.reset">
-<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/skyflats/pointing/base.html#SkyFlatsBasePointing.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.skyflats.pointing.SkyFlatsBasePointing.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset pointing.</p>
 </dd></dl>
 
-</dd></dl>
-
+</div>
+<div class="section" id="skyflatsstaticpointing">
+<h3>SkyFlatsStaticPointing<a class="headerlink" href="#skyflatsstaticpointing" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.utils.skyflats.pointing.SkyFlatsStaticPointing">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SkyFlatsStaticPointing</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initialized</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.utils.skyflats.pointing.SkyFlatsStaticPointing" title="Permalink to this definition">¶</a></dt>
@@ -173,36 +77,41 @@ flat-field</p></li>
 <dd class="field-odd"><p><strong>initialized</strong> – If False, telescope does not move at all.</p>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="pyobs.utils.skyflats.pointing.SkyFlatsStaticPointing.reset">
-<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/skyflats/pointing/static.html#SkyFlatsStaticPointing.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.skyflats.pointing.SkyFlatsStaticPointing.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset pointing.</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
-<span class="target" id="module-pyobs.utils.skyflats.priorities"></span><div class="section" id="sky-flat-priorities-pyobs-utils-skyflats-priorities">
-<h1>Sky flat priorities (pyobs.utils.skyflats.priorities)<a class="headerlink" href="#sky-flat-priorities-pyobs-utils-skyflats-priorities" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-pyobs.utils.skyflats.priorities">
+<span id="sky-flat-priorities-pyobs-utils-skyflats-priorities"></span><h2>Sky flat priorities (pyobs.utils.skyflats.priorities)<a class="headerlink" href="#module-pyobs.utils.skyflats.priorities" title="Permalink to this headline">¶</a></h2>
 <p>TODO: write docs</p>
+<div class="section" id="archiveskyflatpriorities">
+<h3>ArchiveSkyflatPriorities<a class="headerlink" href="#archiveskyflatpriorities" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.utils.skyflats.priorities.ArchiveSkyflatPriorities">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ArchiveSkyflatPriorities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="archive.html#pyobs.utils.archive.Archive" title="pyobs.utils.archive.Archive"><span class="pre">pyobs.utils.archive.Archive</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instrument</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_names</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binnings</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.utils.skyflats.priorities.ArchiveSkyflatPriorities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate flat priorities from an archive.</p>
 </dd></dl>
 
+</div>
+<div class="section" id="constskyflatpriorities">
+<h3>ConstSkyflatPriorities<a class="headerlink" href="#constskyflatpriorities" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.utils.skyflats.priorities.ConstSkyflatPriorities">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ConstSkyflatPriorities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">priorities</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.utils.skyflats.priorities.ConstSkyflatPriorities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constant flat priorities.</p>
 </dd></dl>
 
+</div>
+<div class="section" id="skyflatpriorities">
+<h3>SkyflatPriorities<a class="headerlink" href="#skyflatpriorities" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.utils.skyflats.priorities.SkyflatPriorities">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SkyflatPriorities</span></code><a class="headerlink" href="#pyobs.utils.skyflats.priorities.SkyflatPriorities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for sky flat priorities.</p>
 </dd></dl>
 
+</div>
+</div>
 </div>
 
 
@@ -214,16 +123,27 @@ flat-field</p></li>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Skyflats (pyobs.utils.skyflats)</a></li>
-<li><a class="reference internal" href="#sky-flat-pointings-pyobs-utils-skyflats-pointing">Sky flat pointings (pyobs.utils.skyflats.pointing)</a></li>
-<li><a class="reference internal" href="#sky-flat-priorities-pyobs-utils-skyflats-priorities">Sky flat priorities (pyobs.utils.skyflats.priorities)</a></li>
+<li><a class="reference internal" href="#">Sky flats (pyobs.utils.skyflats)</a><ul>
+<li><a class="reference internal" href="#module-pyobs.utils.skyflats.pointing">Sky flat pointings (pyobs.utils.skyflats.pointing)</a><ul>
+<li><a class="reference internal" href="#skyflatsbasepointing">SkyFlatsBasePointing</a></li>
+<li><a class="reference internal" href="#skyflatsstaticpointing">SkyFlatsStaticPointing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyobs.utils.skyflats.priorities">Sky flat priorities (pyobs.utils.skyflats.priorities)</a><ul>
+<li><a class="reference internal" href="#archiveskyflatpriorities">ArchiveSkyflatPriorities</a></li>
+<li><a class="reference internal" href="#constskyflatpriorities">ConstSkyflatPriorities</a></li>
+<li><a class="reference internal" href="#skyflatpriorities">SkyflatPriorities</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">API</a><ul>
-  <li><a href="index.html">Utilities</a><ul>
-      <li>Previous: <a href="simulation.html" title="previous chapter">Simulations (pyobs.utils.simulations)</a></li>
+  <li><a href="index.html">Utilities (pyobs.utils)</a><ul>
+      <li>Previous: <a href="simulation.html" title="previous chapter">Simulations (pyobs.utils.simulation)</a></li>
       <li>Next: <a href="time.html" title="next chapter">Time (pyobs.utils.time)</a></li>
   </ul></li>
   </ul></li>

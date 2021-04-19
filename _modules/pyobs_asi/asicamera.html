@@ -67,8 +67,9 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="AsiCamera"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCamera">[docs]</a><span class="k">class</span> <span class="nc">AsiCamera</span><span class="p">(</span><span class="n">BaseCamera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">IImageFormat</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">AsiCamera</span><span class="p">(</span><span class="n">BaseCamera</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">,</span> <span class="n">ICameraWindow</span><span class="p">,</span> <span class="n">ICameraBinning</span><span class="p">,</span> <span class="n">IImageFormat</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A pyobs module for ASI cameras.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs_asi&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sdk</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/lib/libASICamera2.so&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes a new AsiCamera.</span>
@@ -338,10 +339,10 @@
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If an error occured.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span></div>
+        <span class="k">pass</span>
 
 
-<div class="viewcode-block" id="AsiCoolCamera"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera">[docs]</a><span class="k">class</span> <span class="nc">AsiCoolCamera</span><span class="p">(</span><span class="n">AsiCamera</span><span class="p">,</span> <span class="n">ICooling</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">AsiCoolCamera</span><span class="p">(</span><span class="n">AsiCamera</span><span class="p">,</span> <span class="n">ICooling</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A pyobs module for ASI cameras with cooling.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -355,7 +356,7 @@
         <span class="c1"># variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span> <span class="o">=</span> <span class="n">setpoint</span>
 
-<div class="viewcode-block" id="AsiCoolCamera.open"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
         <span class="n">AsiCamera</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -364,9 +365,9 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Camera has no support for cooling.&#39;</span><span class="p">)</span>
 
         <span class="c1"># activate cooling</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_cooling</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_cooling</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_setpoint</span><span class="p">)</span>
 
-<div class="viewcode-block" id="AsiCoolCamera.get_cooling_status"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.get_cooling_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_cooling_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_cooling_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the current status for the cooling.</span>
 
 <span class="sd">        Returns:</span>
@@ -384,9 +385,9 @@
         <span class="n">enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_COOLER_ON</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_TARGET_TEMP</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">power</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_COOLER_POWER_PERC</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">enabled</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">power</span></div>
+        <span class="k">return</span> <span class="n">enabled</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">power</span>
 
-<div class="viewcode-block" id="AsiCoolCamera.get_temperatures"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.get_temperatures">[docs]</a>    <span class="k">def</span> <span class="nf">get_temperatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_temperatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns all temperatures measured by this module.</span>
 
 <span class="sd">        Returns:</span>
@@ -400,9 +401,9 @@
         <span class="c1"># return</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s1">&#39;CCD&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">get_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_TEMPERATURE</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">10.</span>
-        <span class="p">}</span></div>
+        <span class="p">}</span>
 
-<div class="viewcode-block" id="AsiCoolCamera.set_cooling"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.set_cooling">[docs]</a>    <span class="k">def</span> <span class="nf">set_cooling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_cooling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Enables/disables cooling and sets setpoint.</span>
 
 <span class="sd">        Args:</span>
@@ -424,9 +425,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_COOLER_ON</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Disabling cooling...&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_COOLER_ON</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">set_control_value</span><span class="p">(</span><span class="n">asi</span><span class="o">.</span><span class="n">ASI_COOLER_ON</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-<div class="viewcode-block" id="AsiCoolCamera.set_image_format"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.set_image_format">[docs]</a>    <span class="k">def</span> <span class="nf">set_image_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">format</span><span class="p">:</span> <span class="n">ImageFormat</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_image_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">format</span><span class="p">:</span> <span class="n">ImageFormat</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the camera image format.</span>
 
 <span class="sd">        Args:</span>
@@ -437,23 +438,23 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">FORMATS</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported image format.&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_image_format</span> <span class="o">=</span> <span class="nb">format</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_format</span> <span class="o">=</span> <span class="nb">format</span>
 
-<div class="viewcode-block" id="AsiCoolCamera.get_image_format"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.get_image_format">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageFormat</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_image_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageFormat</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the camera image format.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Current image format.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_format</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_format</span>
 
-<div class="viewcode-block" id="AsiCoolCamera.list_image_formats"><a class="viewcode-back" href="../../modules/pyobs_asi.html#pyobs_asi.AsiCoolCamera.list_image_formats">[docs]</a>    <span class="k">def</span> <span class="nf">list_image_formats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">list_image_formats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;List available image formats.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List of available image formats.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">FORMATS</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span></div></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">FORMATS</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AsiCamera&#39;</span><span class="p">,</span> <span class="s1">&#39;AsiCoolCamera&#39;</span><span class="p">]</span>

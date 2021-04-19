@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Modules" href="../../modules/index.html" />
-    <link rel="prev" title="Skyflats (pyobs.utils.skyflats)" href="skyflats.html" />
+    <link rel="prev" title="Sky flats (pyobs.utils.skyflats)" href="skyflats.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -36,11 +36,11 @@
           <a href="../../modules/index.html" title="Modules"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="skyflats.html" title="Skyflats (pyobs.utils.skyflats)"
+          <a href="skyflats.html" title="Sky flats (pyobs.utils.skyflats)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilities</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilities (pyobs.utils)</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Time (pyobs.utils.time)</a></li> 
       </ul>
     </div>  
@@ -50,49 +50,18 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs.utils.time"></span><div class="section" id="time-pyobs-utils-time">
-<h1>Time (pyobs.utils.time)<a class="headerlink" href="#time-pyobs-utils-time" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.utils.time">
+<span id="time-pyobs-utils-time"></span><h1>Time (pyobs.utils.time)<a class="headerlink" href="#module-pyobs.utils.time" title="Permalink to this headline">¶</a></h1>
 <p>TODO: write doc</p>
+<div class="section" id="time">
+<h2>Time<a class="headerlink" href="#time" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.utils.time.Time">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Time</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_subfmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_subfmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/time.html#Time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.time.Time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hashable Time class.</p>
-<dl class="py method">
-<dt id="pyobs.utils.time.Time.night_obs">
-<code class="sig-name descname"><span class="pre">night_obs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">astroplan.observer.Observer</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">datetime.date</span><a class="reference internal" href="../../_modules/pyobs/utils/time.html#Time.night_obs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.time.Time.night_obs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the night for this time, i.e. the date of the start of the current night.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>observer</strong> – Observer object to use.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Night for this time.</p>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="pyobs.utils.time.Time.now">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">now</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/utils/time.html#Time.now"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.utils.time.Time.now" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a new object corresponding to the instant in time this
-method is called.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>“Now” is determined using the <cite>~datetime.datetime.utcnow</cite>
-function, so its accuracy and precision is determined by that
-function.  Generally that means it is set by the accuracy of
-your system clock.</p>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A new <cite>Time</cite> object (or a subclass of <cite>Time</cite> if this is called from
-such a subclass) at the current time.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -101,12 +70,20 @@ such a subclass) at the current time.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Time (pyobs.utils.time)</a><ul>
+<li><a class="reference internal" href="#time">Time</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">API</a><ul>
-  <li><a href="index.html">Utilities</a><ul>
-      <li>Previous: <a href="skyflats.html" title="previous chapter">Skyflats (pyobs.utils.skyflats)</a></li>
+  <li><a href="index.html">Utilities (pyobs.utils)</a><ul>
+      <li>Previous: <a href="skyflats.html" title="previous chapter">Sky flats (pyobs.utils.skyflats)</a></li>
       <li>Next: <a href="../../modules/index.html" title="next chapter">Modules</a></li>
   </ul></li>
   </ul></li>

@@ -49,22 +49,19 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs_gui"></span><div class="section" id="gui-pyobs-gui">
-<h1>GUI (pyobs_gui)<a class="headerlink" href="#gui-pyobs-gui" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs_gui">
+<span id="gui-pyobs-gui"></span><h1>GUI (pyobs_gui)<a class="headerlink" href="#module-pyobs_gui" title="Permalink to this headline">¶</a></h1>
 <p>TODO: write doc</p>
+<div class="section" id="gui">
+<h2>GUI<a class="headerlink" href="#gui" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs_gui.GUI">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">GUI</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_gui/gui.html#GUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_gui.GUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initializes a new pyobs module.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – Name of module. If None, ID from comm object is used.</p></li>
-<li><p><strong>label</strong> – Label for module. If None, name is used.</p></li>
-<li><p><strong>comm</strong> – Comm object to use</p></li>
-</ul>
-</dd>
-</dl>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">GUI</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_gui.GUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.IFitsHeaderProvider" title="pyobs.interfaces.IFitsHeaderProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFitsHeaderProvider</span></code></a></p>
+<p>Args:
+name: Name of module. If None, ID from comm object is used.
+label: Label for module. If None, name is used.
+comm: Comm object to use</p>
 <dl class="py method">
 <dt id="pyobs_gui.GUI.get_fits_headers">
 <code class="sig-name descname"><span class="pre">get_fits_headers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs_gui/gui.html#GUI.get_fits_headers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_gui.GUI.get_fits_headers" title="Permalink to this definition">¶</a></dt>
@@ -88,6 +85,7 @@
 </dd></dl>
 
 </div>
+</div>
 
 
             <div class="clearer"></div>
@@ -95,7 +93,15 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">GUI (pyobs_gui)</a><ul>
+<li><a class="reference internal" href="#gui">GUI</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="index.html">Modules</a><ul>

@@ -50,14 +50,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs.modules.utils"></span><div class="section" id="utility-modules-pyobs-modules-utils">
-<h1>Utility modules (pyobs.modules.utils)<a class="headerlink" href="#utility-modules-pyobs-modules-utils" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.modules.utils">
+<span id="utility-modules-pyobs-modules-utils"></span><h1>Utility modules (pyobs.modules.utils)<a class="headerlink" href="#module-pyobs.modules.utils" title="Permalink to this headline">¶</a></h1>
 <p>Utilities
 TODO: write doc</p>
+<div class="section" id="autonomouswarning">
+<h2>AutonomousWarning<a class="headerlink" href="#autonomouswarning" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.utils.AutonomousWarning">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AutonomousWarning</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">warn_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_interval</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">started_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopped_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">player</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'mpg123'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trigger_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/utils/autonomouswarning.html#AutonomousWarning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.AutonomousWarning" title="Permalink to this definition">¶</a></dt>
-<dd><p>A module that can plays a warning sound while an IAutonomous module is running.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AutonomousWarning</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">warn_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_interval</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">started_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopped_sound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">player</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'mpg123'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trigger_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.utils.AutonomousWarning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a></p>
+<p>A module that can plays a warning sound while an IAutonomous module is running.</p>
 <p>Initialize a new warning.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -75,69 +78,14 @@ Will be deleted afterwards.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py class">
-<dt id="pyobs.modules.utils.HttpFileCache">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HttpFileCache</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">37075</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_file_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/utils/httpfilecache.html#HttpFileCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.HttpFileCache" title="Permalink to this definition">¶</a></dt>
-<dd><p>A file cache based on a HTTP server.</p>
-<p>Initializes file cache.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>port</strong> – Port for HTTP server.</p></li>
-<li><p><strong>cache_size</strong> – Size of file cache, i.e. number of files to cache.</p></li>
-<li><p><strong>max_file_size</strong> – Maximum file size in MB.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="pyobs.modules.utils.HttpFileCache.close">
-<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/utils/httpfilecache.html#HttpFileCache.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.HttpFileCache.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close server.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.modules.utils.HttpFileCache.fetch">
-<code class="sig-name descname"><span class="pre">fetch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span> </span><span class="pre">bytearray</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../_modules/pyobs/modules/utils/httpfilecache.html#HttpFileCache.fetch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.HttpFileCache.fetch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send a file to the requesting client.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – Name of file to send.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Data of file.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.modules.utils.HttpFileCache.opened">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">opened</span></code><a class="headerlink" href="#pyobs.modules.utils.HttpFileCache.opened" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether the server is started.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.modules.utils.HttpFileCache.store">
-<code class="sig-name descname"><span class="pre">store</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bytearray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../../_modules/pyobs/modules/utils/httpfilecache.html#HttpFileCache.store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.HttpFileCache.store" title="Permalink to this definition">¶</a></dt>
-<dd><p>Store an incoming file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – Data to store.</p></li>
-<li><p><strong>filename</strong> – Filename to store as.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Filename in cache.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+</div>
+<div class="section" id="jobscheduler">
+<h2>JobScheduler<a class="headerlink" href="#jobscheduler" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.utils.JobScheduler">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">JobScheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/utils/jobscheduler.html#JobScheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.JobScheduler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Job scheduler.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">JobScheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.utils.JobScheduler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a></p>
+<p>Job scheduler.</p>
 <p>Initialize a new job scheduler.</p>
 <dl class="py method">
 <dt id="pyobs.modules.utils.JobScheduler.main">
@@ -153,10 +101,14 @@ Will be deleted afterwards.</p></li>
 
 </dd></dl>
 
+</div>
+<div class="section" id="kiosk">
+<h2>Kiosk<a class="headerlink" href="#kiosk" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.utils.Kiosk">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Kiosk</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><span class="pre">pyobs.interfaces.ICamera</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">37077</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/utils/kiosk.html#Kiosk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Kiosk" title="Permalink to this definition">¶</a></dt>
-<dd><p>A kiosk mode for a pyobs camera that takes images and published them via HTTP.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Kiosk</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><span class="pre">pyobs.interfaces.ICamera</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">37077</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.utils.Kiosk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tornado.web.Application</span></code>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IStoppable" title="pyobs.interfaces.IStoppable"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IStoppable</span></code></a></p>
+<p>A kiosk mode for a pyobs camera that takes images and published them via HTTP.</p>
 <p>Initializes file cache.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -204,10 +156,14 @@ Will be deleted afterwards.</p></li>
 
 </dd></dl>
 
+</div>
+<div class="section" id="scriptrunner">
+<h2>ScriptRunner<a class="headerlink" href="#scriptrunner" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.utils.ScriptRunner">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ScriptRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/utils/scriptrunner.html#ScriptRunner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.ScriptRunner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Config provider.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ScriptRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.utils.ScriptRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IScriptRunner" title="pyobs.interfaces.IScriptRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IScriptRunner</span></code></a></p>
+<p>Config provider.</p>
 <p>Initialize a new script runner.</p>
 <dl class="py method">
 <dt id="pyobs.modules.utils.ScriptRunner.run_script">
@@ -225,10 +181,14 @@ Will be deleted afterwards.</p></li>
 
 </dd></dl>
 
+</div>
+<div class="section" id="telegram">
+<h2>Telegram<a class="headerlink" href="#telegram" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.utils.Telegram">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Telegram</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_new_users</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/utils/telegram.html#Telegram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Telegram" title="Permalink to this definition">¶</a></dt>
-<dd><p>A telegram bot.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Telegram</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_new_users</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.utils.Telegram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a></p>
+<p>A telegram bot.</p>
 <p>Initialize a new bot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -253,10 +213,14 @@ Will be deleted afterwards.</p></li>
 
 </dd></dl>
 
+</div>
+<div class="section" id="trigger">
+<h2>Trigger<a class="headerlink" href="#trigger" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.utils.Trigger">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Trigger</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triggers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/utils/trigger.html#Trigger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.utils.Trigger" title="Permalink to this definition">¶</a></dt>
-<dd><p>A module that can call another module’s methods when a specific event occurs.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Trigger</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triggers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.utils.Trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IAutonomous" title="pyobs.interfaces.IAutonomous"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IAutonomous</span></code></a></p>
+<p>A module that can call another module’s methods when a specific event occurs.</p>
 <p>Initialize a new trigger module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -291,6 +255,7 @@ may contain a sender.</p>
 </dd></dl>
 
 </div>
+</div>
 
 
             <div class="clearer"></div>
@@ -298,7 +263,20 @@ may contain a sender.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Utility modules (pyobs.modules.utils)</a><ul>
+<li><a class="reference internal" href="#autonomouswarning">AutonomousWarning</a></li>
+<li><a class="reference internal" href="#jobscheduler">JobScheduler</a></li>
+<li><a class="reference internal" href="#kiosk">Kiosk</a></li>
+<li><a class="reference internal" href="#scriptrunner">ScriptRunner</a></li>
+<li><a class="reference internal" href="#telegram">Telegram</a></li>
+<li><a class="reference internal" href="#trigger">Trigger</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">Modules</a><ul>

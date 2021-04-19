@@ -14,8 +14,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Interfaces" href="interfaces.html" />
-    <link rel="prev" title="Environment" href="environment.html" />
+    <link rel="next" title="Interfaces (pyobs.interfaces)" href="interfaces.html" />
+    <link rel="prev" title="Environment (pyobs.environment)" href="environment.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -33,10 +33,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="interfaces.html" title="Interfaces"
+          <a href="interfaces.html" title="Interfaces (pyobs.interfaces)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="environment.html" title="Environment"
+          <a href="environment.html" title="Environment (pyobs.environment)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">API</a> &#187;</li>
@@ -49,9 +49,31 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs.vfs"></span><div class="section" id="virtual-file-system-pyobs-vfs">
-<h1>Virtual File System (pyobs.vfs)<a class="headerlink" href="#virtual-file-system-pyobs-vfs" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.vfs">
+<span id="virtual-file-system-pyobs-vfs"></span><h1>Virtual File System (pyobs.vfs)<a class="headerlink" href="#module-pyobs.vfs" title="Permalink to this headline">¶</a></h1>
 <p>TODO: write doc</p>
+<div class="section" id="virtualfilesystem">
+<h2>VirtualFileSystem<a class="headerlink" href="#virtualfilesystem" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.vfs.VirtualFileSystem">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">VirtualFileSystem</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roots</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base for a virtual file system.</p>
+<p>Create a new VFS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>roots</strong> – Dictionary containing roots.</p></li>
+<li><p><strong>compression</strong> – Dictionary containing files that should be compressed.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="file-access-classes">
+<h2>File Access Classes<a class="headerlink" href="#file-access-classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="archivefile">
+<h3>ArchiveFile<a class="headerlink" href="#archivefile" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.ArchiveFile">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ArchiveFile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'w'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.ArchiveFile" title="Permalink to this definition">¶</a></dt>
@@ -69,6 +91,9 @@
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="gzipreader">
+<h3>GzipReader<a class="headerlink" href="#gzipreader" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.GzipReader">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">GzipReader</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">close_fd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.GzipReader" title="Permalink to this definition">¶</a></dt>
@@ -83,110 +108,16 @@ decompressing data on the fly.</p>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="pyobs.vfs.GzipReader.close">
-<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipReader.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipReader.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close stream.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="pyobs.vfs.GzipReader.read">
-<code class="sig-name descname"><span class="pre">read</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bytearray</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipReader.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipReader.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read number of bytes from stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>size</strong> – Number of bytes to read, -1  reads until end of data.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Data read from stream.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.GzipReader.readable">
-<code class="sig-name descname"><span class="pre">readable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipReader.readable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipReader.readable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stream is readable.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.GzipReader.seek">
-<code class="sig-name descname"><span class="pre">seek</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipReader.seek"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipReader.seek" title="Permalink to this definition">¶</a></dt>
-<dd><p>Seek in stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>offset</strong> – Offset to move.</p></li>
-<li><p><strong>whence</strong> – Origin of move, i.e. beginning, current position, or end of stream.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.GzipReader.seekable">
-<code class="sig-name descname"><span class="pre">seekable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipReader.seekable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipReader.seekable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stream is seekable.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.GzipReader.tell">
-<code class="sig-name descname"><span class="pre">tell</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipReader.tell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipReader.tell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Give current position on stream.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyobs.vfs.GzipWriter">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">GzipWriter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">close_fd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipWriter" title="Permalink to this definition">¶</a></dt>
-<dd><p>A pipe object that takes a file-like object as input and acts itself like a stream,
-compressing data on the fly.</p>
-<p>Create a new GZIP writer pipe.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fd</strong> – File-like object.</p></li>
-<li><p><strong>close_fd</strong> – Whether or not to close the file afterwards. If False, caller has to close it by itself.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="pyobs.vfs.GzipWriter.close">
-<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipWriter.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipWriter.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close the stream.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.GzipWriter.flush">
-<code class="sig-name descname"><span class="pre">flush</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipWriter.flush"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipWriter.flush" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flush the stream.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.GzipWriter.writable">
-<code class="sig-name descname"><span class="pre">writable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipWriter.writable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipWriter.writable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stream is writable.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.GzipWriter.write">
-<code class="sig-name descname"><span class="pre">write</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bytearray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/gzippipe.html#GzipWriter.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.GzipWriter.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write data into the stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>b</strong> – Bytes of data to write.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+</div>
+<div class="section" id="httpfile">
+<h3>HttpFile<a class="headerlink" href="#httpfile" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.HttpFile">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">HttpFile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_tls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.HttpFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wraps a file on a HTTP server that can be accessed via GET/POST.
-Especially useful in combination with <a class="reference internal" href="../modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.HttpFileCache" title="pyobs.modules.utils.HttpFileCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.utils.HttpFileCache</span></code></a>.</p>
+Especially useful in combination with <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.utils.HttpFileCache</span></code>.</p>
 <p>Creates a new HTTP file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -201,83 +132,11 @@ Especially useful in combination with <a class="reference internal" href="../mod
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="pyobs.vfs.HttpFile.close">
-<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/httpfile.html#HttpFile.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.HttpFile.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close stream.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="pyobs.vfs.HttpFile.closed">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">closed</span></code><a class="headerlink" href="#pyobs.vfs.HttpFile.closed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether the stream is closed.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.HttpFile.read">
-<code class="sig-name descname"><span class="pre">read</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/httpfile.html#HttpFile.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.HttpFile.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read number of bytes from stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>size</strong> – Number of bytes to read. Read until end, if -1.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Read bytes.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.HttpFile.readable">
-<code class="sig-name descname"><span class="pre">readable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/httpfile.html#HttpFile.readable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.HttpFile.readable" title="Permalink to this definition">¶</a></dt>
-<dd><p>File is readable if it was opened in ‘r’ mode.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.HttpFile.seek">
-<code class="sig-name descname"><span class="pre">seek</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/httpfile.html#HttpFile.seek"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.HttpFile.seek" title="Permalink to this definition">¶</a></dt>
-<dd><p>Seek in stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>offset</strong> – Offset to move.</p></li>
-<li><p><strong>whence</strong> – Origin of move, i.e. beginning, current position, or end of stream.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.HttpFile.seekable">
-<code class="sig-name descname"><span class="pre">seekable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/httpfile.html#HttpFile.seekable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.HttpFile.seekable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stream is seekable.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.HttpFile.tell">
-<code class="sig-name descname"><span class="pre">tell</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/httpfile.html#HttpFile.tell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.HttpFile.tell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Give current position on stream.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.HttpFile.writable">
-<code class="sig-name descname"><span class="pre">writable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/httpfile.html#HttpFile.writable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.HttpFile.writable" title="Permalink to this definition">¶</a></dt>
-<dd><p>File is writable if it was opened in ‘w’ mode.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.HttpFile.write">
-<code class="sig-name descname"><span class="pre">write</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bytearray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/httpfile.html#HttpFile.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.HttpFile.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write data into the stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>b</strong> – Bytes of data to write.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+</div>
+<div class="section" id="localfile">
+<h3>LocalFile<a class="headerlink" href="#localfile" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.LocalFile">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">LocalFile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mkdir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.LocalFile" title="Permalink to this definition">¶</a></dt>
@@ -293,43 +152,11 @@ Especially useful in combination with <a class="reference internal" href="../mod
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="pyobs.vfs.LocalFile.exists">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">exists</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/pyobs/vfs/localfile.html#LocalFile.exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.LocalFile.exists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks, whether a given path or file exists.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> – Path to check.</p></li>
-<li><p><strong>root</strong> – VFS root.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Whether it exists or not</p>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="pyobs.vfs.LocalFile.find">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">find</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/pyobs/vfs/localfile.html#LocalFile.find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.LocalFile.find" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find files by pattern matching.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> – Path to search in.</p></li>
-<li><p><strong>pattern</strong> – Pattern to search for.</p></li>
-<li><p><strong>root</strong> – VFS root.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of found files.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+</div>
+<div class="section" id="memoryfile">
+<h3>MemoryFile<a class="headerlink" href="#memoryfile" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.MemoryFile">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">MemoryFile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.MemoryFile" title="Permalink to this definition">¶</a></dt>
@@ -343,83 +170,11 @@ Especially useful in combination with <a class="reference internal" href="../mod
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="pyobs.vfs.MemoryFile.close">
-<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/memfile.html#MemoryFile.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.MemoryFile.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close stream.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="pyobs.vfs.MemoryFile.closed">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">closed</span></code><a class="headerlink" href="#pyobs.vfs.MemoryFile.closed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether stream is closed.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.MemoryFile.read">
-<code class="sig-name descname"><span class="pre">read</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/memfile.html#MemoryFile.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.MemoryFile.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read number of bytes from stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>size</strong> – Number of bytes to read, -1  reads until end of data.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Data read from stream.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.MemoryFile.readable">
-<code class="sig-name descname"><span class="pre">readable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/memfile.html#MemoryFile.readable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.MemoryFile.readable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stream is readable if it was opened in ‘r’ mode.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.MemoryFile.seek">
-<code class="sig-name descname"><span class="pre">seek</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/memfile.html#MemoryFile.seek"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.MemoryFile.seek" title="Permalink to this definition">¶</a></dt>
-<dd><p>Seek in stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>offset</strong> – Offset to move.</p></li>
-<li><p><strong>whence</strong> – Origin of move, i.e. beginning, current position, or end of stream.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.MemoryFile.seekable">
-<code class="sig-name descname"><span class="pre">seekable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/memfile.html#MemoryFile.seekable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.MemoryFile.seekable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stream is seekable.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.MemoryFile.tell">
-<code class="sig-name descname"><span class="pre">tell</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/memfile.html#MemoryFile.tell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.MemoryFile.tell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Give current position on stream.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.MemoryFile.writable">
-<code class="sig-name descname"><span class="pre">writable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/memfile.html#MemoryFile.writable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.MemoryFile.writable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stream is readable if it was opened in ‘w’ mode.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.MemoryFile.write">
-<code class="sig-name descname"><span class="pre">write</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/memfile.html#MemoryFile.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.MemoryFile.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write data into the stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>b</strong> – Bytes of data to write.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+</div>
+<div class="section" id="sshfile">
+<h3>SSHFile<a class="headerlink" href="#sshfile" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.SSHFile">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SSHFile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bufsize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hostname</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyfile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mkdir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.SSHFile" title="Permalink to this definition">¶</a></dt>
@@ -443,9 +198,12 @@ Especially useful in combination with <a class="reference internal" href="../mod
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="tarfile">
+<h3>TarFile<a class="headerlink" href="#tarfile" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.TarFile">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TarFile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'rb'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyobs.vfs.filelists.filelist.FileList</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyobs.vfs.VirtualFileSystem" title="pyobs.vfs.VirtualFileSystem"><span class="pre">pyobs.vfs.VirtualFileSystem</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.TarFile" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TarFile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'rb'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyobs.vfs.filelists.FileList" title="pyobs.vfs.filelists.FileList"><span class="pre">pyobs.vfs.filelists.FileList</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyobs.vfs.VirtualFileSystem" title="pyobs.vfs.VirtualFileSystem"><span class="pre">pyobs.vfs.VirtualFileSystem</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.TarFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a TAR file from a list of input files.</p>
 <p>Open/create a new TAR file.</p>
 <dl class="field-list simple">
@@ -457,28 +215,11 @@ Especially useful in combination with <a class="reference internal" href="../mod
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="pyobs.vfs.TarFile.close">
-<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/tarfile.html#TarFile.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.TarFile.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close file.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="pyobs.vfs.TarFile.read">
-<code class="sig-name descname"><span class="pre">read</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bytes</span><a class="reference internal" href="../_modules/pyobs/vfs/tarfile.html#TarFile.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.TarFile.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read from the stream.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>size</strong> – Number of bytes to read.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Read bytes.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+</div>
+<div class="section" id="tempfile">
+<h3>TempFile<a class="headerlink" href="#tempfile" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.TempFile">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TempFile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'/tmp/pyobs/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mkdir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.TempFile" title="Permalink to this definition">¶</a></dt>
@@ -496,213 +237,40 @@ Especially useful in combination with <a class="reference internal" href="../mod
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="pyobs.vfs.TempFile.close">
-<code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/tempfile.html#TempFile.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.TempFile.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close file.</p>
 </dd></dl>
 
-</dd></dl>
-
+</div>
+<div class="section" id="vfsfile">
+<h3>VFSFile<a class="headerlink" href="#vfsfile" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.VFSFile">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">VFSFile</span></code><a class="headerlink" href="#pyobs.vfs.VFSFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all VFS file classes.</p>
 </dd></dl>
 
-<dl class="py class">
-<dt id="pyobs.vfs.VirtualFileSystem">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">VirtualFileSystem</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roots</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base for a virtual file system.</p>
-<p>Create a new VFS.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>roots</strong> – Dictionary containing roots.</p></li>
-<li><p><strong>compression</strong> – Dictionary containing files that should be compressed.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.exists">
-<code class="sig-name descname"><span class="pre">exists</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.exists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks, whether a given path or file exists.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> – Path to check.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Whether it exists or not</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.find">
-<code class="sig-name descname"><span class="pre">find</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.find" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find a file in the given path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> – Path to search in.</p></li>
-<li><p><strong>pattern</strong> – Pattern to search for.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of found files.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.open_file">
-<code class="sig-name descname"><span class="pre">open_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#pyobs.vfs.VFSFile" title="pyobs.vfs.VFSFile"><span class="pre">pyobs.vfs.VFSFile</span></a><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.open_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.open_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open a file. The handling class is chosen depending on the rootse in the filename.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Name of file to open.</p></li>
-<li><p><strong>mode</strong> (<em>str</em>) – Opening mode.</p></li>
-<li><p><strong>compression</strong> (<em>bool</em>) – Automatically (de)compress data if True. Automatically determine from filename if None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(IOBase) File like object for given file.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.read_csv">
-<code class="sig-name descname"><span class="pre">read_csv</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.read_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.read_csv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function for reading a CSV file into a DataFrame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – Name of file to read.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>DataFrame with content of file.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.read_fits_image">
-<code class="sig-name descname"><span class="pre">read_fits_image</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">astropy.io.fits.hdu.image.PrimaryHDU</span><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.read_fits_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.read_fits_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function that wraps around open_file() to read a FITS file and put it into a astropy FITS
-structure.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – Name of file to download.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A PrimaryHDU containing the FITS file.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.read_image">
-<code class="sig-name descname"><span class="pre">read_image</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="images.html#pyobs.images.Image" title="pyobs.images.Image"><span class="pre">pyobs.images.Image</span></a><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.read_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.read_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function that wraps around open_file() to read an Image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – Name of file to download.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An image object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.read_yaml">
-<code class="sig-name descname"><span class="pre">read_yaml</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.read_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.read_yaml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function for reading a YAML file into a dict.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – Name of file to read.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Content of file.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.split_root">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">split_root</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">tuple</span><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.split_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.split_root" title="Permalink to this definition">¶</a></dt>
-<dd><p>Splits the root from the rest of the path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to split.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(tuple) Tuple (root, filename).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.write_csv">
-<code class="sig-name descname"><span class="pre">write_csv</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.write_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.write_csv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function for writing a CSV file from a DataFrame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – DataFrame to write.</p></li>
-<li><p><strong>filename</strong> – Name of file to write.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.write_image">
-<code class="sig-name descname"><span class="pre">write_image</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="images.html#pyobs.images.Image" title="pyobs.images.Image"><span class="pre">pyobs.images.Image</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.write_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.write_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function for writing an Image to a FITS file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> – Name of file to write.</p></li>
-<li><p><strong>image</strong> – Image to write.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs.vfs.VirtualFileSystem.write_yaml">
-<code class="sig-name descname"><span class="pre">write_yaml</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/vfs.html#VirtualFileSystem.write_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.VirtualFileSystem.write_yaml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function for writing a YAML file from a dict.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – dict to write.</p></li>
-<li><p><strong>filename</strong> – Name of file to write.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </div>
-<span class="target" id="module-pyobs.vfs.filelists"></span><div class="section" id="file-lists-for-vfs-pyobs-vfs-filelists">
-<h1>File lists for VFS (pyobs.vfs.filelists)<a class="headerlink" href="#file-lists-for-vfs-pyobs-vfs-filelists" title="Permalink to this headline">¶</a></h1>
-<p>TODO: write doc</p>
+</div>
+<div class="section" id="file-lists">
+<h2>File Lists<a class="headerlink" href="#file-lists" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="filelist">
+<h3>FileList<a class="headerlink" href="#filelist" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.filelists.FileList">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">FileList</span></code><a class="reference internal" href="../_modules/pyobs/vfs/filelists/filelist.html#FileList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.filelists.FileList" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">FileList</span></code><a class="headerlink" href="#pyobs.vfs.filelists.FileList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for file lists.</p>
 </dd></dl>
 
+</div>
+<div class="section" id="testingfilelist">
+<h3>TestingFileList<a class="headerlink" href="#testingfilelist" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyobs.vfs.filelists.TestingFileList">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TestingFileList</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/vfs/filelists/testing.html#TestingFileList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.vfs.filelists.TestingFileList" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">TestingFileList</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.vfs.filelists.TestingFileList" title="Permalink to this definition">¶</a></dt>
 <dd><p>File list for testing.</p>
 </dd></dl>
 
+</div>
+</div>
 </div>
 
 
@@ -714,15 +282,34 @@ structure.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Virtual File System (pyobs.vfs)</a></li>
-<li><a class="reference internal" href="#file-lists-for-vfs-pyobs-vfs-filelists">File lists for VFS (pyobs.vfs.filelists)</a></li>
+<li><a class="reference internal" href="#">Virtual File System (pyobs.vfs)</a><ul>
+<li><a class="reference internal" href="#virtualfilesystem">VirtualFileSystem</a></li>
+<li><a class="reference internal" href="#file-access-classes">File Access Classes</a><ul>
+<li><a class="reference internal" href="#archivefile">ArchiveFile</a></li>
+<li><a class="reference internal" href="#gzipreader">GzipReader</a></li>
+<li><a class="reference internal" href="#httpfile">HttpFile</a></li>
+<li><a class="reference internal" href="#localfile">LocalFile</a></li>
+<li><a class="reference internal" href="#memoryfile">MemoryFile</a></li>
+<li><a class="reference internal" href="#sshfile">SSHFile</a></li>
+<li><a class="reference internal" href="#tarfile">TarFile</a></li>
+<li><a class="reference internal" href="#tempfile">TempFile</a></li>
+<li><a class="reference internal" href="#vfsfile">VFSFile</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-lists">File Lists</a><ul>
+<li><a class="reference internal" href="#filelist">FileList</a></li>
+<li><a class="reference internal" href="#testingfilelist">TestingFileList</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="index.html">API</a><ul>
-      <li>Previous: <a href="environment.html" title="previous chapter">Environment</a></li>
-      <li>Next: <a href="interfaces.html" title="next chapter">Interfaces</a></li>
+      <li>Previous: <a href="environment.html" title="previous chapter">Environment (pyobs.environment)</a></li>
+      <li>Next: <a href="interfaces.html" title="next chapter">Interfaces (pyobs.interfaces)</a></li>
   </ul></li>
   </ul></li>
 </ul>

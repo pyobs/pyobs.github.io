@@ -93,7 +93,7 @@ of a module that does nothing more than logging a given message continuously in 
 </pre></div>
 </div>
 <p>The constructor just calls the constructor of <a class="reference internal" href="api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a> and calls a method
-<a class="reference internal" href="api/object.html#pyobs.object.Object._add_thread_func" title="pyobs.object.Object._add_thread_func"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_add_thread_func()</span></code></a>, which takes a method that is run in an extra thread. In this case,
+<a class="reference internal" href="api/object.html#pyobs.object.Object.add_thread_func" title="pyobs.object.Object.add_thread_func"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_thread_func()</span></code></a>, which takes a method that is run in an extra thread. In this case,
 it is the method <code class="docutils literal notranslate"><span class="pre">thread_func()</span></code>, that does some logging in a loop until the program quits.</p>
 <p>The class method default_config() defines the default configuration for the module, and open() and close()
 are called when the module is opened and closed, respectively.</p>
@@ -139,7 +139,7 @@ property, e.g.:</p>
   <span class="n">jid</span><span class="p">:</span> <span class="n">some_module</span><span class="nd">@my</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">com</span>
 </pre></div>
 </div>
-<p>More details about this can be found in the <a class="reference internal" href="api/comm.html"><span class="doc">Communication between modules</span></a> section.</p>
+<p>More details about this can be found in the <a class="reference internal" href="api/comm.html"><span class="doc">Communication between modules (pyobs.comm)</span></a> section.</p>
 </div>
 <div class="section" id="virtual-file-system">
 <h2>Virtual File System<a class="headerlink" href="#virtual-file-system" title="Permalink to this headline">¶</a></h2>
@@ -177,7 +177,7 @@ via a SSH connection, by specifying <a class="reference internal" href="api/vfs.
 <div class="section" id="events">
 <h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
 <p>In addition to calling each other’s method, <em>pyobs</em> modules can also send and receive events. See more about this
-in <a class="reference internal" href="api/events.html"><span class="doc">Events</span></a>.</p>
+in <a class="reference internal" href="api/events.html"><span class="doc">Events (pyobs.events)</span></a>.</p>
 </div>
 </div>
 

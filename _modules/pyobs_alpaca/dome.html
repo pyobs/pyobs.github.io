@@ -59,7 +59,9 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;pyobs&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="AlpacaDome"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome">[docs]</a><span class="k">class</span> <span class="nc">AlpacaDome</span><span class="p">(</span><span class="n">FollowMixin</span><span class="p">,</span> <span class="n">BaseDome</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">AlpacaDome</span><span class="p">(</span><span class="n">FollowMixin</span><span class="p">,</span> <span class="n">BaseDome</span><span class="p">):</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs_alpaca&#39;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">park_az</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">180</span><span class="p">,</span> <span class="n">follow</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes a new ASCOM Alpaca telescope.</span>
@@ -73,7 +75,7 @@
 
         <span class="c1"># device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">AlpacaDevice</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_child_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
         
         <span class="c1"># store</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
@@ -92,7 +94,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_az</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># start thread</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_status</span><span class="p">)</span>
 
         <span class="c1"># mixins</span>
         <span class="n">FollowMixin</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">follow</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">IAltAz</span><span class="p">)</span>
@@ -307,7 +309,7 @@
         <span class="n">az</span> <span class="o">+=</span> <span class="mi">180</span>
         <span class="k">if</span> <span class="n">az</span> <span class="o">&gt;=</span> <span class="mi">360</span><span class="p">:</span>
             <span class="n">az</span> <span class="o">-=</span> <span class="mi">360</span>
-        <span class="k">return</span> <span class="n">az</span></div>
+        <span class="k">return</span> <span class="n">az</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AlpacaDome&#39;</span><span class="p">]</span>

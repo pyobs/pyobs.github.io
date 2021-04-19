@@ -121,33 +121,32 @@
 
 
 <div class="viewcode-block" id="Object"><a class="viewcode-back" href="../../api/object.html#pyobs.object.Object">[docs]</a><span class="k">class</span> <span class="nc">Object</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Base class for all objects in *pyobs*.</span>
-
-<span class="sd">    .. note::</span>
-
-<span class="sd">        Objects must always be opened and closed using :meth:`~pyobs.object.Object.open` and</span>
-<span class="sd">        :meth:`~pyobs.object.Object.close`, respectively.</span>
-
-<span class="sd">    This class provides a :class:`~pyobs.vfs.VirtualFileSystem`, a timezone and a location. From the latter two, an</span>
-<span class="sd">    observer object is automatically created.</span>
-
-<span class="sd">    Object also adds support for easily adding threads using the :meth:`~pyobs.object.Object._add_thread_func`</span>
-<span class="sd">    method as well as a watchdog thread that automatically restarts threads, if requested.</span>
-
-<span class="sd">    Using :meth:`~pyobs.object.Object._add_child_object`, other objects can be (created an) attached to this object,</span>
-<span class="sd">    which then automatically handles calls to :meth:`~pyobs.object.Object.open` and :meth:`~pyobs.object.Object.close`</span>
-<span class="sd">    on those objects.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all objects in *pyobs*.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vfs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pyobs</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">VirtualFileSystem</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">timezone</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">tzinfo</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;utc&#39;</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">EarthLocation</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initializes a new object.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Objects must always be opened and closed using :meth:`~pyobs.object.Object.open` and</span>
+<span class="sd">            :meth:`~pyobs.object.Object.close`, respectively.</span>
+
+<span class="sd">        This class provides a :class:`~pyobs.vfs.VirtualFileSystem`, a timezone and a location. From the latter two, an</span>
+<span class="sd">        observer object is automatically created.</span>
+
+<span class="sd">        Object also adds support for easily adding threads using the :meth:`~pyobs.object.Object.add_thread_func`</span>
+<span class="sd">        method as well as a watchdog thread that automatically restarts threads, if requested.</span>
+
+<span class="sd">        Using :meth:`~pyobs.object.Object.add_child_object`, other objects can be (created an) attached to this object,</span>
+<span class="sd">        which then automatically handles calls to :meth:`~pyobs.object.Object.open` and :meth:`~pyobs.object.Object.close`</span>
+<span class="sd">        on those objects.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            vfs: VFS to use (either object or config)</span>
 <span class="sd">            timezone: Timezone at observatory.</span>
 <span class="sd">            location: Location of observatory, either a name or a dict containing latitude, longitude, and elevation.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">pyobs.vfs</span> <span class="kn">import</span> <span class="n">VirtualFileSystem</span>
 
@@ -202,7 +201,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_watchdog</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_watchdog_func</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;watchdog&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Object._add_thread_func"><a class="viewcode-back" href="../../api/object.html#pyobs.object.Object._add_thread_func">[docs]</a>    <span class="k">def</span> <span class="nf">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">restart</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Object.add_thread_func"><a class="viewcode-back" href="../../api/object.html#pyobs.object.Object.add_thread_func">[docs]</a>    <span class="k">def</span> <span class="nf">add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">restart</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a new function that should be run in a thread.</span>
 
 <span class="sd">        MUST be called in constructor of derived class or at least before calling open() on the object.</span>
@@ -257,7 +256,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_watchdog</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
         <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">is_alive</span><span class="p">()]</span></div>
 
-<div class="viewcode-block" id="Object._thread_func"><a class="viewcode-back" href="../../api/object.html#pyobs.object.Object._thread_func">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_thread_func</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run given function.</span>
 
@@ -267,9 +266,9 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">target</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Exception in thread method </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">target</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Exception in thread method </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">target</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Object._watchdog_func"><a class="viewcode-back" href="../../api/object.html#pyobs.object.Object._watchdog_func">[docs]</a>    <span class="k">def</span> <span class="nf">_watchdog_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_watchdog_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Watchdog thread that tries to restart threads if they quit.&quot;&quot;&quot;</span>
 
         <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
@@ -293,7 +292,7 @@
                     <span class="k">return</span>
 
             <span class="c1"># sleep a little</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closing</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Object.check_running"><a class="viewcode-back" href="../../api/object.html#pyobs.object.Object.check_running">[docs]</a>    <span class="k">def</span> <span class="nf">check_running</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check, whether an object should be closing. Can be polled by long-running methods.</span>
@@ -305,8 +304,8 @@
             <span class="k">raise</span> <span class="ne">InterruptedError</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="Object._add_child_object"><a class="viewcode-back" href="../../api/object.html#pyobs.object.Object._add_child_object">[docs]</a>    <span class="k">def</span> <span class="nf">_add_child_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_or_object</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">object_class</span><span class="p">:</span> <span class="n">ObjectClass</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                          <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectClass</span><span class="p">:</span>
+<div class="viewcode-block" id="Object.add_child_object"><a class="viewcode-back" href="../../api/object.html#pyobs.object.Object.add_child_object">[docs]</a>    <span class="k">def</span> <span class="nf">add_child_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_or_object</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">object_class</span><span class="p">:</span> <span class="n">ObjectClass</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectClass</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Create a new sub-module, which will automatically be opened and closed.</span>
 
 <span class="sd">        Args:</span>

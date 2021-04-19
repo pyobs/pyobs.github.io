@@ -73,8 +73,9 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="Weather"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather">[docs]</a><span class="k">class</span> <span class="nc">Weather</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IWeather</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Weather</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IWeather</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Connection to pyobs-weather.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.modules.weather&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">system_init_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize a new pyobs-weather connector.</span>
@@ -98,7 +99,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_status_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
 
         <span class="c1"># add thread func</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_thread_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Weather.open"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open module.&quot;&quot;&quot;</span>
@@ -234,7 +235,7 @@
                 <span class="n">header</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dtype</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">comment</span><span class="p">)</span>
 
         <span class="c1"># finished</span>
-        <span class="k">return</span> <span class="n">header</span></div></div>
+        <span class="k">return</span> <span class="n">header</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Weather&#39;</span><span class="p">]</span>

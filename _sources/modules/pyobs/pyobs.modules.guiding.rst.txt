@@ -1,4 +1,26 @@
+Auto-guiding (pyobs.modules.guiding)
+------------------------------------
+
 .. automodule:: pyobs.modules.guiding
+
+AutoGuiding
+~~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.guiding.AutoGuiding
    :members:
-   :imported-members:
+   :show-inheritance:
+
+BaseGuiding
+~~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.guiding.BaseGuiding
+   :members:
+   :show-inheritance:
+
+ScienceFrameAutoGuiding
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.guiding.ScienceFrameAutoGuiding
+   :members:
+   :show-inheritance:
 

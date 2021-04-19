@@ -1,4 +1,5 @@
+Simulations (pyobs.utils.simulation)
+------------------------------------
+
 .. automodule:: pyobs.utils.simulation
-   :members:
-   :imported-members:
 

@@ -1,4 +1,47 @@
+Utility modules (pyobs.modules.utils)
+-------------------------------------
+
 .. automodule:: pyobs.modules.utils
+
+AutonomousWarning
+~~~~~~~~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.utils.AutonomousWarning
    :members:
-   :imported-members:
+   :show-inheritance:
+
+JobScheduler
+~~~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.utils.JobScheduler
+   :members:
+   :show-inheritance:
+
+Kiosk
+~~~~~
+
+.. autoclass:: pyobs.modules.utils.Kiosk
+   :members:
+   :show-inheritance:
+
+ScriptRunner
+~~~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.utils.ScriptRunner
+   :members:
+   :show-inheritance:
+
+Telegram
+~~~~~~~~
+
+.. autoclass:: pyobs.modules.utils.Telegram
+   :members:
+   :show-inheritance:
+
+Trigger
+~~~~~~~
+
+.. autoclass:: pyobs.modules.utils.Trigger
+   :members:
+   :show-inheritance:
 

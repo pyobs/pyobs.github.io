@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Astrometry (pyobs.modules.astrometry) &#8212; pyobs 0.12 documentation</title>
+    <title>Acquisition (pyobs.modules.acquisition) &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -41,7 +41,7 @@
         <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Core modules (pyobs.modules)</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Astrometry (pyobs.modules.astrometry)</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Acquisition (pyobs.modules.acquisition)</a></li> 
       </ul>
     </div>  
 
@@ -50,14 +50,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs.modules.acquisition"></span><div class="section" id="astrometry-pyobs-modules-astrometry">
-<h1>Astrometry (pyobs.modules.astrometry)<a class="headerlink" href="#astrometry-pyobs-modules-astrometry" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.modules.acquisition">
+<span id="acquisition-pyobs-modules-acquisition"></span><h1>Acquisition (pyobs.modules.acquisition)<a class="headerlink" href="#module-pyobs.modules.acquisition" title="Permalink to this headline">¶</a></h1>
 <p>Modules for performing acquisition.
 TODO: write doc</p>
+<div class="section" id="astrometryacquisition">
+<h2>AstrometryAcquisition<a class="headerlink" href="#astrometryacquisition" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.acquisition.AstrometryAcquisition">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AstrometryAcquisition</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_detection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/images.html#pyobs.images.processors.detection.SourceDetection" title="pyobs.images.processors.detection.SourceDetection"><span class="pre">pyobs.images.processors.detection.SourceDetection</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">astrometry</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/images.html#pyobs.images.processors.astrometry.Astrometry" title="pyobs.images.processors.astrometry.Astrometry"><span class="pre">pyobs.images.processors.astrometry.Astrometry</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/acquisition/astrometry.html#AstrometryAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.acquisition.AstrometryAcquisition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Module for acquiring telescope using astrometry.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">AstrometryAcquisition</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_detection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/images.html#pyobs.images.processors.detection.SourceDetection" title="pyobs.images.processors.detection.SourceDetection"><span class="pre">pyobs.images.processors.detection.SourceDetection</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">astrometry</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/images.html#pyobs.images.processors.astrometry.Astrometry" title="pyobs.images.processors.astrometry.Astrometry"><span class="pre">pyobs.images.processors.astrometry.Astrometry</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.acquisition.AstrometryAcquisition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyobs.modules.acquisition.BaseAcquisition" title="pyobs.modules.acquisition.BaseAcquisition"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.acquisition.BaseAcquisition</span></code></a></p>
+<p>Module for acquiring telescope using astrometry.</p>
 <p>Acquire using astrometry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -69,10 +72,14 @@ TODO: write doc</p>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="baseacquisition">
+<h2>BaseAcquisition<a class="headerlink" href="#baseacquisition" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.acquisition.BaseAcquisition">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseAcquisition</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">telescope</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ITelescope" title="pyobs.interfaces.ITelescope"><span class="pre">pyobs.interfaces.ITelescope</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><span class="pre">pyobs.interfaces.ICamera</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_pixel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attempts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_bin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/acquisition/base.html#BaseAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.acquisition.BaseAcquisition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for telescope acquisition.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseAcquisition</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">telescope</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ITelescope" title="pyobs.interfaces.ITelescope"><span class="pre">pyobs.interfaces.ITelescope</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><span class="pre">pyobs.interfaces.ICamera</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_pixel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attempts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_bin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.acquisition.BaseAcquisition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.camerasettings.CameraSettingsMixin</span></code>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IAcquisition" title="pyobs.interfaces.IAcquisition"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IAcquisition</span></code></a></p>
+<p>Base class for telescope acquisition.</p>
 <p>Create a new base acquisition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -116,6 +123,7 @@ coordinates.</p>
 </dd></dl>
 
 </div>
+</div>
 
 
             <div class="clearer"></div>
@@ -123,7 +131,16 @@ coordinates.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Acquisition (pyobs.modules.acquisition)</a><ul>
+<li><a class="reference internal" href="#astrometryacquisition">AstrometryAcquisition</a></li>
+<li><a class="reference internal" href="#baseacquisition">BaseAcquisition</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">Modules</a><ul>

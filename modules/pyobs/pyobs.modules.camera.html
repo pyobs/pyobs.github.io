@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Flatfielding (pyobs.modules.flatfield)" href="pyobs.modules.flatfield.html" />
-    <link rel="prev" title="Astrometry (pyobs.modules.astrometry)" href="pyobs.modules.acquisition.html" />
+    <link rel="prev" title="Acquisition (pyobs.modules.acquisition)" href="pyobs.modules.acquisition.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
@@ -36,7 +36,7 @@
           <a href="pyobs.modules.flatfield.html" title="Flatfielding (pyobs.modules.flatfield)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyobs.modules.acquisition.html" title="Astrometry (pyobs.modules.astrometry)"
+          <a href="pyobs.modules.acquisition.html" title="Acquisition (pyobs.modules.acquisition)"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li>
@@ -50,14 +50,18 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs.modules.camera"></span><div class="section" id="cameras-pyobs-modules-camera">
-<h1>Cameras (pyobs.modules.camera)<a class="headerlink" href="#cameras-pyobs-modules-camera" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.modules.camera">
+<span id="cameras-pyobs-modules-camera"></span><h1>Cameras (pyobs.modules.camera)<a class="headerlink" href="#module-pyobs.modules.camera" title="Permalink to this headline">¶</a></h1>
 <p>Camera modules.
 TODO: write doc</p>
+<div class="section" id="basecamera">
+<h2>BaseCamera<a class="headerlink" href="#basecamera" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.camera.BaseCamera">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fits_headers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flip</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'/cache/pyobs-{DAY-OBS|date:}-{FRAMENUM|string:04d}-{IMAGETYP|type}00.fits.gz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fits_namespaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/camera/basecamera.html#BaseCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.camera.BaseCamera" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a new BaseCamera.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fits_headers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centre</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flip</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'/cache/pyobs-{DAY-OBS|date:}-{FRAMENUM|string:04d}-{IMAGETYP|type}00.fits.gz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fits_namespaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.BaseCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ICamera</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICameraExposureTime" title="pyobs.interfaces.ICameraExposureTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ICameraExposureTime</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IImageType" title="pyobs.interfaces.IImageType"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IImageType</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IAbortable" title="pyobs.interfaces.IAbortable"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IAbortable</span></code></a></p>
+<p>Base class for all camera modules.</p>
+<p>Creates a new BaseCamera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -214,10 +218,14 @@ TODO: write doc</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="dummycamera">
+<h2>DummyCamera<a class="headerlink" href="#dummycamera" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.camera.DummyCamera">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">DummyCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">readout_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">SimWorld</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/camera/dummycamera.html#DummyCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.camera.DummyCamera" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dummy camera for testing.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">DummyCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">readout_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">SimWorld</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.camera.DummyCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyobs.modules.camera.BaseCamera" title="pyobs.modules.camera.BaseCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.camera.BaseCamera</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICameraWindow" title="pyobs.interfaces.ICameraWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ICameraWindow</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICameraBinning" title="pyobs.interfaces.ICameraBinning"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ICameraBinning</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ICooling" title="pyobs.interfaces.ICooling"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ICooling</span></code></a></p>
+<p>A dummy camera for testing.</p>
 <p>Creates a new dummy cammera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -344,6 +352,7 @@ Temperatures (dict):    Dictionary of sensor name/value pairs with temperatures<
 </dd></dl>
 
 </div>
+</div>
 
 
             <div class="clearer"></div>
@@ -351,12 +360,21 @@ Temperatures (dict):    Dictionary of sensor name/value pairs with temperatures<
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Cameras (pyobs.modules.camera)</a><ul>
+<li><a class="reference internal" href="#basecamera">BaseCamera</a></li>
+<li><a class="reference internal" href="#dummycamera">DummyCamera</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">Modules</a><ul>
   <li><a href="index.html">Core modules (pyobs.modules)</a><ul>
-      <li>Previous: <a href="pyobs.modules.acquisition.html" title="previous chapter">Astrometry (pyobs.modules.astrometry)</a></li>
+      <li>Previous: <a href="pyobs.modules.acquisition.html" title="previous chapter">Acquisition (pyobs.modules.acquisition)</a></li>
       <li>Next: <a href="pyobs.modules.flatfield.html" title="next chapter">Flatfielding (pyobs.modules.flatfield)</a></li>
   </ul></li>
   </ul></li>

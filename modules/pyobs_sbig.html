@@ -49,13 +49,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs_sbig"></span><div class="section" id="sbig-camera-modules-pyobs-sbig">
-<h1>SBIG camera modules (pyobs_sbig)<a class="headerlink" href="#sbig-camera-modules-pyobs-sbig" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs_sbig">
+<span id="sbig-camera-modules-pyobs-sbig"></span><h1>SBIG camera modules (pyobs_sbig)<a class="headerlink" href="#module-pyobs_sbig" title="Permalink to this headline">¶</a></h1>
 <p>TODO: write doc</p>
+<div class="section" id="sbig6303ecamera">
+<h2>Sbig6303eCamera<a class="headerlink" href="#sbig6303ecamera" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs_sbig.Sbig6303eCamera">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Sbig6303eCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_names</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbig6303e.html#Sbig6303eCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.Sbig6303eCamera" title="Permalink to this definition">¶</a></dt>
-<dd><p>A pyobs module for SBIG6303e cameras.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Sbig6303eCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_names</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.Sbig6303eCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyobs_sbig.SbigFilterCamera" title="pyobs_sbig.SbigFilterCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs_sbig.SbigFilterCamera</span></code></a></p>
+<p>A pyobs module for SBIG6303e cameras.</p>
 <p>Initializes a new SbigCamera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -64,10 +67,14 @@
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="sbigbasecamera">
+<h2>SbigBaseCamera<a class="headerlink" href="#sbigbasecamera" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs_sbig.SbigBaseCamera">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SbigBaseCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">sensor:</span> <span class="pre">Union[str</span></em>, <em class="sig-param"><span class="pre">pyobs_sbig.sbigudrv.ActiveSensor]</span> <span class="pre">=</span> <span class="pre">&lt;ActiveSensor.IMAGING:</span> <span class="pre">0&gt;</span></em>, <em class="sig-param"><span class="pre">driver:</span> <span class="pre">Optional[pyobs_sbig.sbigdriver.SbigDriver]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">*args</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigbasecamera.html#SbigBaseCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigBaseCamera" title="Permalink to this definition">¶</a></dt>
-<dd><p>A pyobs module for SBIG cameras.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SbigBaseCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">sensor:</span> <span class="pre">Union[str</span></em>, <em class="sig-param"><span class="pre">pyobs_sbig.sbigudrv.ActiveSensor]</span> <span class="pre">=</span> <span class="pre">&lt;ActiveSensor.IMAGING:</span> <span class="pre">0&gt;</span></em>, <em class="sig-param"><span class="pre">driver:</span> <span class="pre">Optional[pyobs_sbig.sbigdriver.SbigDriver]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">*args</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigBaseCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pyobs/pyobs.modules.camera.html#pyobs.modules.camera.BaseCamera" title="pyobs.modules.camera.BaseCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.camera.BaseCamera</span></code></a>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ICamera</span></code></a>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.ICameraWindow" title="pyobs.interfaces.ICameraWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ICameraWindow</span></code></a></p>
+<p>A pyobs module for SBIG cameras.</p>
 <p>Initializes a new SbigCamera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -128,10 +135,14 @@
 
 </dd></dl>
 
+</div>
+<div class="section" id="sbigcamera">
+<h2>SbigCamera<a class="headerlink" href="#sbigcamera" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs_sbig.SbigCamera">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SbigCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setpoint</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigcamera.html#SbigCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigCamera" title="Permalink to this definition">¶</a></dt>
-<dd><p>A pyobs module for SBIG cameras.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SbigCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setpoint</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyobs_sbig.SbigBaseCamera" title="pyobs_sbig.SbigBaseCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs_sbig.SbigBaseCamera</span></code></a>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.ICameraBinning" title="pyobs.interfaces.ICameraBinning"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ICameraBinning</span></code></a>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.ICooling" title="pyobs.interfaces.ICooling"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ICooling</span></code></a></p>
+<p>A pyobs module for SBIG cameras.</p>
 <p>Initializes a new SbigCamera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -220,92 +231,14 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </dd></dl>
 
-<dl class="py class">
-<dt id="pyobs_sbig.SbigDriver">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SbigDriver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_wheel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'UNKNOWN'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigdriver.html#SbigDriver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigDriver" title="Permalink to this definition">¶</a></dt>
-<dd><p>The underlying driver for the pyobs SBIG modules.</p>
-<p>Initializes a new SbigCamera.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filter_wheel</strong> – Name of filter wheel, if any.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="pyobs_sbig.SbigDriver.end_exposure">
-<code class="sig-name descname"><span class="pre">end_exposure</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs_sbig.sbigudrv.ActiveSensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigdriver.html#SbigDriver.end_exposure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigDriver.end_exposure" title="Permalink to this definition">¶</a></dt>
-<dd><p>End an exposure.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs_sbig.SbigDriver.full_frame">
-<code class="sig-name descname"><span class="pre">full_frame</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs_sbig.sbigudrv.ActiveSensor</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs_sbig/sbigdriver.html#SbigDriver.full_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigDriver.full_frame" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return full frame.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs_sbig.SbigDriver.has_exposure_finished">
-<code class="sig-name descname"><span class="pre">has_exposure_finished</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs_sbig.sbigudrv.ActiveSensor</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigdriver.html#SbigDriver.has_exposure_finished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigDriver.has_exposure_finished" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether an exposure has finished</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>sensor</strong> – Sensor to use for exposure.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Exposure finished or not.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs_sbig.SbigDriver.open">
-<code class="sig-name descname"><span class="pre">open</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigdriver.html#SbigDriver.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigDriver.open" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open module.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If cannot connect to camera or set filter wheel.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs_sbig.SbigDriver.readout">
-<code class="sig-name descname"><span class="pre">readout</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs_sbig.sbigudrv.ActiveSensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs_sbig.sbigudrv.SBIGImg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shutter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigdriver.html#SbigDriver.readout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigDriver.readout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Readout image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sensor</strong> – Camera to use for exposure.</p></li>
-<li><p><strong>img</strong> – Image to read into.</p></li>
-<li><p><strong>shutter</strong> – Whether shutter was open.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyobs_sbig.SbigDriver.start_exposure">
-<code class="sig-name descname"><span class="pre">start_exposure</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs_sbig.sbigudrv.ActiveSensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyobs_sbig.sbigudrv.SBIGImg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shutter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exposure_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigdriver.html#SbigDriver.start_exposure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigDriver.start_exposure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start an exposure.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sensor</strong> – Sensor to use for exposure.</p></li>
-<li><p><strong>img</strong> – Image to write into.</p></li>
-<li><p><strong>shutter</strong> – Whether to open shutter.</p></li>
-<li><p><strong>exposure_time</strong> – Exposure time in secs.</p></li>
-<li><p><strong>window</strong> – Window to use.</p></li>
-<li><p><strong>binning</strong> – Binning to use.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+</div>
+<div class="section" id="sbigfiltercamera">
+<h2>SbigFilterCamera<a class="headerlink" href="#sbigfiltercamera" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs_sbig.SbigFilterCamera">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SbigFilterCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_names</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigfiltercamera.html#SbigFilterCamera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigFilterCamera" title="Permalink to this definition">¶</a></dt>
-<dd><p>A pyobs module for SBIG cameras.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SbigFilterCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_names</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigFilterCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.motionstatus.MotionStatusMixin</span></code>, <a class="reference internal" href="#pyobs_sbig.SbigCamera" title="pyobs_sbig.SbigCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs_sbig.SbigCamera</span></code></a>, <a class="reference internal" href="../api/interfaces.html#pyobs.interfaces.IFilters" title="pyobs.interfaces.IFilters"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFilters</span></code></a></p>
+<p>A pyobs module for SBIG cameras.</p>
 <p>Initializes a new SbigCamera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -373,10 +306,14 @@ Power (float):          Current cooling power in percent or None.</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="sbigtracker">
+<h2>SbigTracker<a class="headerlink" href="#sbigtracker" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs_sbig.SbigTracker">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SbigTracker</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">sensor:</span> <span class="pre">Union[str</span></em>, <em class="sig-param"><span class="pre">pyobs_sbig.sbigudrv.ActiveSensor]</span> <span class="pre">=</span> <span class="pre">&lt;ActiveSensor.TRACKING:</span> <span class="pre">1&gt;</span></em>, <em class="sig-param"><span class="pre">*args</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs_sbig/sbigtracker.html#SbigTracker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs_sbig.SbigTracker" title="Permalink to this definition">¶</a></dt>
-<dd><p>A pyobs module for the tracker chip in some SBIG cameras.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SbigTracker</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">sensor:</span> <span class="pre">Union[str</span></em>, <em class="sig-param"><span class="pre">pyobs_sbig.sbigudrv.ActiveSensor]</span> <span class="pre">=</span> <span class="pre">&lt;ActiveSensor.TRACKING:</span> <span class="pre">1&gt;</span></em>, <em class="sig-param"><span class="pre">*args</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs_sbig.SbigTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyobs_sbig.SbigBaseCamera" title="pyobs_sbig.SbigBaseCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs_sbig.SbigBaseCamera</span></code></a></p>
+<p>A pyobs module for the tracker chip in some SBIG cameras.</p>
 <p>Initializes a new SbigTracker.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -386,6 +323,7 @@ Power (float):          Current cooling power in percent or None.</p>
 </dd></dl>
 
 </div>
+</div>
 
 
             <div class="clearer"></div>
@@ -393,7 +331,19 @@ Power (float):          Current cooling power in percent or None.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SBIG camera modules (pyobs_sbig)</a><ul>
+<li><a class="reference internal" href="#sbig6303ecamera">Sbig6303eCamera</a></li>
+<li><a class="reference internal" href="#sbigbasecamera">SbigBaseCamera</a></li>
+<li><a class="reference internal" href="#sbigcamera">SbigCamera</a></li>
+<li><a class="reference internal" href="#sbigfiltercamera">SbigFilterCamera</a></li>
+<li><a class="reference internal" href="#sbigtracker">SbigTracker</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="index.html">Modules</a><ul>

@@ -59,8 +59,9 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="AutoFocusSeries"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.focus.html#pyobs.modules.focus.AutoFocusSeries">[docs]</a><span class="k">class</span> <span class="nc">AutoFocusSeries</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">CameraSettingsMixin</span><span class="p">,</span> <span class="n">IAutoFocus</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">AutoFocusSeries</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">CameraSettingsMixin</span><span class="p">,</span> <span class="n">IAutoFocus</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Module for auto-focusing a telescope.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.modules.focus&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">focuser</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">],</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ICamera</span><span class="p">],</span> <span class="n">filters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">IFilters</span><span class="p">],</span>
                  <span class="n">series</span><span class="p">:</span> <span class="n">FocusSeries</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -256,7 +257,7 @@
 <div class="viewcode-block" id="AutoFocusSeries.abort"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.focus.html#pyobs.modules.focus.AutoFocusSeries.abort">[docs]</a>    <span class="nd">@timeout</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">abort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Abort current actions.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_abort</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AutoFocusSeries&#39;</span><span class="p">]</span>

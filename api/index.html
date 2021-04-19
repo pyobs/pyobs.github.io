@@ -14,7 +14,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Objects" href="object.html" />
+    <link rel="next" title="Objects (pyobs.object)" href="object.html" />
     <link rel="prev" title="Command Line Interface" href="../cli.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -33,7 +33,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="object.html" title="Objects"
+          <a href="object.html" title="Objects (pyobs.object)"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../cli.html" title="Command Line Interface"
@@ -53,25 +53,26 @@
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="object.html">Objects</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="object.html#object">Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="object.html#get-object">get_object</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="module.html">Modules</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="object.html">Objects (pyobs.object)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module.html">Modules (pyobs.modules)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module.html#module">Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html#multimodule">MultiModule</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="comm.html">Communication between modules</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="comm.html">Communication between modules (pyobs.comm)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="comm.html#comm">Comm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comm.html#xmppcomm">XmppComm</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="environment.html">Environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vfs.html">Virtual File System (pyobs.vfs)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vfs.html#file-lists-for-vfs-pyobs-vfs-filelists">File lists for VFS (pyobs.vfs.filelists)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="environment.html">Environment (pyobs.environment)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vfs.html">Virtual File System (pyobs.vfs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vfs.html#virtualfilesystem">VirtualFileSystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vfs.html#file-access-classes">File Access Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vfs.html#file-lists">File Lists</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces (pyobs.interfaces)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interfaces.html#list-of-interfaces">List of interfaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interfaces.html#iabortable">IAbortable</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interfaces.html#iacquisition">IAcquisition</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interfaces.html#ialtaz">IAltAz</a></li>
@@ -113,8 +114,9 @@
 <li class="toctree-l2"><a class="reference internal" href="interfaces.html#iweather">IWeather</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="events.html">Events</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events (pyobs.events)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="events.html#badweatherevent">BadWeatherEvent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#event">Event</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events.html#exposurestatuschangedevent">ExposureStatusChangedEvent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events.html#filterchangedevent">FilterChangedEvent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="events.html#focusfoundevent">FocusFoundEvent</a></li>
@@ -135,20 +137,18 @@
 <li class="toctree-l2"><a class="reference internal" href="events.html#variablesupdateevent">VariablesUpdateEvent</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="images.html">Images</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="images.html">Images (pyobs.images)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="images.html#image">Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="images.html#module-pyobs.images.processors.astrometry">Image Processors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="images.html#module-pyobs.images.processors.astrometry">Image Processors (pyobs.images.processors)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="utils/index.html">Utilities</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="utils/index.html">Utilities (pyobs.utils)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="utils/archive.html">Image archives (pyobs.utils.archive)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils/enums.html">Enumerations (pyobs.utils.enums)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils/fits.html">FITS utilities (pyobs.utils.fits)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils/focusseries.html">Focus series (pyobs.utils.focusseries)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils/simulation.html">Simulations (pyobs.utils.simulations)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils/skyflats.html">Skyflats (pyobs.utils.skyflats)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils/skyflats.html#sky-flat-pointings-pyobs-utils-skyflats-pointing">Sky flat pointings (pyobs.utils.skyflats.pointing)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils/skyflats.html#sky-flat-priorities-pyobs-utils-skyflats-priorities">Sky flat priorities (pyobs.utils.skyflats.priorities)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/simulation.html">Simulations (pyobs.utils.simulation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/skyflats.html">Sky flats (pyobs.utils.skyflats)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils/time.html">Time (pyobs.utils.time)</a></li>
 </ul>
 </li>
@@ -166,7 +166,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
       <li>Previous: <a href="../cli.html" title="previous chapter">Command Line Interface</a></li>
-      <li>Next: <a href="object.html" title="next chapter">Objects</a></li>
+      <li>Next: <a href="object.html" title="next chapter">Objects (pyobs.object)</a></li>
   </ul></li>
 </ul>
   <div role="note" aria-label="source link">

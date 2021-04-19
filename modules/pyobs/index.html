@@ -14,7 +14,7 @@
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Astrometry (pyobs.modules.astrometry)" href="pyobs.modules.acquisition.html" />
+    <link rel="next" title="Acquisition (pyobs.modules.acquisition)" href="pyobs.modules.acquisition.html" />
     <link rel="prev" title="Modules" href="../index.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -33,7 +33,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyobs.modules.acquisition.html" title="Astrometry (pyobs.modules.astrometry)"
+          <a href="pyobs.modules.acquisition.html" title="Acquisition (pyobs.modules.acquisition)"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../index.html" title="Modules"
@@ -54,18 +54,75 @@
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.acquisition.html">Astrometry (pyobs.modules.astrometry)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.camera.html">Cameras (pyobs.modules.camera)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.flatfield.html">Flatfielding (pyobs.modules.flatfield)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.focus.html">Focus (pyobs.modules.focus)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.guiding.html">Auto-guiding (pyobs.modules.guiding)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.image.html">Image operations (pyobs.modules.image)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.robotic.html">Robotic mode (pyobs.modules.robotic)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.roof.html">Roofs (pyobs.modules.roof)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.telescope.html">Telescopes (pyobs.modules.telescope)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.test.html">Test modules (pyobs.modules.test)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.utils.html">Utility modules (pyobs.modules.utils)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.weather.html">Weather (pyobs.modules.weather)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.acquisition.html">Acquisition (pyobs.modules.acquisition)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.acquisition.html#astrometryacquisition">AstrometryAcquisition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.acquisition.html#baseacquisition">BaseAcquisition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.camera.html">Cameras (pyobs.modules.camera)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.camera.html#basecamera">BaseCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.camera.html#dummycamera">DummyCamera</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.flatfield.html">Flatfielding (pyobs.modules.flatfield)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.flatfield.html#flatfield">FlatField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.flatfield.html#flatfieldpointing">FlatFieldPointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.flatfield.html#flatfieldscheduler">FlatFieldScheduler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.focus.html">Focus (pyobs.modules.focus)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.focus.html#autofocusprojection">AutoFocusProjection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.focus.html#autofocusseries">AutoFocusSeries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.focus.html#focusmodel">FocusModel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.guiding.html">Auto-guiding (pyobs.modules.guiding)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.guiding.html#autoguiding">AutoGuiding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.guiding.html#baseguiding">BaseGuiding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.guiding.html#scienceframeautoguiding">ScienceFrameAutoGuiding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.image.html">Image operations (pyobs.modules.image)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.image.html#imagewatcher">ImageWatcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.image.html#imagewriter">ImageWriter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.image.html#onlinereduction">OnlineReduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.image.html#seeing">Seeing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.robotic.html">Robotic mode (pyobs.modules.robotic)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.robotic.html#mastermind">Mastermind</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.robotic.html#pointingseries">PointingSeries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.robotic.html#scheduler">Scheduler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.roof.html">Roofs (pyobs.modules.roof)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.roof.html#basedome">BaseDome</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.roof.html#baseroof">BaseRoof</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.roof.html#dummyroof">DummyRoof</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.telescope.html">Telescopes (pyobs.modules.telescope)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.telescope.html#basetelescope">BaseTelescope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.telescope.html#dummytelescope">DummyTelescope</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.test.html">Test modules (pyobs.modules.test)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.test.html#standalone">StandAlone</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.utils.html">Utility modules (pyobs.modules.utils)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.utils.html#autonomouswarning">AutonomousWarning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.utils.html#jobscheduler">JobScheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.utils.html#kiosk">Kiosk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.utils.html#scriptrunner">ScriptRunner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.utils.html#telegram">Telegram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.utils.html#trigger">Trigger</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyobs.modules.weather.html">Weather (pyobs.modules.weather)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyobs.modules.weather.html#weather">Weather</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -81,7 +138,7 @@
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">Modules</a><ul>
       <li>Previous: <a href="../index.html" title="previous chapter">Modules</a></li>
-      <li>Next: <a href="pyobs.modules.acquisition.html" title="next chapter">Astrometry (pyobs.modules.astrometry)</a></li>
+      <li>Next: <a href="pyobs.modules.acquisition.html" title="next chapter">Acquisition (pyobs.modules.acquisition)</a></li>
   </ul></li>
   </ul></li>
 </ul>

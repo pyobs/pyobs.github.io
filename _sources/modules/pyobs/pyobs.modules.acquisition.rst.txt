@@ -1,4 +1,19 @@
+Acquisition (pyobs.modules.acquisition)
+---------------------------------------
+
 .. automodule:: pyobs.modules.acquisition
+
+AstrometryAcquisition
+~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.acquisition.AstrometryAcquisition
    :members:
-   :imported-members:
+   :show-inheritance:
+
+BaseAcquisition
+~~~~~~~~~~~~~~~
+
+.. autoclass:: pyobs.modules.acquisition.BaseAcquisition
+   :members:
+   :show-inheritance:
 

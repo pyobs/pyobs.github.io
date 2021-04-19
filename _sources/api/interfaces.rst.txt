@@ -1,9 +1,7 @@
-Interfaces
-==========
+Interfaces (pyobs.interfaces)
+=============================
 
-.. autoclass:: pyobs.interfaces.Interface
-   :members:
-   :show-inheritance:
+.. automodule:: pyobs.interfaces
 
 IAbortable
 ----------
@@ -11,6 +9,7 @@ IAbortable
 .. autoclass:: pyobs.interfaces.IAbortable
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IAcquisition
 ------------
@@ -18,6 +17,7 @@ IAcquisition
 .. autoclass:: pyobs.interfaces.IAcquisition
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IAltAz
 ------
@@ -25,6 +25,7 @@ IAltAz
 .. autoclass:: pyobs.interfaces.IAltAz
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IAltAzOffsets
 -------------
@@ -32,6 +33,7 @@ IAltAzOffsets
 .. autoclass:: pyobs.interfaces.IAltAzOffsets
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IAutoFocus
 ----------
@@ -39,6 +41,7 @@ IAutoFocus
 .. autoclass:: pyobs.interfaces.IAutoFocus
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IAutoGuiding
 ------------
@@ -46,6 +49,7 @@ IAutoGuiding
 .. autoclass:: pyobs.interfaces.IAutoGuiding
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IAutonomous
 -----------
@@ -53,6 +57,7 @@ IAutonomous
 .. autoclass:: pyobs.interfaces.IAutonomous
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ICalibrate
 ----------
@@ -60,6 +65,7 @@ ICalibrate
 .. autoclass:: pyobs.interfaces.ICalibrate
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ICamera
 -------
@@ -67,6 +73,7 @@ ICamera
 .. autoclass:: pyobs.interfaces.ICamera
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ICameraBinning
 --------------
@@ -74,6 +81,7 @@ ICameraBinning
 .. autoclass:: pyobs.interfaces.ICameraBinning
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ICameraExposureTime
 -------------------
@@ -81,6 +89,7 @@ ICameraExposureTime
 .. autoclass:: pyobs.interfaces.ICameraExposureTime
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ICameraWindow
 -------------
@@ -88,6 +97,7 @@ ICameraWindow
 .. autoclass:: pyobs.interfaces.ICameraWindow
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IConfig
 -------
@@ -95,6 +105,7 @@ IConfig
 .. autoclass:: pyobs.interfaces.IConfig
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ICooling
 --------
@@ -102,6 +113,7 @@ ICooling
 .. autoclass:: pyobs.interfaces.ICooling
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ICoordinatesQuery
 -----------------
@@ -109,6 +121,7 @@ ICoordinatesQuery
 .. autoclass:: pyobs.interfaces.ICoordinatesQuery
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IDome
 -----
@@ -116,6 +129,7 @@ IDome
 .. autoclass:: pyobs.interfaces.IDome
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IFilters
 --------
@@ -123,6 +137,7 @@ IFilters
 .. autoclass:: pyobs.interfaces.IFilters
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IFitsHeaderProvider
 -------------------
@@ -130,6 +145,7 @@ IFitsHeaderProvider
 .. autoclass:: pyobs.interfaces.IFitsHeaderProvider
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IFlatField
 ----------
@@ -137,6 +153,7 @@ IFlatField
 .. autoclass:: pyobs.interfaces.IFlatField
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IFocusModel
 -----------
@@ -144,6 +161,7 @@ IFocusModel
 .. autoclass:: pyobs.interfaces.IFocusModel
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IFocuser
 --------
@@ -151,6 +169,7 @@ IFocuser
 .. autoclass:: pyobs.interfaces.IFocuser
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IImageFormat
 ------------
@@ -158,6 +177,7 @@ IImageFormat
 .. autoclass:: pyobs.interfaces.IImageFormat
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IImageType
 ----------
@@ -165,6 +185,7 @@ IImageType
 .. autoclass:: pyobs.interfaces.IImageType
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ILatLon
 -------
@@ -172,6 +193,7 @@ ILatLon
 .. autoclass:: pyobs.interfaces.ILatLon
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IModule
 -------
@@ -179,6 +201,7 @@ IModule
 .. autoclass:: pyobs.interfaces.IModule
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IMotion
 -------
@@ -186,6 +209,7 @@ IMotion
 .. autoclass:: pyobs.interfaces.IMotion
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IPipeline
 ---------
@@ -193,6 +217,7 @@ IPipeline
 .. autoclass:: pyobs.interfaces.IPipeline
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IRaDec
 ------
@@ -200,6 +225,7 @@ IRaDec
 .. autoclass:: pyobs.interfaces.IRaDec
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IRaDecOffsets
 -------------
@@ -207,6 +233,7 @@ IRaDecOffsets
 .. autoclass:: pyobs.interfaces.IRaDecOffsets
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IReady
 ------
@@ -214,6 +241,7 @@ IReady
 .. autoclass:: pyobs.interfaces.IReady
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IRoof
 -----
@@ -221,6 +249,7 @@ IRoof
 .. autoclass:: pyobs.interfaces.IRoof
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IRotation
 ---------
@@ -228,6 +257,7 @@ IRotation
 .. autoclass:: pyobs.interfaces.IRotation
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IRunnable
 ---------
@@ -235,6 +265,7 @@ IRunnable
 .. autoclass:: pyobs.interfaces.IRunnable
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IScriptRunner
 -------------
@@ -242,6 +273,7 @@ IScriptRunner
 .. autoclass:: pyobs.interfaces.IScriptRunner
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IStoppable
 ----------
@@ -249,6 +281,7 @@ IStoppable
 .. autoclass:: pyobs.interfaces.IStoppable
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ISyncTarget
 -----------
@@ -256,6 +289,7 @@ ISyncTarget
 .. autoclass:: pyobs.interfaces.ISyncTarget
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ITelescope
 ----------
@@ -263,6 +297,7 @@ ITelescope
 .. autoclass:: pyobs.interfaces.ITelescope
    :members:
    :show-inheritance:
+   :undoc-members:
 
 ITemperatures
 -------------
@@ -270,6 +305,7 @@ ITemperatures
 .. autoclass:: pyobs.interfaces.ITemperatures
    :members:
    :show-inheritance:
+   :undoc-members:
 
 IWeather
 --------
@@ -277,4 +313,5 @@ IWeather
 .. autoclass:: pyobs.interfaces.IWeather
    :members:
    :show-inheritance:
+   :undoc-members:
 

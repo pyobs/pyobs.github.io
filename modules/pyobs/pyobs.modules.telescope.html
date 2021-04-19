@@ -50,14 +50,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-pyobs.modules.telescope"></span><div class="section" id="telescopes-pyobs-modules-telescope">
-<h1>Telescopes (pyobs.modules.telescope)<a class="headerlink" href="#telescopes-pyobs-modules-telescope" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyobs.modules.telescope">
+<span id="telescopes-pyobs-modules-telescope"></span><h1>Telescopes (pyobs.modules.telescope)<a class="headerlink" href="#module-pyobs.modules.telescope" title="Permalink to this headline">¶</a></h1>
 <p>Modules for telescopes.
 TODO: write doc</p>
+<div class="section" id="basetelescope">
+<h2>BaseTelescope<a class="headerlink" href="#basetelescope" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.telescope.BaseTelescope">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseTelescope</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fits_headers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_altitude</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_for_dome</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/telescope/basetelescope.html#BaseTelescope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for telescopes.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BaseTelescope</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fits_headers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_altitude</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_for_dome</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.telescope.BaseTelescope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.weatheraware.WeatherAwareMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.motionstatus.MotionStatusMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.waitformotion.WaitForMotionMixin</span></code>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ITelescope" title="pyobs.interfaces.ITelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ITelescope</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFitsHeaderProvider" title="pyobs.interfaces.IFitsHeaderProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFitsHeaderProvider</span></code></a>, <a class="reference internal" href="../../api/module.html#pyobs.modules.Module" title="pyobs.modules.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.Module</span></code></a></p>
+<p>Base class for telescopes.</p>
 <p>Initialize a new base telescope.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -150,10 +153,14 @@ TODO: write doc</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="dummytelescope">
+<h2>DummyTelescope<a class="headerlink" href="#dummytelescope" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.modules.telescope.DummyTelescope">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">DummyTelescope</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">world</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">SimWorld</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyobs/modules/telescope/dummytelescope.html#DummyTelescope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.modules.telescope.DummyTelescope" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dummy telescope for testing.</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">DummyTelescope</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">world</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">SimWorld</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.modules.telescope.DummyTelescope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyobs.modules.telescope.BaseTelescope" title="pyobs.modules.telescope.BaseTelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.modules.telescope.BaseTelescope</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IRaDecOffsets" title="pyobs.interfaces.IRaDecOffsets"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IRaDecOffsets</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFocuser" title="pyobs.interfaces.IFocuser"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFocuser</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFilters" title="pyobs.interfaces.IFilters"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFilters</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.IFitsHeaderProvider" title="pyobs.interfaces.IFitsHeaderProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IFitsHeaderProvider</span></code></a>, <a class="reference internal" href="../../api/interfaces.html#pyobs.interfaces.ITemperatures" title="pyobs.interfaces.ITemperatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ITemperatures</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.mixins.fitsnamespace.FitsNamespaceMixin</span></code></p>
+<p>A dummy telescope for testing.</p>
 <p>Creates a new dummy telescope.</p>
 <dl class="py method">
 <dt id="pyobs.modules.telescope.DummyTelescope.get_altaz">
@@ -347,6 +354,7 @@ TODO: write doc</p>
 </dd></dl>
 
 </div>
+</div>
 
 
             <div class="clearer"></div>
@@ -354,7 +362,16 @@ TODO: write doc</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Telescopes (pyobs.modules.telescope)</a><ul>
+<li><a class="reference internal" href="#basetelescope">BaseTelescope</a></li>
+<li><a class="reference internal" href="#dummytelescope">DummyTelescope</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">Modules</a><ul>

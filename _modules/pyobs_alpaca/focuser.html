@@ -58,13 +58,15 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="AlpacaFocuser"><a class="viewcode-back" href="../../modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaFocuser">[docs]</a><span class="k">class</span> <span class="nc">AlpacaFocuser</span><span class="p">(</span><span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">AlpacaFocuser</span><span class="p">(</span><span class="n">MotionStatusMixin</span><span class="p">,</span> <span class="n">IFocuser</span><span class="p">,</span> <span class="n">IFitsHeaderProvider</span><span class="p">,</span> <span class="n">Module</span><span class="p">):</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs_alpaca&#39;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">AlpacaDevice</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_child_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_child_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
         
         <span class="c1"># variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_focus_offset</span> <span class="o">=</span> <span class="mi">0</span>
@@ -232,7 +234,7 @@
         <span class="c1"># check that motion is not in one of the states listed below</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="o">.</span><span class="n">connected</span> <span class="ow">and</span> \
                <span class="bp">self</span><span class="o">.</span><span class="n">get_motion_status</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKED</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">INITIALIZING</span><span class="p">,</span>
-                                                <span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKING</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">]</span></div></div>
+                                                <span class="n">MotionStatus</span><span class="o">.</span><span class="n">PARKING</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">MotionStatus</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">]</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AlpacaFocuser&#39;</span><span class="p">]</span>

@@ -58,8 +58,9 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="FlatField"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField">[docs]</a><span class="k">class</span> <span class="nc">FlatField</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IFlatField</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">FlatField</span><span class="p">(</span><span class="n">Module</span><span class="p">,</span> <span class="n">IFlatField</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Module for auto-focusing a telescope.&quot;&quot;&quot;</span>
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.modules.flatfield&#39;</span>
 
 <div class="viewcode-block" id="FlatField.Twilight"><a class="viewcode-back" href="../../../../modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.Twilight">[docs]</a>    <span class="k">class</span> <span class="nc">Twilight</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
         <span class="n">DUSK</span> <span class="o">=</span> <span class="s1">&#39;dusk&#39;</span>
@@ -197,7 +198,7 @@
 
     <span class="k">def</span> <span class="nf">_abort_weather</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Abort on bad weather.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abort</span><span class="p">()</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FlatField&#39;</span><span class="p">]</span>
