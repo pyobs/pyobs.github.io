@@ -115,7 +115,7 @@ derived from <a class="reference internal" href="api/interfaces.html#pyobs.inter
 especially the location of the telescope and the local time. For this, the <code class="xref py py-class docutils literal notranslate"><span class="pre">Application</span></code> class
 has support for an additional module of type <a class="reference internal" href="api/environment.html#pyobs.environment.Environment" title="pyobs.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code></a>, which can be
 defined in the application’s configuration at top-level like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">timezone</span><span class="p">:</span> <span class="n">utc</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">timezone</span><span class="p">:</span> <span class="n">Africa</span><span class="o">/</span><span class="n">Johannesburg</span>
 <span class="n">location</span><span class="p">:</span>
   <span class="n">longitude</span><span class="p">:</span> <span class="mf">20.810808</span>
   <span class="n">latitude</span><span class="p">:</span> <span class="o">-</span><span class="mf">32.375823</span>
@@ -133,7 +133,7 @@ property, e.g.:</p>
 <div class="section" id="communication-between-modules">
 <h2>Communication between modules<a class="headerlink" href="#communication-between-modules" title="Permalink to this headline">¶</a></h2>
 <p>In case the module is supposed to communicate with others, we need another module of type
-<a class="reference internal" href="api/comm.html#pyobs.comm.comm.Comm" title="pyobs.comm.comm.Comm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comm</span></code></a>, which can be defined in the application’s configuration like this:</p>
+<a class="reference internal" href="api/comm.html#pyobs.comm.Comm" title="pyobs.comm.Comm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comm</span></code></a>, which can be defined in the application’s configuration like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comm</span><span class="p">:</span>
   <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
   <span class="n">jid</span><span class="p">:</span> <span class="n">some_module</span><span class="nd">@my</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">com</span>

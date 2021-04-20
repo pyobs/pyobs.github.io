@@ -69,6 +69,7 @@
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  | <a href="#X"><strong>X</strong></a>
+ | <a href="#Z"><strong>Z</strong></a>
  
 </div>
 <h2 id="_">_</h2>
@@ -222,22 +223,22 @@
 </li>
       <li><a href="api/object.html#pyobs.object.Object.check_running">check_running() (Object method)</a>
 </li>
-      <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm.client">client() (XmppComm property)</a>
+      <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.client">client() (XmppComm property)</a>
 </li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.clients">clients() (Comm property)</a>
+      <li><a href="api/comm.html#pyobs.comm.Comm.clients">clients() (Comm property)</a>
 
       <ul>
-        <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm.clients">(XmppComm property)</a>
+        <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.clients">(XmppComm property)</a>
 </li>
       </ul></li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.clients_with_interface">clients_with_interface() (Comm method)</a>
+      <li><a href="api/comm.html#pyobs.comm.Comm.clients_with_interface">clients_with_interface() (Comm method)</a>
 </li>
       <li><a href="modules/pyobs_asi.html#pyobs_asi.AsiCamera.close">close() (AsiCamera method)</a>
 
       <ul>
         <li><a href="modules/pyobs/pyobs.modules.focus.html#pyobs.modules.focus.AutoFocusSeries.close">(AutoFocusSeries method)</a>
 </li>
-        <li><a href="api/comm.html#pyobs.comm.comm.Comm.close">(Comm method)</a>
+        <li><a href="api/comm.html#pyobs.comm.Comm.close">(Comm method)</a>
 </li>
         <li><a href="modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.close">(FlatField method)</a>
 </li>
@@ -255,14 +256,14 @@
 </li>
         <li><a href="modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Telegram.close">(Telegram method)</a>
 </li>
-        <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm.close">(XmppComm method)</a>
+        <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.close">(XmppComm method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/pyobs/pyobs.modules.roof.html#pyobs.modules.roof.DummyRoof.close_roof">close_roof() (DummyRoof method)</a>
 </li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm">Comm (class in pyobs.comm.comm)</a>
+      <li><a href="api/comm.html#pyobs.comm.Comm">Comm (class in pyobs.comm)</a>
 </li>
       <li><a href="api/utils/skyflats.html#pyobs.utils.skyflats.priorities.ConstSkyflatPriorities">ConstSkyflatPriorities (class in pyobs.utils.skyflats.priorities)</a>
 </li>
@@ -320,12 +321,14 @@
       </ul></li>
       <li><a href="api/events.html#pyobs.events.Event">Event (class in pyobs.events)</a>
 </li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.execute">execute() (Comm method)</a>
+      <li><a href="api/comm.html#pyobs.comm.Comm.execute">execute() (Comm method)</a>
 
       <ul>
         <li><a href="api/module.html#pyobs.modules.Module.execute">(Module method)</a>
 </li>
-        <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm.execute">(XmppComm method)</a>
+        <li><a href="api/comm.html#pyobs.comm.Proxy.execute">(Proxy method)</a>
+</li>
+        <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.execute">(XmppComm method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -546,10 +549,10 @@
         <li><a href="api/interfaces.html#pyobs.interfaces.IImageType.get_image_type">(IImageType method)</a>
 </li>
       </ul></li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.get_interfaces">get_interfaces() (Comm method)</a>
+      <li><a href="api/comm.html#pyobs.comm.Comm.get_interfaces">get_interfaces() (Comm method)</a>
 
       <ul>
-        <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm.get_interfaces">(XmppComm method)</a>
+        <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.get_interfaces">(XmppComm method)</a>
 </li>
       </ul></li>
       <li><a href="api/interfaces.html#pyobs.interfaces.ILatLon.get_latlon">get_latlon() (ILatLon method)</a>
@@ -742,10 +745,14 @@
 </li>
       <li><a href="api/interfaces.html#pyobs.interfaces.Interface">Interface (class in pyobs.interfaces)</a>
 </li>
+      <li><a href="api/comm.html#pyobs.comm.Proxy.interface_method">interface_method() (Proxy method)</a>
+</li>
       <li><a href="api/module.html#pyobs.modules.Module.interfaces">interfaces() (Module property)</a>
+
+      <ul>
+        <li><a href="api/comm.html#pyobs.comm.Proxy.interfaces">(Proxy property)</a>
 </li>
-      <li><a href="api/interfaces.html#pyobs.interfaces.IPipeline">IPipeline (class in pyobs.interfaces)</a>
-</li>
+      </ul></li>
       <li><a href="api/interfaces.html#pyobs.interfaces.IRaDec">IRaDec (class in pyobs.interfaces)</a>
 </li>
       <li><a href="api/interfaces.html#pyobs.interfaces.IRaDecOffsets">IRaDecOffsets (class in pyobs.interfaces)</a>
@@ -854,9 +861,15 @@
 </li>
       <li><a href="api/vfs.html#pyobs.vfs.LocalFile">LocalFile (class in pyobs.vfs)</a>
 </li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.log_message">log_message() (Comm method)</a>
+      <li><a href="api/environment.html#pyobs.environment.Environment.localtime">localtime() (Environment method)</a>
+</li>
+      <li><a href="api/environment.html#pyobs.environment.Environment.location">location() (Environment property)</a>
+</li>
+      <li><a href="api/comm.html#pyobs.comm.Comm.log_message">log_message() (Comm method)</a>
 </li>
       <li><a href="api/events.html#pyobs.events.LogEvent">LogEvent (class in pyobs.events)</a>
+</li>
+      <li><a href="api/environment.html#pyobs.environment.Environment.lst">lst() (Environment method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -882,13 +895,15 @@
 </li>
       <li><a href="api/vfs.html#pyobs.vfs.MemoryFile">MemoryFile (class in pyobs.vfs)</a>
 </li>
+      <li><a href="api/comm.html#pyobs.comm.Proxy.method_names">method_names() (Proxy property)</a>
+</li>
       <li><a href="api/module.html#pyobs.modules.Module.methods">methods() (Module property)</a>
 </li>
       <li>
     module
 
       <ul>
-        <li><a href="api/comm.html#module-pyobs.comm.comm">pyobs.comm.comm</a>
+        <li><a href="api/comm.html#module-pyobs.comm">pyobs.comm</a>
 </li>
         <li><a href="api/environment.html#module-pyobs.environment">pyobs.environment</a>
 </li>
@@ -910,6 +925,8 @@
 </li>
         <li><a href="api/interfaces.html#module-pyobs.interfaces">pyobs.interfaces</a>
 </li>
+        <li><a href="api/module.html#module-pyobs.modules">pyobs.modules</a>
+</li>
         <li><a href="modules/pyobs/pyobs.modules.acquisition.html#module-pyobs.modules.acquisition">pyobs.modules.acquisition</a>
 </li>
         <li><a href="modules/pyobs/pyobs.modules.camera.html#module-pyobs.modules.camera">pyobs.modules.camera</a>
@@ -921,8 +938,6 @@
         <li><a href="modules/pyobs/pyobs.modules.guiding.html#module-pyobs.modules.guiding">pyobs.modules.guiding</a>
 </li>
         <li><a href="modules/pyobs/pyobs.modules.image.html#module-pyobs.modules.image">pyobs.modules.image</a>
-</li>
-        <li><a href="api/module.html#module-pyobs.modules.module">pyobs.modules.module</a>
 </li>
         <li><a href="modules/pyobs/pyobs.modules.robotic.html#module-pyobs.modules.robotic">pyobs.modules.robotic</a>
 </li>
@@ -973,7 +988,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/module.html#pyobs.modules.Module">Module (class in pyobs.modules)</a>
 </li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.module">module() (Comm property)</a>
+      <li><a href="api/comm.html#pyobs.comm.Comm.module">module() (Comm property)</a>
 </li>
       <li><a href="api/events.html#pyobs.events.ModuleClosedEvent">ModuleClosedEvent (class in pyobs.events)</a>
 </li>
@@ -1001,7 +1016,7 @@
         <li><a href="api/interfaces.html#pyobs.interfaces.IRaDec.move_radec">(IRaDec method)</a>
 </li>
       </ul></li>
-      <li><a href="api/module.html#pyobs.modules.module.MultiModule">MultiModule (class in pyobs.modules.module)</a>
+      <li><a href="api/module.html#pyobs.modules.MultiModule">MultiModule (class in pyobs.modules)</a>
 </li>
       <li><a href="pyobs-weather/stations/mysql.html#pyobs_weather.weather.stations.MySQL">MySQL (class in pyobs_weather.weather.stations)</a>
 </li>
@@ -1011,17 +1026,23 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.name">name() (Comm property)</a>
+      <li><a href="api/comm.html#pyobs.comm.Comm.name">name() (Comm property)</a>
 
       <ul>
         <li><a href="api/module.html#pyobs.modules.Module.name">(Module method)</a>
 </li>
-        <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm.name">(XmppComm property)</a>
+        <li><a href="api/comm.html#pyobs.comm.Proxy.name">(Proxy property)</a>
+</li>
+        <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.name">(XmppComm property)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/events.html#pyobs.events.NewImageEvent">NewImageEvent (class in pyobs.events)</a>
+</li>
+      <li><a href="api/environment.html#pyobs.environment.Environment.night_obs">night_obs() (Environment method)</a>
+</li>
+      <li><a href="api/environment.html#pyobs.environment.Environment.now">now() (Environment method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1062,7 +1083,7 @@
 </li>
         <li><a href="modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.BaseTelescope.open">(BaseTelescope method)</a>
 </li>
-        <li><a href="api/comm.html#pyobs.comm.comm.Comm.open">(Comm method)</a>
+        <li><a href="api/comm.html#pyobs.comm.Comm.open">(Comm method)</a>
 </li>
         <li><a href="modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.DummyTelescope.open">(DummyTelescope method)</a>
 </li>
@@ -1106,7 +1127,7 @@
 </li>
         <li><a href="modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather.open">(Weather method)</a>
 </li>
-        <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm.open">(XmppComm method)</a>
+        <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.open">(XmppComm method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1169,17 +1190,19 @@
 </li>
       <li><a href="api/utils/focusseries.html#pyobs.utils.focusseries.ProjectionFocusSeries">ProjectionFocusSeries (class in pyobs.utils.focusseries)</a>
 </li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.proxy">proxy() (Comm method)</a>
+      <li><a href="api/comm.html#pyobs.comm.Proxy">Proxy (class in pyobs.comm)</a>
+</li>
+      <li><a href="api/comm.html#pyobs.comm.Comm.proxy">proxy() (Comm method)</a>
 
       <ul>
         <li><a href="api/module.html#pyobs.modules.Module.proxy">(Module method)</a>
 </li>
       </ul></li>
       <li>
-    pyobs.comm.comm
+    pyobs.comm
 
       <ul>
-        <li><a href="api/comm.html#module-pyobs.comm.comm">module</a>
+        <li><a href="api/comm.html#module-pyobs.comm">module</a>
 </li>
       </ul></li>
       <li>
@@ -1253,6 +1276,13 @@
 </li>
       </ul></li>
       <li>
+    pyobs.modules
+
+      <ul>
+        <li><a href="api/module.html#module-pyobs.modules">module</a>
+</li>
+      </ul></li>
+      <li>
     pyobs.modules.acquisition
 
       <ul>
@@ -1273,6 +1303,8 @@
         <li><a href="modules/pyobs/pyobs.modules.flatfield.html#module-pyobs.modules.flatfield">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyobs.modules.focus
 
@@ -1280,8 +1312,6 @@
         <li><a href="modules/pyobs/pyobs.modules.focus.html#module-pyobs.modules.focus">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyobs.modules.guiding
 
@@ -1294,13 +1324,6 @@
 
       <ul>
         <li><a href="modules/pyobs/pyobs.modules.image.html#module-pyobs.modules.image">module</a>
-</li>
-      </ul></li>
-      <li>
-    pyobs.modules.module
-
-      <ul>
-        <li><a href="api/module.html#module-pyobs.modules.module">module</a>
 </li>
       </ul></li>
       <li>
@@ -1481,12 +1504,10 @@
 </li>
       <li><a href="api/utils/enums.html#pyobs.utils.enums.ExposureStatus.READOUT">READOUT (ExposureStatus attribute)</a>
 </li>
-      <li><a href="api/interfaces.html#pyobs.interfaces.IPipeline.reduce_range">reduce_range() (IPipeline method)</a>
-</li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.register_event">register_event() (Comm method)</a>
+      <li><a href="api/comm.html#pyobs.comm.Comm.register_event">register_event() (Comm method)</a>
 
       <ul>
-        <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm.register_event">(XmppComm method)</a>
+        <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.register_event">(XmppComm method)</a>
 </li>
       </ul></li>
       <li><a href="api/utils/enums.html#pyobs.utils.enums.ImageFormat.RGB24">RGB24 (ImageFormat attribute)</a>
@@ -1539,10 +1560,10 @@
 </li>
       <li><a href="modules/pyobs/pyobs.modules.image.html#pyobs.modules.image.Seeing">Seeing (class in pyobs.modules.image)</a>
 </li>
-      <li><a href="api/comm.html#pyobs.comm.comm.Comm.send_event">send_event() (Comm method)</a>
+      <li><a href="api/comm.html#pyobs.comm.Comm.send_event">send_event() (Comm method)</a>
 
       <ul>
-        <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm.send_event">(XmppComm method)</a>
+        <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.send_event">(XmppComm method)</a>
 </li>
       </ul></li>
       <li><a href="api/images.html#pyobs.images.processors.photometry.SepPhotometry">SepPhotometry (class in pyobs.images.processors.photometry)</a>
@@ -1653,6 +1674,8 @@
         <li><a href="modules/pyobs_sbig.html#pyobs_sbig.SbigBaseCamera.set_window">(SbigBaseCamera method)</a>
 </li>
       </ul></li>
+      <li><a href="api/comm.html#pyobs.comm.Proxy.signature">signature() (Proxy method)</a>
+</li>
       <li><a href="api/utils/enums.html#pyobs.utils.enums.ImageType.SKYFLAT">SKYFLAT (ImageType attribute)</a>
 </li>
       <li><a href="api/utils/skyflats.html#pyobs.utils.skyflats.priorities.SkyflatPriorities">SkyflatPriorities (class in pyobs.utils.skyflats.priorities)</a>
@@ -1721,6 +1744,8 @@
         <li><a href="api/interfaces.html#pyobs.interfaces.IMotion.stop_motion">(IMotion method)</a>
 </li>
       </ul></li>
+      <li><a href="api/environment.html#pyobs.environment.Environment.sun">sun() (Environment method)</a>
+</li>
       <li><a href="pyobs-weather/evaluators/switch.html#pyobs_weather.weather.evaluators.Switch">Switch (class in pyobs_weather.weather.evaluators)</a>
 </li>
       <li><a href="modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaTelescope.sync_target">sync_target() (AlpacaTelescope method)</a>
@@ -1749,15 +1774,21 @@
 </li>
       <li><a href="api/vfs.html#pyobs.vfs.TempFile">TempFile (class in pyobs.vfs)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/events.html#pyobs.events.TestEvent">TestEvent (class in pyobs.events)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/vfs.html#pyobs.vfs.filelists.TestingFileList">TestingFileList (class in pyobs.vfs.filelists)</a>
 </li>
       <li><a href="api/utils/time.html#pyobs.utils.time.Time">Time (class in pyobs.utils.time)</a>
 </li>
       <li><a href="api/utils/enums.html#pyobs.utils.enums.WeatherSensors.TIME">TIME (WeatherSensors attribute)</a>
+</li>
+      <li><a href="api/environment.html#pyobs.environment.Environment.timezone">timezone() (Environment property)</a>
+</li>
+      <li><a href="api/environment.html#pyobs.environment.Environment.to_altaz">to_altaz() (Environment method)</a>
+</li>
+      <li><a href="api/environment.html#pyobs.environment.Environment.to_radec">to_radec() (Environment method)</a>
 </li>
       <li><a href="api/interfaces.html#pyobs.interfaces.IRotation.track">track() (IRotation method)</a>
 </li>
@@ -1831,7 +1862,15 @@
 <h2 id="X">X</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/comm.html#pyobs.comm.xmpp.xmppcomm.XmppComm">XmppComm (class in pyobs.comm.xmpp.xmppcomm)</a>
+      <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm">XmppComm (class in pyobs.comm.xmpp)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/environment.html#pyobs.environment.Environment.zenith_position">zenith_position() (Environment method)</a>
 </li>
   </ul></td>
 </tr></table>

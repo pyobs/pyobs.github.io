@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyobs.interfaces.IScriptRunner &#8212; pyobs 0.12 documentation</title>
+    <title>pyobs.vfs.filelists &#8212; pyobs 0.12 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -32,8 +32,8 @@
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">pyobs 0.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../interfaces.html" accesskey="U">pyobs.interfaces</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">pyobs.interfaces.IScriptRunner</a></li> 
+          <li class="nav-item nav-item-2"><a href="../vfs.html" accesskey="U">pyobs.vfs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs.vfs.filelists</a></li> 
       </ul>
     </div>  
 
@@ -42,24 +42,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for pyobs.interfaces.IScriptRunner</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.interface</span> <span class="kn">import</span> <span class="o">*</span>
-
-
-<span class="k">class</span> <span class="nc">IScriptRunner</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The module can execute a script.&quot;&quot;&quot;</span>
-    <span class="vm">__module__</span> <span class="o">=</span> <span class="s1">&#39;pyobs.interfaces&#39;</span>
-
-<div class="viewcode-block" id="IScriptRunner.run_script"><a class="viewcode-back" href="../../../api/interfaces.html#pyobs.interfaces.IScriptRunner.run_script">[docs]</a>    <span class="k">def</span> <span class="nf">run_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Run the given script.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            script: Script to run.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
-
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;IScriptRunner&#39;</span><span class="p">]</span>
+  <h1>Source code for pyobs.vfs.filelists</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.filelist</span> <span class="kn">import</span> <span class="n">FileList</span>
+<span class="kn">from</span> <span class="nn">.testing</span> <span class="kn">import</span> <span class="n">TestingFileList</span>
 </pre></div>
 
             <div class="clearer"></div>
@@ -71,7 +56,7 @@
 <ul>
   <li><a href="../../../index.html">Documentation index</a><ul>
   <li><a href="../../index.html">Module code</a><ul>
-  <li><a href="../interfaces.html">pyobs.interfaces</a><ul>
+  <li><a href="../vfs.html">pyobs.vfs</a><ul>
   </ul></li>
   </ul></li>
   </ul></li>

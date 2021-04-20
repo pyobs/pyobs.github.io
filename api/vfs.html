@@ -51,7 +51,58 @@
             
   <div class="section" id="module-pyobs.vfs">
 <span id="virtual-file-system-pyobs-vfs"></span><h1>Virtual File System (pyobs.vfs)<a class="headerlink" href="#module-pyobs.vfs" title="Permalink to this headline">¶</a></h1>
-<p>TODO: write doc</p>
+<p>A virtual file system (VFS) is a convenient way for allowing access to different resources with a  common interface.
+It also makes it easy to change the actual place of storage without any changes to the code. In <em>pyobs</em>, a path into
+the VFS looks like a normal path on a Unix-like system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">ext</span>
+</pre></div>
+</div>
+<p>To be more precise, a path is built like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/&lt;</span><span class="n">root</span><span class="o">&gt;/&lt;</span><span class="n">path</span><span class="o">&gt;/&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;root&gt;</span></code> indicates, which VFS to use, <code class="docutils literal notranslate"><span class="pre">&lt;path&gt;</span></code> is the path within that VFS and <cite>&lt;filename&gt;</cite> is the actual
+filename.</p>
+<p>The available roots in the <em>pyobs</em> VFS are usually defined in the configuration file like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vfs</span><span class="p">:</span>
+    <span class="n">root1</span><span class="p">:</span>
+        <span class="n">class</span><span class="p">:</span> <span class="n">VfsClass1</span>
+    <span class="n">root2</span><span class="p">:</span>
+        <span class="n">class</span><span class="p">:</span> <span class="n">VfsClass2</span>
+</pre></div>
+</div>
+<p>With this configuration, all filenames that start with <code class="docutils literal notranslate"><span class="pre">/root1/</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">/root1/path/filename.ext</span></code>) are handled
+by <code class="docutils literal notranslate"><span class="pre">VfsClass1</span></code>, while all filenames starting with <code class="docutils literal notranslate"><span class="pre">/root2/</span></code> use <code class="docutils literal notranslate"><span class="pre">VfsClass2</span></code>. Both defined classes can have
+additional parameters, which should also be given in the configuration.</p>
+<p>With this example, one can easily see the advantages of using a VFS:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>File access to all roots look similar, we always open a filename like <code class="docutils literal notranslate"><span class="pre">/root/path/file.ext</span></code>.</p></li>
+<li><p>Changing the handling class for one of the roots changes the way we access a file. For instance, if
+a file was always stored locally, but now we want to change that to a location using a SSH location, this can
+easily be accomplished by simply changing the configuration.</p></li>
+<li><p>Another advantage that we have not mentioned before is, that the same roots can use different handling classes on
+different machines. See below for details.</p></li>
+</ol>
+</div></blockquote>
+<p>Imagine a file <code class="docutils literal notranslate"><span class="pre">/storage/file.ext</span></code> that maps to a local file on machine A, i.e. <code class="docutils literal notranslate"><span class="pre">storage</span></code> uses a handling class
+that simply changes the filename to a local filename. On machine B we can now define the same root <code class="docutils literal notranslate"><span class="pre">storage</span></code>, but use
+a different handling class that, e.g., accesses the file via SSH. Still, the filename would be the same on both
+machines. So A could store a file as <code class="docutils literal notranslate"><span class="pre">/storage/file.ext</span></code>, send the filename to B, which then can access the file
+via the same filename.</p>
+<dl class="simple">
+<dt>Currently supported are these types of file access:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#pyobs.vfs.LocalFile" title="pyobs.vfs.LocalFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocalFile</span></code></a>: Local file on the machine the module is running on.</p></li>
+<li><p><a class="reference internal" href="#pyobs.vfs.HttpFile" title="pyobs.vfs.HttpFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">HttpFile</span></code></a>: File on a HTTP server.</p></li>
+<li><p><a class="reference internal" href="#pyobs.vfs.MemoryFile" title="pyobs.vfs.MemoryFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryFile</span></code></a>: File in memory.</p></li>
+<li><p><a class="reference internal" href="#pyobs.vfs.SSHFile" title="pyobs.vfs.SSHFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSHFile</span></code></a>: File on different machine that is accessible via SSH.</p></li>
+<li><p><a class="reference internal" href="#pyobs.vfs.TarFile" title="pyobs.vfs.TarFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">TarFile</span></code></a>: Wrapper for a dynamically created TAR file. Can only be read from.</p></li>
+<li><p><a class="reference internal" href="#pyobs.vfs.TempFile" title="pyobs.vfs.TempFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">TempFile</span></code></a>: Temporary file that will be deleted after being closed.</p></li>
+<li><p><a class="reference internal" href="#pyobs.vfs.ArchiveFile" title="pyobs.vfs.ArchiveFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArchiveFile</span></code></a>: Wrapper for a file in the <a class="reference internal" href="../pyobs-archive/index.html#pyobs-archive"><span class="std std-ref">pyobs-archive</span></a> image archive.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The base class for all of these classes is <a class="reference internal" href="#pyobs.vfs.VFSFile" title="pyobs.vfs.VFSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">VFSFile</span></code></a>.</p>
 <div class="section" id="virtualfilesystem">
 <h2>VirtualFileSystem<a class="headerlink" href="#virtualfilesystem" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
@@ -62,7 +113,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>roots</strong> – Dictionary containing roots.</p></li>
+<li><p><strong>roots</strong> – Dictionary containing roots, see <a class="reference internal" href="#module-pyobs.vfs" title="pyobs.vfs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">vfs</span></code></a> for examples.</p></li>
 <li><p><strong>compression</strong> – Dictionary containing files that should be compressed.</p></li>
 </ul>
 </dd>

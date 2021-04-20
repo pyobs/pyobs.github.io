@@ -61,15 +61,13 @@ procedure calls. The base class for all interfaces in <em>pyobs</em> is:</p>
 
 <p>Modules need to implement the required interfaces. For instance, if a module operates a camera, it probably should
 implement <a class="reference internal" href="#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">ICamera</span></code></a>.</p>
-<div class="section" id="list-of-interfaces">
-<h2>List of interfaces<a class="headerlink" href="#list-of-interfaces" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="iabortable">
 <h2>IAbortable<a class="headerlink" href="#iabortable" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IAbortable">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IAbortable</span></code><a class="headerlink" href="#pyobs.interfaces.IAbortable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The module has an abortable action.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IAbortable.abort">
 <code class="sig-name descname"><span class="pre">abort</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IAbortable.html#IAbortable.abort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAbortable.abort" title="Permalink to this definition">¶</a></dt>
@@ -85,6 +83,7 @@ implement <a class="reference internal" href="#pyobs.interfaces.ICamera" title="
 <dt id="pyobs.interfaces.IAcquisition">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IAcquisition</span></code><a class="headerlink" href="#pyobs.interfaces.IAcquisition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The module can acquire a target, usually by accessing a telescope and a camera.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IAcquisition.acquire_target">
 <code class="sig-name descname"><span class="pre">acquire_target</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exposure_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/interfaces/IAcquisition.html#IAcquisition.acquire_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAcquisition.acquire_target" title="Permalink to this definition">¶</a></dt>
@@ -113,7 +112,7 @@ coordinates.</p>
 <dt id="pyobs.interfaces.IAltAz">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IAltAz</span></code><a class="headerlink" href="#pyobs.interfaces.IAltAz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Base interface for everything that can move to Alt/Az coordinates.</p>
+<p>The module can move to Alt/Az coordinates, usually combined with <a class="reference internal" href="#pyobs.interfaces.ITelescope" title="pyobs.interfaces.ITelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITelescope</span></code></a>.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IAltAz.get_altaz">
 <code class="sig-name descname"><span class="pre">get_altaz</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAz.html#IAltAz.get_altaz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAz.get_altaz" title="Permalink to this definition">¶</a></dt>
@@ -151,7 +150,8 @@ coordinates.</p>
 <dt id="pyobs.interfaces.IAltAzOffsets">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IAltAzOffsets</span></code><a class="headerlink" href="#pyobs.interfaces.IAltAzOffsets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Telescopes on an altaz mount should also implement this interface.</p>
+<p>The module supports Alt/Az offsets, usually combined with <a class="reference internal" href="#pyobs.interfaces.ITelescope" title="pyobs.interfaces.ITelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITelescope</span></code></a> and
+<a class="reference internal" href="#pyobs.interfaces.IAltAz" title="pyobs.interfaces.IAltAz"><code class="xref py py-class docutils literal notranslate"><span class="pre">IAltAz</span></code></a>.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IAltAzOffsets.get_altaz_offsets">
 <code class="sig-name descname"><span class="pre">get_altaz_offsets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IAltAzOffsets.html#IAltAzOffsets.get_altaz_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAltAzOffsets.get_altaz_offsets" title="Permalink to this definition">¶</a></dt>
@@ -189,6 +189,7 @@ coordinates.</p>
 <dt id="pyobs.interfaces.IAutoFocus">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IAutoFocus</span></code><a class="headerlink" href="#pyobs.interfaces.IAutoFocus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IAbortable" title="pyobs.interfaces.IAbortable"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IAbortable</span></code></a></p>
+<p>The module can perform an auto-focus.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IAutoFocus.auto_focus">
 <code class="sig-name descname"><span class="pre">auto_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exposure_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IAutoFocus.html#IAutoFocus.auto_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutoFocus.auto_focus" title="Permalink to this definition">¶</a></dt>
@@ -234,6 +235,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.interfaces.IAutoGuiding">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IAutoGuiding</span></code><a class="headerlink" href="#pyobs.interfaces.IAutoGuiding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IStoppable" title="pyobs.interfaces.IStoppable"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IStoppable</span></code></a></p>
+<p>The module can perform auto-guiding.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IAutoGuiding.set_exposure_time">
 <code class="sig-name descname"><span class="pre">set_exposure_time</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exposure_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IAutoGuiding.html#IAutoGuiding.set_exposure_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IAutoGuiding.set_exposure_time" title="Permalink to this definition">¶</a></dt>
@@ -254,7 +256,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.interfaces.IAutonomous">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IAutonomous</span></code><a class="headerlink" href="#pyobs.interfaces.IAutonomous" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IStoppable" title="pyobs.interfaces.IStoppable"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IStoppable</span></code></a></p>
-<p>Base class for all modules that act autonomously.</p>
+<p>The module does some autonomous actions, mainly used for warnings to users.</p>
 </dd></dl>
 
 </div>
@@ -264,7 +266,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.interfaces.ICalibrate">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ICalibrate</span></code><a class="headerlink" href="#pyobs.interfaces.ICalibrate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Interface for devices that can be calibrated.</p>
+<p>The module can calibrate a device.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ICalibrate.calibrate">
 <code class="sig-name descname"><span class="pre">calibrate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICalibrate.html#ICalibrate.calibrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICalibrate.calibrate" title="Permalink to this definition">¶</a></dt>
@@ -280,7 +282,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.interfaces.ICamera">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ICamera</span></code><a class="headerlink" href="#pyobs.interfaces.ICamera" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IAbortable" title="pyobs.interfaces.IAbortable"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IAbortable</span></code></a></p>
-<p>Basic interface for all cameras.</p>
+<p>The module controls a camera.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ICamera.abort">
 <code class="sig-name descname"><span class="pre">abort</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICamera.html#ICamera.abort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICamera.abort" title="Permalink to this definition">¶</a></dt>
@@ -337,6 +339,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.interfaces.ICameraBinning">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ICameraBinning</span></code><a class="headerlink" href="#pyobs.interfaces.ICameraBinning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The camera supports binning, to be used together with <a class="reference internal" href="#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">ICamera</span></code></a>.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ICameraBinning.get_binning">
 <code class="sig-name descname"><span class="pre">get_binning</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraBinning.html#ICameraBinning.get_binning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraBinning.get_binning" title="Permalink to this definition">¶</a></dt>
@@ -385,6 +388,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.interfaces.ICameraExposureTime">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ICameraExposureTime</span></code><a class="headerlink" href="#pyobs.interfaces.ICameraExposureTime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The camera supports exposure times, to be used together with <a class="reference internal" href="#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">ICamera</span></code></a>.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ICameraExposureTime.get_exposure_time">
 <code class="sig-name descname"><span class="pre">get_exposure_time</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraExposureTime.html#ICameraExposureTime.get_exposure_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraExposureTime.get_exposure_time" title="Permalink to this definition">¶</a></dt>
@@ -430,6 +434,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.interfaces.ICameraWindow">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ICameraWindow</span></code><a class="headerlink" href="#pyobs.interfaces.ICameraWindow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The camera supports windows, to be used together with <a class="reference internal" href="#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">ICamera</span></code></a>.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ICameraWindow.get_full_frame">
 <code class="sig-name descname"><span class="pre">get_full_frame</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ICameraWindow.html#ICameraWindow.get_full_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICameraWindow.get_full_frame" title="Permalink to this definition">¶</a></dt>
@@ -480,7 +485,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.interfaces.IConfig">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IConfig</span></code><a class="headerlink" href="#pyobs.interfaces.IConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Interface for getting/setting values that were configured in the YAML file.</p>
+<p>The module allows access to some of its configuration options.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IConfig.get_config_options">
 <code class="sig-name descname"><span class="pre">get_config_options</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IConfig.html#IConfig.get_config_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IConfig.get_config_options" title="Permalink to this definition">¶</a></dt>
@@ -535,7 +540,7 @@ step size. With count=3, step=1 and guess=10, this takes images at the following
 <dt id="pyobs.interfaces.ICooling">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ICooling</span></code><a class="headerlink" href="#pyobs.interfaces.ICooling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.ITemperatures" title="pyobs.interfaces.ITemperatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.ITemperatures</span></code></a></p>
-<p>Interface for all devices that allow for some kind of cooling.</p>
+<p>The module can control the cooling of a device.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ICooling.get_cooling_status">
 <code class="sig-name descname"><span class="pre">get_cooling_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ICooling.html#ICooling.get_cooling_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICooling.get_cooling_status" title="Permalink to this definition">¶</a></dt>
@@ -582,6 +587,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.ICoordinatesQuery">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ICoordinatesQuery</span></code><a class="headerlink" href="#pyobs.interfaces.ICoordinatesQuery" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The module perfoms a search for coordinates.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ICoordinatesQuery.query_coordinates_by_name">
 <code class="sig-name descname"><span class="pre">query_coordinates_by_name</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/pyobs/interfaces/ICoordinatesQuery.html#ICoordinatesQuery.query_coordinates_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ICoordinatesQuery.query_coordinates_by_name" title="Permalink to this definition">¶</a></dt>
@@ -618,7 +624,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IDome">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IDome</span></code><a class="headerlink" href="#pyobs.interfaces.IDome" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IRoof" title="pyobs.interfaces.IRoof"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IRoof</span></code></a>, <a class="reference internal" href="#pyobs.interfaces.IAltAz" title="pyobs.interfaces.IAltAz"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IAltAz</span></code></a></p>
-<p>Base interface for all shelters with a rotating dome.</p>
+<p>The module controls a dome, i.e. a <a class="reference internal" href="#pyobs.interfaces.IRoof" title="pyobs.interfaces.IRoof"><code class="xref py py-class docutils literal notranslate"><span class="pre">IRoof</span></code></a> with a rotating roof.</p>
 </dd></dl>
 
 </div>
@@ -628,6 +634,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IFilters">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IFilters</span></code><a class="headerlink" href="#pyobs.interfaces.IFilters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IMotion" title="pyobs.interfaces.IMotion"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IMotion</span></code></a></p>
+<p>The module can change filters in a device.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IFilters.get_filter">
 <code class="sig-name descname"><span class="pre">get_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFilters.html#IFilters.get_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFilters.get_filter" title="Permalink to this definition">¶</a></dt>
@@ -673,6 +680,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IFitsHeaderProvider">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IFitsHeaderProvider</span></code><a class="headerlink" href="#pyobs.interfaces.IFitsHeaderProvider" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The module provides some additional header entries for FITS headers.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IFitsHeaderProvider.get_fits_headers">
 <code class="sig-name descname"><span class="pre">get_fits_headers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IFitsHeaderProvider.html#IFitsHeaderProvider.get_fits_headers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFitsHeaderProvider.get_fits_headers" title="Permalink to this definition">¶</a></dt>
@@ -696,6 +704,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IFlatField">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IFlatField</span></code><a class="headerlink" href="#pyobs.interfaces.IFlatField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IAbortable" title="pyobs.interfaces.IAbortable"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IAbortable</span></code></a></p>
+<p>The module performs flat-fielding.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IFlatField.flat_field">
 <code class="sig-name descname"><span class="pre">flat_field</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IFlatField.html#IFlatField.flat_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFlatField.flat_field" title="Permalink to this definition">¶</a></dt>
@@ -735,6 +744,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IFocusModel">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IFocusModel</span></code><a class="headerlink" href="#pyobs.interfaces.IFocusModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The module provides a model for the telescope focus, e.g. based on temperatures.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IFocusModel.get_optimal_focus">
 <code class="sig-name descname"><span class="pre">get_optimal_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFocusModel.html#IFocusModel.get_optimal_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocusModel.get_optimal_focus" title="Permalink to this definition">¶</a></dt>
@@ -756,7 +766,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IFocuser">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IFocuser</span></code><a class="headerlink" href="#pyobs.interfaces.IFocuser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IMotion" title="pyobs.interfaces.IMotion"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IMotion</span></code></a></p>
-<p>Generic focussing device with states corresponding to IMotionDevice.MotionState.</p>
+<p>The module is a focusing device.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IFocuser.get_focus">
 <code class="sig-name descname"><span class="pre">get_focus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/IFocuser.html#IFocuser.get_focus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IFocuser.get_focus" title="Permalink to this definition">¶</a></dt>
@@ -816,7 +826,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IImageFormat">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IImageFormat</span></code><a class="headerlink" href="#pyobs.interfaces.IImageFormat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>For cameras supporting different image formats, e.g. INT16 or RGB24</p>
+<p>The module supports different image formats (e.g. INT16, FLOAT32), mainly used by cameras.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IImageFormat.get_image_format">
 <code class="sig-name descname"><span class="pre">get_image_format</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="utils/enums.html#pyobs.utils.enums.ImageFormat" title="pyobs.utils.enums.ImageFormat"><span class="pre">pyobs.utils.enums.ImageFormat</span></a><a class="reference internal" href="../_modules/pyobs/interfaces/IImageFormat.html#IImageFormat.get_image_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageFormat.get_image_format" title="Permalink to this definition">¶</a></dt>
@@ -862,6 +872,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IImageType">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IImageType</span></code><a class="headerlink" href="#pyobs.interfaces.IImageType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The module supports different image types (e.g. object, bias, dark, etc), mainly used by cameras.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IImageType.get_image_type">
 <code class="sig-name descname"><span class="pre">get_image_type</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="utils/enums.html#pyobs.utils.enums.ImageType" title="pyobs.utils.enums.ImageType"><span class="pre">pyobs.utils.enums.ImageType</span></a><a class="reference internal" href="../_modules/pyobs/interfaces/IImageType.html#IImageType.get_image_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IImageType.get_image_type" title="Permalink to this definition">¶</a></dt>
@@ -893,7 +904,8 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.ILatLon">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ILatLon</span></code><a class="headerlink" href="#pyobs.interfaces.ILatLon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Base interface for everything that can move to Lat/Lon coordinates.</p>
+<p>The module can move to general Lat/Lon coordinates, which have to be defined by the module itself.
+Usually combined with <a class="reference internal" href="#pyobs.interfaces.ITelescope" title="pyobs.interfaces.ITelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITelescope</span></code></a>.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ILatLon.get_latlon">
 <code class="sig-name descname"><span class="pre">get_latlon</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/ILatLon.html#ILatLon.get_latlon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ILatLon.get_latlon" title="Permalink to this definition">¶</a></dt>
@@ -931,6 +943,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IModule">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IModule</span></code><a class="headerlink" href="#pyobs.interfaces.IModule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The module is actually a module. Implemented by all modules.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IModule.label">
 <code class="sig-name descname"><span class="pre">label</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/pyobs/interfaces/IModule.html#IModule.label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IModule.label" title="Permalink to this definition">¶</a></dt>
@@ -946,9 +959,7 @@ Power:    Current cooling power in percent or None.</p>
 <dt id="pyobs.interfaces.IMotion">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IMotion</span></code><a class="headerlink" href="#pyobs.interfaces.IMotion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IReady" title="pyobs.interfaces.IReady"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IReady</span></code></a></p>
-<p>Basic interface for all devices that move.</p>
-<p>There are no generic motion methods - these have to be defined in daughter
-interfaces.</p>
+<p>The module controls a device that can move.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IMotion.get_motion_status">
 <code class="sig-name descname"><span class="pre">get_motion_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="utils/enums.html#pyobs.utils.enums.MotionStatus" title="pyobs.utils.enums.MotionStatus"><span class="pre">pyobs.utils.enums.MotionStatus</span></a><a class="reference internal" href="../_modules/pyobs/interfaces/IMotion.html#IMotion.get_motion_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IMotion.get_motion_status" title="Permalink to this definition">¶</a></dt>
@@ -999,36 +1010,13 @@ interfaces.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="ipipeline">
-<h2>IPipeline<a class="headerlink" href="#ipipeline" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="pyobs.interfaces.IPipeline">
-<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IPipeline</span></code><a class="headerlink" href="#pyobs.interfaces.IPipeline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<dl class="py method">
-<dt id="pyobs.interfaces.IPipeline.reduce_range">
-<code class="sig-name descname"><span class="pre">reduce_range</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="utils/time.html#pyobs.utils.time.Time" title="pyobs.utils.time.Time"><span class="pre">pyobs.utils.time.Time</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="utils/time.html#pyobs.utils.time.Time" title="pyobs.utils.time.Time"><span class="pre">pyobs.utils.time.Time</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IPipeline.html#IPipeline.reduce_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IPipeline.reduce_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reduces all data within a given range of time.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>start</strong> – Start of time range.</p></li>
-<li><p><strong>end</strong> – End of time range.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
 <div class="section" id="iradec">
 <h2>IRaDec<a class="headerlink" href="#iradec" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyobs.interfaces.IRaDec">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IRaDec</span></code><a class="headerlink" href="#pyobs.interfaces.IRaDec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Base interface for everything that can move to RA/Dec coordinates.</p>
+<p>The module can move to RA/Dec coordinates, usually combined with <a class="reference internal" href="#pyobs.interfaces.ITelescope" title="pyobs.interfaces.ITelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITelescope</span></code></a>.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IRaDec.get_radec">
 <code class="sig-name descname"><span class="pre">get_radec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDec.html#IRaDec.get_radec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDec.get_radec" title="Permalink to this definition">¶</a></dt>
@@ -1067,7 +1055,8 @@ interfaces.</p>
 <dt id="pyobs.interfaces.IRaDecOffsets">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IRaDecOffsets</span></code><a class="headerlink" href="#pyobs.interfaces.IRaDecOffsets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Interface for any device that supports offsets in RA/Dec.</p>
+<p>The module supports RA/Dec offsets, usually combined with <a class="reference internal" href="#pyobs.interfaces.ITelescope" title="pyobs.interfaces.ITelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITelescope</span></code></a> and
+<a class="reference internal" href="#pyobs.interfaces.IRaDec" title="pyobs.interfaces.IRaDec"><code class="xref py py-class docutils literal notranslate"><span class="pre">IRaDec</span></code></a>.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IRaDecOffsets.get_radec_offsets">
 <code class="sig-name descname"><span class="pre">get_radec_offsets</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/pyobs/interfaces/IRaDecOffsets.html#IRaDecOffsets.get_radec_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRaDecOffsets.get_radec_offsets" title="Permalink to this definition">¶</a></dt>
@@ -1105,7 +1094,7 @@ interfaces.</p>
 <dt id="pyobs.interfaces.IReady">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IReady</span></code><a class="headerlink" href="#pyobs.interfaces.IReady" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Interface for all devices that can be “not ready” for science and need to be initialized in some way.</p>
+<p>The module can be in a “not ready” state for science and need to be initialized in some way.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IReady.is_ready">
 <code class="sig-name descname"><span class="pre">is_ready</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/pyobs/interfaces/IReady.html#IReady.is_ready"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IReady.is_ready" title="Permalink to this definition">¶</a></dt>
@@ -1126,7 +1115,7 @@ interfaces.</p>
 <dt id="pyobs.interfaces.IRoof">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IRoof</span></code><a class="headerlink" href="#pyobs.interfaces.IRoof" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IMotion" title="pyobs.interfaces.IMotion"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IMotion</span></code></a></p>
-<p>Base interface for all observatory enclosures.</p>
+<p>The module controls a roof.</p>
 </dd></dl>
 
 </div>
@@ -1136,6 +1125,7 @@ interfaces.</p>
 <dt id="pyobs.interfaces.IRotation">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IRotation</span></code><a class="headerlink" href="#pyobs.interfaces.IRotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IMotion" title="pyobs.interfaces.IMotion"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IMotion</span></code></a></p>
+<p>The module controls a device that can rotate.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IRotation.get_rotation">
 <code class="sig-name descname"><span class="pre">get_rotation</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/pyobs/interfaces/IRotation.html#IRotation.get_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRotation.get_rotation" title="Permalink to this definition">¶</a></dt>
@@ -1163,6 +1153,7 @@ interfaces.</p>
 <dt id="pyobs.interfaces.IRunnable">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IRunnable</span></code><a class="headerlink" href="#pyobs.interfaces.IRunnable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IAbortable" title="pyobs.interfaces.IAbortable"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IAbortable</span></code></a></p>
+<p>The module has some action that can be started remotely.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IRunnable.run">
 <code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IRunnable.html#IRunnable.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IRunnable.run" title="Permalink to this definition">¶</a></dt>
@@ -1178,7 +1169,7 @@ interfaces.</p>
 <dt id="pyobs.interfaces.IScriptRunner">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IScriptRunner</span></code><a class="headerlink" href="#pyobs.interfaces.IScriptRunner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Interface for running a script.</p>
+<p>The module can execute a script.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IScriptRunner.run_script">
 <code class="sig-name descname"><span class="pre">run_script</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/IScriptRunner.html#IScriptRunner.run_script"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IScriptRunner.run_script" title="Permalink to this definition">¶</a></dt>
@@ -1199,6 +1190,7 @@ interfaces.</p>
 <dt id="pyobs.interfaces.IStoppable">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IStoppable</span></code><a class="headerlink" href="#pyobs.interfaces.IStoppable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The module can be started and stopped.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IStoppable.is_running">
 <code class="sig-name descname"><span class="pre">is_running</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/pyobs/interfaces/IStoppable.html#IStoppable.is_running"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IStoppable.is_running" title="Permalink to this definition">¶</a></dt>
@@ -1226,7 +1218,8 @@ interfaces.</p>
 <dt id="pyobs.interfaces.ISyncTarget">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ISyncTarget</span></code><a class="headerlink" href="#pyobs.interfaces.ISyncTarget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Interface for all devices that can be synchronized on a target.</p>
+<p>The module can synchronize a target, e.g. via a telescope control software behinde an
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Telescope</span></code>.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ISyncTarget.sync_target">
 <code class="sig-name descname"><span class="pre">sync_target</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/interfaces/ISyncTarget.html#ISyncTarget.sync_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ISyncTarget.sync_target" title="Permalink to this definition">¶</a></dt>
@@ -1242,7 +1235,7 @@ interfaces.</p>
 <dt id="pyobs.interfaces.ITelescope">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ITelescope</span></code><a class="headerlink" href="#pyobs.interfaces.ITelescope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.IMotion" title="pyobs.interfaces.IMotion"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IMotion</span></code></a>, <a class="reference internal" href="#pyobs.interfaces.IAltAz" title="pyobs.interfaces.IAltAz"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IAltAz</span></code></a>, <a class="reference internal" href="#pyobs.interfaces.IRaDec" title="pyobs.interfaces.IRaDec"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.IRaDec</span></code></a></p>
-<p>Generic interface for an astronomical telescope.</p>
+<p>The module controls a telescope.</p>
 </dd></dl>
 
 </div>
@@ -1252,7 +1245,7 @@ interfaces.</p>
 <dt id="pyobs.interfaces.ITemperatures">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ITemperatures</span></code><a class="headerlink" href="#pyobs.interfaces.ITemperatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
-<p>Interface for all devices that measure temperatures.</p>
+<p>The module can return temperatures measured on some device.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.ITemperatures.get_temperatures">
 <code class="sig-name descname"><span class="pre">get_temperatures</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/interfaces/ITemperatures.html#ITemperatures.get_temperatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.ITemperatures.get_temperatures" title="Permalink to this definition">¶</a></dt>
@@ -1273,6 +1266,7 @@ interfaces.</p>
 <dt id="pyobs.interfaces.IWeather">
 <em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IWeather</span></code><a class="headerlink" href="#pyobs.interfaces.IWeather" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyobs.interfaces.Interface" title="pyobs.interfaces.Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyobs.interfaces.Interface</span></code></a></p>
+<p>The module acts as a weather station.</p>
 <dl class="py method">
 <dt id="pyobs.interfaces.IWeather.get_current_weather">
 <code class="sig-name descname"><span class="pre">get_current_weather</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/pyobs/interfaces/IWeather.html#IWeather.get_current_weather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.interfaces.IWeather.get_current_weather" title="Permalink to this definition">¶</a></dt>
@@ -1329,7 +1323,6 @@ with sensor information, which contain a value and a good flag.</p>
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Interfaces (pyobs.interfaces)</a><ul>
-<li><a class="reference internal" href="#list-of-interfaces">List of interfaces</a></li>
 <li><a class="reference internal" href="#iabortable">IAbortable</a></li>
 <li><a class="reference internal" href="#iacquisition">IAcquisition</a></li>
 <li><a class="reference internal" href="#ialtaz">IAltAz</a></li>
@@ -1356,7 +1349,6 @@ with sensor information, which contain a value and a good flag.</p>
 <li><a class="reference internal" href="#ilatlon">ILatLon</a></li>
 <li><a class="reference internal" href="#imodule">IModule</a></li>
 <li><a class="reference internal" href="#imotion">IMotion</a></li>
-<li><a class="reference internal" href="#ipipeline">IPipeline</a></li>
 <li><a class="reference internal" href="#iradec">IRaDec</a></li>
 <li><a class="reference internal" href="#iradecoffsets">IRaDecOffsets</a></li>
 <li><a class="reference internal" href="#iready">IReady</a></li>

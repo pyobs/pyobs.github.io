@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyobs.vfs &#8212; pyobs 0.12 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyobs.vfs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyobs.vfs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A virtual file system (VFS) is a convenient way for allowing access to different resources with a  common interface.</span>
+<span class="sd">It also makes it easy to change the actual place of storage without any changes to the code. In *pyobs*, a path into</span>
+<span class="sd">the VFS looks like a normal path on a Unix-like system::</span>
+
+<span class="sd">    /path/to/file.ext</span>
+
+<span class="sd">To be more precise, a path is built like this::</span>
+
+<span class="sd">    /&lt;root&gt;/&lt;path&gt;/&lt;filename&gt;</span>
+
+<span class="sd">where ``&lt;root&gt;`` indicates, which VFS to use, ``&lt;path&gt;`` is the path within that VFS and `&lt;filename&gt;` is the actual</span>
+<span class="sd">filename.</span>
+
+<span class="sd">The available roots in the *pyobs* VFS are usually defined in the configuration file like this::</span>
+
+<span class="sd">    vfs:</span>
+<span class="sd">        root1:</span>
+<span class="sd">            class: VfsClass1</span>
+<span class="sd">        root2:</span>
+<span class="sd">            class: VfsClass2</span>
+
+<span class="sd">With this configuration, all filenames that start with ``/root1/`` (e.g. ``/root1/path/filename.ext``) are handled</span>
+<span class="sd">by ``VfsClass1``, while all filenames starting with ``/root2/`` use ``VfsClass2``. Both defined classes can have</span>
+<span class="sd">additional parameters, which should also be given in the configuration.</span>
+
+<span class="sd">With this example, one can easily see the advantages of using a VFS:</span>
+
+<span class="sd">    1. File access to all roots look similar, we always open a filename like ``/root/path/file.ext``.</span>
+
+<span class="sd">    2. Changing the handling class for one of the roots changes the way we access a file. For instance, if</span>
+<span class="sd">       a file was always stored locally, but now we want to change that to a location using a SSH location, this can</span>
+<span class="sd">       easily be accomplished by simply changing the configuration.</span>
+
+<span class="sd">    3. Another advantage that we have not mentioned before is, that the same roots can use different handling classes on</span>
+<span class="sd">       different machines. See below for details.</span>
+
+<span class="sd">Imagine a file ``/storage/file.ext`` that maps to a local file on machine A, i.e. ``storage`` uses a handling class</span>
+<span class="sd">that simply changes the filename to a local filename. On machine B we can now define the same root ``storage``, but use</span>
+<span class="sd">a different handling class that, e.g., accesses the file via SSH. Still, the filename would be the same on both</span>
+<span class="sd">machines. So A could store a file as ``/storage/file.ext``, send the filename to B, which then can access the file</span>
+<span class="sd">via the same filename.</span>
+
+<span class="sd">Currently supported are these types of file access:</span>
+<span class="sd">    - :class:`~pyobs.vfs.LocalFile`: Local file on the machine the module is running on.</span>
+<span class="sd">    - :class:`~pyobs.vfs.HttpFile`: File on a HTTP server.</span>
+<span class="sd">    - :class:`~pyobs.vfs.MemoryFile`: File in memory.</span>
+<span class="sd">    - :class:`~pyobs.vfs.SSHFile`: File on different machine that is accessible via SSH.</span>
+<span class="sd">    - :class:`~pyobs.vfs.TarFile`: Wrapper for a dynamically created TAR file. Can only be read from.</span>
+<span class="sd">    - :class:`~pyobs.vfs.TempFile`: Temporary file that will be deleted after being closed.</span>
+<span class="sd">    - :class:`~pyobs.vfs.ArchiveFile`: Wrapper for a file in the :ref:`pyobs-archive` image archive.</span>
+
+<span class="sd">The base class for all of these is :class:`~pyobs.vfs.VFSFile`.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__title__</span> <span class="o">=</span> <span class="s1">&#39;Virtual File System&#39;</span>
+
+<span class="kn">from</span> <span class="nn">.vfs</span> <span class="kn">import</span> <span class="n">VirtualFileSystem</span><span class="p">,</span> <span class="n">VFSFile</span>
+<span class="kn">from</span> <span class="nn">.localfile</span> <span class="kn">import</span> <span class="n">LocalFile</span>
+<span class="kn">from</span> <span class="nn">.httpfile</span> <span class="kn">import</span> <span class="n">HttpFile</span>
+<span class="kn">from</span> <span class="nn">.memfile</span> <span class="kn">import</span> <span class="n">MemoryFile</span>
+<span class="kn">from</span> <span class="nn">.sshfile</span> <span class="kn">import</span> <span class="n">SSHFile</span>
+<span class="kn">from</span> <span class="nn">.tarfile</span> <span class="kn">import</span> <span class="n">TarFile</span>
+<span class="kn">from</span> <span class="nn">.tempfile</span> <span class="kn">import</span> <span class="n">TempFile</span>
+<span class="kn">from</span> <span class="nn">.gzippipe</span> <span class="kn">import</span> <span class="n">GzipReader</span><span class="p">,</span> <span class="n">GzipWriter</span>
+<span class="kn">from</span> <span class="nn">.archivefile</span> <span class="kn">import</span> <span class="n">ArchiveFile</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation index</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2021, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>

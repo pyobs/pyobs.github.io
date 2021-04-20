@@ -1,5 +1,5 @@
 Events (pyobs.events)
-=====================
+---------------------
 
 .. automodule:: pyobs.events
 

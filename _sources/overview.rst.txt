@@ -76,7 +76,7 @@ especially the location of the telescope and the local time. For this, the :clas
 has support for an additional module of type :class:`~pyobs.environment.Environment`, which can be
 defined in the application's configuration at top-level like this::
 
-    timezone: utc
+    timezone: Africa/Johannesburg
     location:
       longitude: 20.810808
       latitude: -32.375823
@@ -94,7 +94,7 @@ Communication between modules
 -----------------------------
 
 In case the module is supposed to communicate with others, we need another module of type
-:class:`~pyobs.comm.comm.Comm`, which can be defined in the application's configuration like this::
+:class:`~pyobs.comm.Comm`, which can be defined in the application's configuration like this::
 
     comm:
       class: pyobs.comm.xmpp.XmppComm

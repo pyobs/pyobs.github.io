@@ -32,7 +32,7 @@ These are some projects, that are closely related to the *pyobs* observation con
 So they might be of interest even for observatories that operate their own OCS.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    pyobs-weather/index
    pyobs-archive/index

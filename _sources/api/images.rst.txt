@@ -1,15 +1,15 @@
 Images (pyobs.images)
-=====================
+---------------------
 
 .. automodule:: pyobs.images
 
 Image
------
+~~~~~
 
 .. autoclass:: pyobs.images.Image
 
 Image Processors (pyobs.images.processors)
-------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: pyobs.images.processors.astrometry
 

@@ -42,53 +42,7 @@
           <div class="body" role="main">
             
   <h1>Source code for pyobs.modules.module</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A module in *pyobs* is the smalles executable unit. The base class for all modules is</span>
-<span class="sd">:class:`~pyobs.modules.Module`, so all modules should derive from this class and, usually, implement</span>
-<span class="sd">one or more :class:`~pyobs.interfaces.Interface`\ s.</span>
-
-<span class="sd">Modules are usually not created directly in code, but via a configuration file, which is a YAML file that directly</span>
-<span class="sd">maps to the constructor of the module plus an additional entry ``class`` containing the full reference to the class</span>
-<span class="sd">of the module to instantiate.</span>
-
-<span class="sd">Take, for instance, the :class:`~pyobs.modules.test.StandAlone` class, which has two parameters in its</span>
-<span class="sd">constructor: ``message`` and ``interval``. So a valid configuration file would look like this::</span>
-
-<span class="sd">    class: pyobs.modules.test.Standalone</span>
-<span class="sd">    message: Test</span>
-<span class="sd">    interval: 5</span>
-
-<span class="sd">Note that both parameters have default values, so both could be omitted from the configuration. So, this would also</span>
-<span class="sd">work::</span>
-
-<span class="sd">    class: pyobs.modules.test.Standalone</span>
-<span class="sd">    message: Test</span>
-
-<span class="sd">In this case, interval would have to its default value of 10.</span>
-
-<span class="sd">.. note::</span>
-<span class="sd">    Remember that the ``*args`` and ``**kwargs`` are always forwarded to the super class(es), so the constructor of</span>
-<span class="sd">    a module *always* also provides the parameters from :class:`~pyobs.object.Object` and</span>
-<span class="sd">    :class:`~pyobs.modules.Module`.</span>
-
-<span class="sd">Quite often, a parameter will accept both an object of a given type and a dict. If this is the case, the dict must</span>
-<span class="sd">be another class definition with a ``class`` keyword, referring to a class of the given type. See, for example, the</span>
-<span class="sd">``comm`` parameter of :class:`~pyobs.modules.Module`: it takes both a dict and a :class:`pyobs.comm.comm.Comm`.</span>
-<span class="sd">So in a configuration file, we can always specify a Comm object like this::</span>
-
-<span class="sd">    comm:</span>
-<span class="sd">        class: pyobs.comm.xmpp.XmppComm</span>
-<span class="sd">        jid: someone@example.com</span>
-<span class="sd">        password: secret</span>
-
-<span class="sd">An object of type :class:`~pyobs.comm.xmpp.xmppcomm.XmppComm` (which is a class derived from</span>
-<span class="sd">:class:`~pyobs.comm.comm.Comm`) will automatically be created.</span>
-
-<span class="sd">Sometimes, multiple modules have to run in a single process, so that they can access a common resource. For this case</span>
-<span class="sd">a :class:`~pyobs.modules.MultiModule` can contain multiple module descriptions.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">inspect</span>
+<span></span><span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">from</span> <span class="nn">py_expression_eval</span> <span class="kn">import</span> <span class="n">Parser</span>
