@@ -38,6 +38,17 @@ So they might be of interest even for observatories that operate their own OCS.
    pyobs-archive/index
 
 
+Project details
+---------------
+
+.. toctree::
+   :maxdepth: 1
+
+   project/credits
+   project/license
+   project/3rdparty
+
+
 Indices and tables
 ==================
 
