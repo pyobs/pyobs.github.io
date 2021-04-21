@@ -273,11 +273,10 @@
         <span class="sd">&quot;&quot;&quot;Returns the current status for the cooling.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Tuple containing:</span>
-<span class="sd">                Enabled (bool):         Whether the cooling is enabled</span>
-<span class="sd">                SetPoint (float):       Setpoint for the cooling in celsius.</span>
-<span class="sd">                Power (float):          Current cooling power in percent or None.</span>
-<span class="sd">                Temperatures (dict):    Dictionary of sensor name/value pairs with temperatures</span>
+<span class="sd">            (tuple): Tuple containing:</span>
+<span class="sd">                Enabled:  Whether the cooling is enabled</span>
+<span class="sd">                SetPoint: Setpoint for the cooling in celsius.</span>
+<span class="sd">                Power:    Current cooling power in percent or None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coolingLock</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">enabled</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">set_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cooling</span><span class="o">.</span><span class="n">power</span></div>

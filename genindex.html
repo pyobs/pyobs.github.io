@@ -75,6 +75,8 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/mixins.html#pyobs.mixins.FitsNamespaceMixin.__add_namespace">__add_namespace() (FitsNamespaceMixin method)</a>
+</li>
       <li><a href="pyobs-weather/evaluators/boolean.html#pyobs_weather.weather.evaluators.Boolean.__call__">__call__() (Boolean method)</a>
 
       <ul>
@@ -85,6 +87,26 @@
         <li><a href="pyobs-weather/evaluators/valid.html#pyobs_weather.weather.evaluators.Valid.__call__">(Valid method)</a>
 </li>
       </ul></li>
+      <li><a href="api/mixins.html#pyobs.mixins.WeatherAwareMixin.__on_bad_weather">__on_bad_weather() (WeatherAwareMixin method)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.FollowMixin.__update_follow">__update_follow() (FollowMixin method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/mixins.html#pyobs.mixins.WeatherAwareMixin.__weather_check">__weather_check() (WeatherAwareMixin method)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.MotionStatusMixin._change_motion_status">_change_motion_status() (MotionStatusMixin method)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.MotionStatusMixin._combine_motion_status">_combine_motion_status() (MotionStatusMixin method)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.CameraSettingsMixin._do_camera_settings">_do_camera_settings() (CameraSettingsMixin method)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.FitsNamespaceMixin._filter_fits_namespace">_filter_fits_namespace() (FitsNamespaceMixin method)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.WeatherAwareMixin._on_good_weather">_on_good_weather() (WeatherAwareMixin method)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.WaitForMotionMixin._wait_for_motion">_wait_for_motion() (WaitForMotionMixin method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -220,6 +242,8 @@
       <li><a href="api/interfaces.html#pyobs.interfaces.ICalibrate.calibrate">calibrate() (ICalibrate method)</a>
 </li>
       <li><a href="modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.callback">callback() (FlatField method)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.CameraSettingsMixin">CameraSettingsMixin (class in pyobs.mixins)</a>
 </li>
       <li><a href="api/object.html#pyobs.object.Object.check_running">check_running() (Object method)</a>
 </li>
@@ -359,6 +383,8 @@
 </li>
       <li><a href="api/events.html#pyobs.events.FilterChangedEvent">FilterChangedEvent (class in pyobs.events)</a>
 </li>
+      <li><a href="api/mixins.html#pyobs.mixins.FitsNamespaceMixin">FitsNamespaceMixin (class in pyobs.mixins)</a>
+</li>
       <li><a href="modules/pyobs/pyobs.modules.flatfield.html#pyobs.modules.flatfield.FlatField.flat_field">flat_field() (FlatField method)</a>
 
       <ul>
@@ -396,6 +422,8 @@
       <li><a href="modules/pyobs/pyobs.modules.focus.html#pyobs.modules.focus.FocusModel">FocusModel (class in pyobs.modules.focus)</a>
 </li>
       <li><a href="api/utils/focusseries.html#pyobs.utils.focusseries.FocusSeries">FocusSeries (class in pyobs.utils.focusseries)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.FollowMixin">FollowMixin (class in pyobs.mixins)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -558,7 +586,11 @@
       <li><a href="api/interfaces.html#pyobs.interfaces.ILatLon.get_latlon">get_latlon() (ILatLon method)</a>
 </li>
       <li><a href="api/interfaces.html#pyobs.interfaces.IMotion.get_motion_status">get_motion_status() (IMotion method)</a>
+
+      <ul>
+        <li><a href="api/mixins.html#pyobs.mixins.MotionStatusMixin.get_motion_status">(MotionStatusMixin method)</a>
 </li>
+      </ul></li>
       <li><a href="api/object.html#pyobs.object.get_object">get_object() (in module pyobs.object)</a>
 </li>
       <li><a href="modules/pyobs/pyobs.modules.focus.html#pyobs.modules.focus.FocusModel.get_optimal_focus">get_optimal_focus() (FocusModel method)</a>
@@ -765,6 +797,8 @@
 </li>
       <li><a href="api/interfaces.html#pyobs.interfaces.IRunnable">IRunnable (class in pyobs.interfaces)</a>
 </li>
+      <li><a href="api/mixins.html#pyobs.mixins.FollowMixin.is_following">is_following() (FollowMixin property)</a>
+</li>
       <li><a href="modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome.is_ready">is_ready() (AlpacaDome method)</a>
 
       <ul>
@@ -925,6 +959,8 @@
 </li>
         <li><a href="api/interfaces.html#module-pyobs.interfaces">pyobs.interfaces</a>
 </li>
+        <li><a href="api/mixins.html#module-pyobs.mixins">pyobs.mixins</a>
+</li>
         <li><a href="api/module.html#module-pyobs.modules">pyobs.modules</a>
 </li>
         <li><a href="modules/pyobs/pyobs.modules.acquisition.html#module-pyobs.modules.acquisition">pyobs.modules.acquisition</a>
@@ -999,6 +1035,8 @@
       <li><a href="api/utils/enums.html#pyobs.utils.enums.MotionStatus">MotionStatus (class in pyobs.utils.enums)</a>
 </li>
       <li><a href="api/events.html#pyobs.events.MotionStatusChangedEvent">MotionStatusChangedEvent (class in pyobs.events)</a>
+</li>
+      <li><a href="api/mixins.html#pyobs.mixins.MotionStatusMixin">MotionStatusMixin (class in pyobs.mixins)</a>
 </li>
       <li><a href="modules/pyobs_alpaca.html#pyobs_alpaca.AlpacaDome.move_altaz">move_altaz() (AlpacaDome method)</a>
 
@@ -1126,6 +1164,8 @@
         <li><a href="modules/pyobs/pyobs.modules.utils.html#pyobs.modules.utils.Trigger.open">(Trigger method)</a>
 </li>
         <li><a href="modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather.open">(Weather method)</a>
+</li>
+        <li><a href="api/mixins.html#pyobs.mixins.WeatherAwareMixin.open">(WeatherAwareMixin method)</a>
 </li>
         <li><a href="api/comm.html#pyobs.comm.xmpp.XmppComm.open">(XmppComm method)</a>
 </li>
@@ -1276,6 +1316,13 @@
 </li>
       </ul></li>
       <li>
+    pyobs.mixins
+
+      <ul>
+        <li><a href="api/mixins.html#module-pyobs.mixins">module</a>
+</li>
+      </ul></li>
+      <li>
     pyobs.modules
 
       <ul>
@@ -1296,6 +1343,8 @@
         <li><a href="modules/pyobs/pyobs.modules.camera.html#module-pyobs.modules.camera">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyobs.modules.flatfield
 
@@ -1303,8 +1352,6 @@
         <li><a href="modules/pyobs/pyobs.modules.flatfield.html#module-pyobs.modules.flatfield">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyobs.modules.focus
 
@@ -1846,12 +1893,16 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/mixins.html#pyobs.mixins.WaitForMotionMixin">WaitForMotionMixin (class in pyobs.mixins)</a>
+</li>
       <li><a href="modules/pyobs/pyobs.modules.weather.html#pyobs.modules.weather.Weather">Weather (class in pyobs.modules.weather)</a>
 </li>
-      <li><a href="api/utils/enums.html#pyobs.utils.enums.WeatherSensors">WeatherSensors (class in pyobs.utils.enums)</a>
+      <li><a href="api/mixins.html#pyobs.mixins.WeatherAwareMixin">WeatherAwareMixin (class in pyobs.mixins)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/enums.html#pyobs.utils.enums.WeatherSensors">WeatherSensors (class in pyobs.utils.enums)</a>
+</li>
       <li><a href="api/utils/enums.html#pyobs.utils.enums.WeatherSensors.WINDDIR">WINDDIR (WeatherSensors attribute)</a>
 </li>
       <li><a href="api/utils/enums.html#pyobs.utils.enums.WeatherSensors.WINDSPEED">WINDSPEED (WeatherSensors attribute)</a>

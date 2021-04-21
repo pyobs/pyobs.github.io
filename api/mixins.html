@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mixins (pyobs.mixins) &#8212; pyobs 0.12 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Communication between modules (pyobs.comm)" href="comm.html" />
+    <link rel="prev" title="Modules (pyobs.modules)" href="module.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="comm.html" title="Communication between modules (pyobs.comm)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="module.html" title="Modules (pyobs.modules)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.12 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Mixins (pyobs.mixins)</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyobs.mixins">
+<span id="mixins-pyobs-mixins"></span><h1>Mixins (pyobs.mixins)<a class="headerlink" href="#module-pyobs.mixins" title="Permalink to this headline">¶</a></h1>
+<p>Mixins are classes that can be inherited from to automatically add some functionality to a module.</p>
+<div class="section" id="camerasettingsmixin">
+<h2>CameraSettingsMixin<a class="headerlink" href="#camerasettingsmixin" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.mixins.CameraSettingsMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">CameraSettingsMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="interfaces.html#pyobs.interfaces.IFilters" title="pyobs.interfaces.IFilters"><span class="pre">pyobs.interfaces.IFilters</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.CameraSettingsMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixin for a device that should be able to set camera settings.</p>
+<p>Initializes the mixin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filters</strong> – Filter wheel module.</p></li>
+<li><p><strong>filter</strong> – Filter to set.</p></li>
+<li><p><strong>binning</strong> – Binning to set.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyobs.mixins.CameraSettingsMixin._do_camera_settings">
+<code class="sig-name descname"><span class="pre">_do_camera_settings</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="interfaces.html#pyobs.interfaces.ICamera" title="pyobs.interfaces.ICamera"><span class="pre">pyobs.interfaces.ICamera</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/mixins/camerasettings.html#CameraSettingsMixin._do_camera_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.mixins.CameraSettingsMixin._do_camera_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do camera settings for given camera.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="fitsnamespacemixin">
+<h2>FitsNamespaceMixin<a class="headerlink" href="#fitsnamespacemixin" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.mixins.FitsNamespaceMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">FitsNamespaceMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fits_namespaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.FitsNamespaceMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixin for IFitsHeaderProvider modules that filters FITS headers by namespace.</p>
+<dl class="py method">
+<dt id="pyobs.mixins.FitsNamespaceMixin.__add_namespace">
+<code class="sig-name descname"><span class="pre">__add_namespace</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keywords</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.FitsNamespaceMixin.__add_namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add FITS header keywords from namespace to list of valid keywords</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of namespace</p></li>
+<li><p><strong>keywords</strong> – List of valid keywords, which will be added to</p></li>
+<li><p><strong>hdr</strong> – Full unfiltered header</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.mixins.FitsNamespaceMixin._filter_fits_namespace">
+<code class="sig-name descname"><span class="pre">_filter_fits_namespace</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sender</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/mixins/fitsnamespace.html#FitsNamespaceMixin._filter_fits_namespace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.mixins.FitsNamespaceMixin._filter_fits_namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter FITS header keywords by given namespaces. If no namespaces are given, let all through. Always
+let keywords with this module’s name as namespace pass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hdr</strong> – Input header to filter</p></li>
+<li><p><strong>namespaces</strong> – Requested namespaces</p></li>
+<li><p><strong>sender</strong> – Name of module that requested headers</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Filtered FITS header</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="followmixin">
+<h2>FollowMixin<a class="headerlink" href="#followmixin" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.mixins.FollowMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">FollowMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="interfaces.html#pyobs.interfaces.IAltAz" title="pyobs.interfaces.IAltAz"><span class="pre">pyobs.interfaces.IAltAz</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="interfaces.html#pyobs.interfaces.IRaDec" title="pyobs.interfaces.IRaDec"><span class="pre">pyobs.interfaces.IRaDec</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.FollowMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixin for a device that should follow the motion of another.</p>
+<p>Initializes the mixin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device</strong> – Name of device to follow</p></li>
+<li><p><strong>interval</strong> – Interval in seconds between position checks.</p></li>
+<li><p><strong>tolerance</strong> – Tolerance in degrees between both devices to trigger new movement.</p></li>
+<li><p><strong>mode</strong> – Set to “altaz” to follow Alt/Az coordinates or “radec” to follow RA/Dec.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyobs.mixins.FollowMixin.__update_follow">
+<code class="sig-name descname"><span class="pre">__update_follow</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.FollowMixin.__update_follow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.mixins.FollowMixin.is_following">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">is_following</span></code><a class="headerlink" href="#pyobs.mixins.FollowMixin.is_following" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True, if we’re following another device.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="motionstatusmixin">
+<h2>MotionStatusMixin<a class="headerlink" href="#motionstatusmixin" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.mixins.MotionStatusMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">MotionStatusMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">motion_status_interfaces</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.MotionStatusMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixin for IMotion devices for handling status.</p>
+<p>Initializes the mixin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interfaces</strong> – List of interfaces to handle or None</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyobs.mixins.MotionStatusMixin._change_motion_status">
+<code class="sig-name descname"><span class="pre">_change_motion_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="utils/enums.html#pyobs.utils.enums.MotionStatus" title="pyobs.utils.enums.MotionStatus"><span class="pre">pyobs.utils.enums.MotionStatus</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/mixins/motionstatus.html#MotionStatusMixin._change_motion_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.mixins.MotionStatusMixin._change_motion_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change motion status and send event,</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>status</strong> – New motion status</p></li>
+<li><p><strong>interface</strong> – Interface to set motion status for</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.mixins.MotionStatusMixin._combine_motion_status">
+<code class="sig-name descname"><span class="pre">_combine_motion_status</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/mixins/motionstatus.html#MotionStatusMixin._combine_motion_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.mixins.MotionStatusMixin._combine_motion_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method for combining motion statuses for individual interfaces into the global one. Can be overriden.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.mixins.MotionStatusMixin.get_motion_status">
+<code class="sig-name descname"><span class="pre">get_motion_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="utils/enums.html#pyobs.utils.enums.MotionStatus" title="pyobs.utils.enums.MotionStatus"><span class="pre">pyobs.utils.enums.MotionStatus</span></a><a class="reference internal" href="../_modules/pyobs/mixins/motionstatus.html#MotionStatusMixin.get_motion_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.mixins.MotionStatusMixin.get_motion_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current motion status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device</strong> – Name of device to get status for, or None.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string from the Status enumerator.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="waitformotionmixin">
+<h2>WaitForMotionMixin<a class="headerlink" href="#waitformotionmixin" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.mixins.WaitForMotionMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">WaitForMotionMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wait_for_modules</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_for_states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils/enums.html#pyobs.utils.enums.MotionStatus" title="pyobs.utils.enums.MotionStatus"><span class="pre">pyobs.utils.enums.MotionStatus</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_for_timeout</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.WaitForMotionMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixin for a device that should wait for the motion status of another device.</p>
+<p>Initializes the mixin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wait_for_modules</strong> – One or more modules to wait for.</p></li>
+<li><p><strong>wait_for_states</strong> – List of states to wait for.</p></li>
+<li><p><strong>wait_for_timeout</strong> – Wait timeout in seconds.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyobs.mixins.WaitForMotionMixin._wait_for_motion">
+<code class="sig-name descname"><span class="pre">_wait_for_motion</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">threading.Event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/mixins/waitformotion.html#WaitForMotionMixin._wait_for_motion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.mixins.WaitForMotionMixin._wait_for_motion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until all devices are in one of the given motion states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> – Abort event.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TimeoutError</strong> – If wait timed out.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="weatherawaremixin">
+<h2>WeatherAwareMixin<a class="headerlink" href="#weatherawaremixin" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.mixins.WeatherAwareMixin">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">WeatherAwareMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weather</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="interfaces.html#pyobs.interfaces.IWeather" title="pyobs.interfaces.IWeather"><span class="pre">pyobs.interfaces.IWeather</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.WeatherAwareMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mixin for IMotion devices that should park(), when weather gets bad.</p>
+<dl class="py method">
+<dt id="pyobs.mixins.WeatherAwareMixin.__on_bad_weather">
+<code class="sig-name descname"><span class="pre">__on_bad_weather</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="events.html#pyobs.events.BadWeatherEvent" title="pyobs.events.BadWeatherEvent"><span class="pre">pyobs.events.BadWeatherEvent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sender</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.WeatherAwareMixin.__on_bad_weather" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abort exposure if a bad weather event occurs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – The bad weather event.</p></li>
+<li><p><strong>sender</strong> – Who sent it.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.mixins.WeatherAwareMixin.__weather_check">
+<code class="sig-name descname"><span class="pre">__weather_check</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.mixins.WeatherAwareMixin.__weather_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thread for continuously checking for good weather</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.mixins.WeatherAwareMixin._on_good_weather">
+<code class="sig-name descname"><span class="pre">_on_good_weather</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="events.html#pyobs.events.GoodWeatherEvent" title="pyobs.events.GoodWeatherEvent"><span class="pre">pyobs.events.GoodWeatherEvent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sender</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/mixins/weatheraware.html#WeatherAwareMixin._on_good_weather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.mixins.WeatherAwareMixin._on_good_weather" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change status of weather.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – The good weather event.</p></li>
+<li><p><strong>sender</strong> – Who sent it.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyobs.mixins.WeatherAwareMixin.open">
+<code class="sig-name descname"><span class="pre">open</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyobs/mixins/weatheraware.html#WeatherAwareMixin.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyobs.mixins.WeatherAwareMixin.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open mixin.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pyobs.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Mixins (pyobs.mixins)</a><ul>
+<li><a class="reference internal" href="#camerasettingsmixin">CameraSettingsMixin</a></li>
+<li><a class="reference internal" href="#fitsnamespacemixin">FitsNamespaceMixin</a></li>
+<li><a class="reference internal" href="#followmixin">FollowMixin</a></li>
+<li><a class="reference internal" href="#motionstatusmixin">MotionStatusMixin</a></li>
+<li><a class="reference internal" href="#waitformotionmixin">WaitForMotionMixin</a></li>
+<li><a class="reference internal" href="#weatherawaremixin">WeatherAwareMixin</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="index.html">API</a><ul>
+      <li>Previous: <a href="module.html" title="previous chapter">Modules (pyobs.modules)</a></li>
+      <li>Next: <a href="comm.html" title="next chapter">Communication between modules (pyobs.comm)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/mixins.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2021, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>
