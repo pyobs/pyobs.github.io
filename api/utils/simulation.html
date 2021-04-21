@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simulations (pyobs.utils.simulation) &#8212; pyobs 0.12 documentation</title>
+    <title>Simulations (pyobs.utils.simulation) &#8212; pyobs 0.13alpha documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="focusseries.html" title="Focus series (pyobs.utils.focusseries)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.13alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilities (pyobs.utils)</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Simulations (pyobs.utils.simulation)</a></li> 
@@ -53,6 +53,75 @@
   <div class="section" id="module-pyobs.utils.simulation">
 <span id="simulations-pyobs-utils-simulation"></span><h1>Simulations (pyobs.utils.simulation)<a class="headerlink" href="#module-pyobs.utils.simulation" title="Permalink to this headline">¶</a></h1>
 <p>TODO: write docs</p>
+<div class="section" id="simcamera">
+<h2>SimCamera<a class="headerlink" href="#simcamera" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.utils.simulation.SimCamera">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SimCamera</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">world</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#pyobs.utils.simulation.SimWorld" title="pyobs.utils.simulation.SimWorld"><span class="pre">SimWorld</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.015</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">images</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.utils.simulation.SimCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simulated camera.</p>
+<p>Inits a new camera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> – World to use.</p></li>
+<li><p><strong>image_size</strong> – Size of image.</p></li>
+<li><p><strong>pixel_size</strong> – Square pixel size in mm.</p></li>
+<li><p><strong>images</strong> – Filename pattern (e.g. /path/to/<a href="#id1"><span class="problematic" id="id2">*</span></a>.fits) for files to return instead of simulated images.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="simtelescope">
+<h2>SimTelescope<a class="headerlink" href="#simtelescope" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.utils.simulation.SimTelescope">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SimTelescope</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">world</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#pyobs.utils.simulation.SimWorld" title="pyobs.utils.simulation.SimWorld"><span class="pre">SimWorld</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointing_offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move_accuracy</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">20.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'clear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focal_length</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5000.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.utils.simulation.SimTelescope" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simulated telescope on an equitorial mount.</p>
+<p>Initializes new telescope.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> – World object.</p></li>
+<li><p><strong>position</strong> – RA/Dec tuple with position of telescope in degrees.</p></li>
+<li><p><strong>offsets</strong> – RA/Dec offsets of telescope in arcsecs.</p></li>
+<li><p><strong>pointing_offset</strong> – Pointing offset in RA/Dec in arcsecs.</p></li>
+<li><p><strong>move_accuracy</strong> – Accuracy of movements in RA/Dec, i.e. random error after any movement [arcsec].</p></li>
+<li><p><strong>speed</strong> – Speed of telescope in deg/sec.</p></li>
+<li><p><strong>focus</strong> – Telescope focus.</p></li>
+<li><p><strong>filters</strong> – List of filters.</p></li>
+<li><p><strong>filter</strong> – Current filter.</p></li>
+<li><p><strong>drift</strong> – RA/Dec drift of telescope in arcsec/sec.</p></li>
+<li><p><strong>focal_length</strong> – Focal length of telescope in mm.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="simworld">
+<h2>SimWorld<a class="headerlink" href="#simworld" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.utils.simulation.SimWorld">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">SimWorld</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">astropy.time.core.Time</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">telescope</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyobs.utils.simulation.SimTelescope" title="pyobs.utils.simulation.SimTelescope"><span class="pre">SimTelescope</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyobs.utils.simulation.SimCamera" title="pyobs.utils.simulation.SimCamera"><span class="pre">SimCamera</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.utils.simulation.SimWorld" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simulated world.</p>
+<p>Initializes a new simulated world.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> – Time at start of simulation.</p></li>
+<li><p><strong>telescope</strong> – Telescope to use.</p></li>
+<li><p><strong>camera</strong> – Camera to use.</p></li>
+<li><p><strong>observer</strong> – Observer to use.</p></li>
+<li><p><strong>*args</strong></p></li>
+<li><p><strong>**kwargs</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -64,7 +133,17 @@
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/pyobs.png" alt="Logo"/>
-            </a></p><h3>Related Topics</h3>
+            </a></p>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Simulations (pyobs.utils.simulation)</a><ul>
+<li><a class="reference internal" href="#simcamera">SimCamera</a></li>
+<li><a class="reference internal" href="#simtelescope">SimTelescope</a></li>
+<li><a class="reference internal" href="#simworld">SimWorld</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
   <li><a href="../index.html">API</a><ul>

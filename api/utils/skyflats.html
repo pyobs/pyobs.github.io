@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sky flats (pyobs.utils.skyflats) &#8212; pyobs 0.12 documentation</title>
+    <title>Sky flats (pyobs.utils.skyflats) &#8212; pyobs 0.13alpha documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="simulation.html" title="Simulations (pyobs.utils.simulation)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.12 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyobs 0.13alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Utilities (pyobs.utils)</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Sky flats (pyobs.utils.skyflats)</a></li> 
@@ -53,6 +53,82 @@
   <div class="section" id="module-pyobs.utils.skyflats">
 <span id="sky-flats-pyobs-utils-skyflats"></span><h1>Sky flats (pyobs.utils.skyflats)<a class="headerlink" href="#module-pyobs.utils.skyflats" title="Permalink to this headline">¶</a></h1>
 <p>TODO: write docs</p>
+<div class="section" id="flatfielder">
+<h2>FlatFielder<a class="headerlink" href="#flatfielder" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.utils.skyflats.FlatFielder">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">FlatFielder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">30000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_exptime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_exptime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts_frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_offset_frac</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_counts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#pyobs.utils.skyflats.pointing.SkyFlatsBasePointing" title="pyobs.utils.skyflats.pointing.SkyFlatsBasePointing"><span class="pre">pyobs.utils.skyflats.pointing.SkyFlatsBasePointing</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_binnings</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">astroplan.observer.Observer</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../vfs.html#pyobs.vfs.VirtualFileSystem" title="pyobs.vfs.VirtualFileSystem"><span class="pre">pyobs.vfs.VirtualFileSystem</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.utils.skyflats.FlatFielder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatized flat-fielding.</p>
+<p>Initialize a new flat fielder.</p>
+<p>Depending on the value of combine_binnings, functions must be in a specific format:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><dl class="simple">
+<dt>combine_binnings=True:</dt><dd><p>functions must be a dictionary of filter-&gt;function pairs, like
+{‘clear’: ‘exp(-0.9*(h+3.9))’}
+In this case it is assumed that the average flux per pixel is directly correlated to the binning,
+i.e. a flat with 3x3 binning hast on average 9 times as much flux per pixel.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>combine_binnings=False:</dt><dd><p>functions must be nested one level deeper within the binning, like
+{‘1x1’: {‘clear’: ‘exp(-0.9*(h+3.9))’}}</p>
+</dd>
+</dl>
+</li>
+</ol>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>functions</strong> – Function f(h) for each filter to describe ideal exposure time as a function of solar
+elevation h, i.e. something like exp(-0.9*(h+3.9))</p></li>
+<li><p><strong>target_count</strong> – Count rate to aim for.</p></li>
+<li><p><strong>min_exptime</strong> – Minimum exposure time.</p></li>
+<li><p><strong>max_exptime</strong> – Maximum exposure time.</p></li>
+<li><p><strong>test_frame</strong> – Tupel (left, top, width, height) in percent that describe the frame for on-sky testing.</p></li>
+<li><p><strong>counts_frame</strong> – Tupel (left, top, width, height) in percent that describe the frame for calculating mean
+count rate.</p></li>
+<li><p><strong>allowed_offset_frac</strong> – Offset from target_count (given in fraction of it) that’s still allowed for good
+flat-field</p></li>
+<li><p><strong>min_counts</strong> – Minimum counts in frames.</p></li>
+<li><p><strong>combine_binnings</strong> – Whether different binnings use the same functions.</p></li>
+<li><p><strong>observer</strong> – Observer to use.</p></li>
+<li><p><strong>vfs</strong> – VFS to use.</p></li>
+<li><p><strong>callback</strong> – Callback function for statistics.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="scheduler">
+<h2>Scheduler<a class="headerlink" href="#scheduler" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyobs.utils.skyflats.Scheduler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Scheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priorities</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#pyobs.utils.skyflats.priorities.SkyflatPriorities" title="pyobs.utils.skyflats.priorities.SkyflatPriorities"><span class="pre">pyobs.utils.skyflats.priorities.SkyflatPriorities</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">observer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">astroplan.observer.Observer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_exptime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_exptime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timespan</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">7200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_change</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_binnings</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readout</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyobs.utils.skyflats.Scheduler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scheduler for taking flat fields</p>
+<p>Initializes a new scheduler for taking flat fields</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>functions</strong> – Flat field functions</p></li>
+<li><p><strong>priorities</strong> – Class handling priorities</p></li>
+<li><p><strong>observer</strong> – Observer to use</p></li>
+<li><p><strong>min_exptime</strong> – Minimum exposure time for flats</p></li>
+<li><p><strong>max_exptime</strong> – Maximum exposure time for flats</p></li>
+<li><p><strong>timespan</strong> – Timespan from now that should be scheduled [s]</p></li>
+<li><p><strong>filter_change</strong> – Time required for filter change [s]</p></li>
+<li><p><strong>count</strong> – Number of flats to schedule</p></li>
+<li><p><strong>combine_binnings</strong> – Whether different binnings use the same functions.</p></li>
+<li><p><strong>readout</strong> – Dictionary with readout times (in sec) per binning (as BxB).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 <div class="section" id="module-pyobs.utils.skyflats.pointing">
 <span id="sky-flat-pointings-pyobs-utils-skyflats-pointing"></span><h2>Sky flat pointings (pyobs.utils.skyflats.pointing)<a class="headerlink" href="#module-pyobs.utils.skyflats.pointing" title="Permalink to this headline">¶</a></h2>
 <p>TODO: write docs</p>
@@ -127,6 +203,8 @@
   <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Sky flats (pyobs.utils.skyflats)</a><ul>
+<li><a class="reference internal" href="#flatfielder">FlatFielder</a></li>
+<li><a class="reference internal" href="#scheduler">Scheduler</a></li>
 <li><a class="reference internal" href="#module-pyobs.utils.skyflats.pointing">Sky flat pointings (pyobs.utils.skyflats.pointing)</a><ul>
 <li><a class="reference internal" href="#skyflatsbasepointing">SkyFlatsBasePointing</a></li>
 <li><a class="reference internal" href="#skyflatsstaticpointing">SkyFlatsStaticPointing</a></li>

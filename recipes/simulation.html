@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setting up a pyobs system with simulated telescope and camera &#8212; pyobs 0.13alpha documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/readable.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API" href="../api/index.html" />
+    <link rel="prev" title="Command Line Interface" href="../cli.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../api/index.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../cli.html" title="Command Line Interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyobs 0.13alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Setting up a <em>pyobs</em> system with simulated telescope and camera</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="setting-up-a-pyobs-system-with-simulated-telescope-and-camera">
+<h1>Setting up a <em>pyobs</em> system with simulated telescope and camera<a class="headerlink" href="#setting-up-a-pyobs-system-with-simulated-telescope-and-camera" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This recipe requires three accounts on your XMPP server (see <a class="reference internal" href="../installing.html#setting-up-ejabberd"><span class="std std-ref">Setting up ejabberd</span></a>): <code class="docutils literal notranslate"><span class="pre">telescope</span></code>, <code class="docutils literal notranslate"><span class="pre">camera</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">gui</span></code>.</p>
+</div>
+<div class="section" id="setting-up-the-venv">
+<h2>Setting up the venv<a class="headerlink" href="#setting-up-the-venv" title="Permalink to this headline">¶</a></h2>
+<p>For this recipe, we start with a fresh new virtual environment in a new directory of your choice and install
+<code class="docutils literal notranslate"><span class="pre">pyobs-core</span></code> and <code class="docutils literal notranslate"><span class="pre">pyobs-gui</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">test</span>
+<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">venv</span>
+<span class="n">source</span> <span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">pyobs</span><span class="o">-</span><span class="n">core</span><span class="p">[</span><span class="n">full</span><span class="p">]</span> <span class="n">pyobs</span><span class="o">-</span><span class="n">gui</span>
+</pre></div>
+</div>
+<p>Remember that in every new terminal you need to activate the venv first:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">test</span>
+<span class="n">source</span> <span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="simulated-telescope">
+<h2>Simulated telescope<a class="headerlink" href="#simulated-telescope" title="Permalink to this headline">¶</a></h2>
+<p><em>pyobs</em> contains classes for simulated telescopes and cameras, called <a class="reference internal" href="../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.DummyCamera" title="pyobs.modules.camera.DummyCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">DummyCamera</span></code></a> and
+<a class="reference internal" href="../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.DummyTelescope" title="pyobs.modules.telescope.DummyTelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">DummyTelescope</span></code></a>, respectively.</p>
+<p>Starting with the telescope, create a file <code class="docutils literal notranslate"><span class="pre">telescope.yaml</span></code> with the following content:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">include</span> <span class="n">_environment</span><span class="o">.</span><span class="n">yaml</span><span class="p">}</span>
+
+<span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">telescope</span><span class="o">.</span><span class="n">DummyTelescope</span>
+
+<span class="n">comm</span><span class="p">:</span>
+    <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+    <span class="n">jid</span><span class="p">:</span> <span class="n">telescope</span><span class="nd">@localhost</span>
+    <span class="n">password</span><span class="p">:</span> <span class="n">pyobs</span>
+</pre></div>
+</div>
+<p>With the <code class="docutils literal notranslate"><span class="pre">class</span></code> keyword we define the previously mentioned class for the dummy telescope. For communicating with
+other modules, it also needs a Comm object, which we define under <code class="docutils literal notranslate"><span class="pre">comm</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the Comm configurations given in this recipe, remember to adjust JIDs and passwords according to your setup.</p>
+</div>
+<p>Since the location for all modules will be the same, we outsourced it into a file <code class="docutils literal notranslate"><span class="pre">_environment.yaml</span></code>, which is
+included in the first line, and has the following content (for this example, this is the location of the SAAO in
+Sutherland, South Africa):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">timezone</span><span class="p">:</span> <span class="n">Africa</span><span class="o">/</span><span class="n">Johannesburg</span>
+<span class="n">location</span><span class="p">:</span>
+    <span class="n">longitude</span><span class="p">:</span> <span class="mf">20.810808</span>
+    <span class="n">latitude</span><span class="p">:</span> <span class="o">-</span><span class="mf">32.375823</span>
+    <span class="n">elevation</span><span class="p">:</span> <span class="mf">1798.</span>
+</pre></div>
+</div>
+<p>You can now simply run the configuration by calling <code class="docutils literal notranslate"><span class="pre">pyobs</span> <span class="pre">telescope.yaml</span></code>. The last line of the produced output
+should contain <code class="docutils literal notranslate"><span class="pre">Started</span> <span class="pre">successfully</span></code>. You can shutdown the module via <code class="docutils literal notranslate"><span class="pre">Ctrl-c</span></code>.</p>
+</div>
+<div class="section" id="simulated-camera">
+<h2>Simulated camera<a class="headerlink" href="#simulated-camera" title="Permalink to this headline">¶</a></h2>
+<p>Open a new terminal and activate the venv. Then create a new file <code class="docutils literal notranslate"><span class="pre">camera.yaml</span></code> with the following content:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">include</span> <span class="n">_environment</span><span class="o">.</span><span class="n">yaml</span><span class="p">}</span>
+
+<span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">DummyCamera</span>
+
+<span class="n">comm</span><span class="p">:</span>
+    <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+    <span class="n">jid</span><span class="p">:</span> <span class="n">camera</span><span class="nd">@localhost</span>
+    <span class="n">password</span><span class="p">:</span> <span class="n">pyobs</span>
+</pre></div>
+</div>
+<p>Again, start the module via <code class="docutils literal notranslate"><span class="pre">pyobs</span> <span class="pre">camera.yaml</span></code>. Congratulations, you have set up your first <em>pyobs</em> system!</p>
+</div>
+<div class="section" id="graphical-user-interface">
+<h2>Graphical user interface<a class="headerlink" href="#graphical-user-interface" title="Permalink to this headline">¶</a></h2>
+<p>In order to get a graphical user interface (GUI) to the system, we can employ the <code class="docutils literal notranslate"><span class="pre">pyobs-gui</span></code> package. Again, open a
+new terminal and activate the venv. Then create a file callen <code class="docutils literal notranslate"><span class="pre">gui.yaml</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">include</span> <span class="n">_environment</span><span class="o">.</span><span class="n">yaml</span><span class="p">}</span>
+
+<span class="n">class</span><span class="p">:</span> <span class="n">pyobs_gui</span><span class="o">.</span><span class="n">GUI</span>
+
+<span class="n">comm</span><span class="p">:</span>
+    <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+    <span class="n">jid</span><span class="p">:</span> <span class="n">gui</span><span class="nd">@localhost</span>
+    <span class="n">password</span><span class="p">:</span> <span class="n">pyobs</span>
+</pre></div>
+</div>
+<p>Start the module (<code class="docutils literal notranslate"><span class="pre">pyobs</span> <span class="pre">gui.yaml</span></code>) and you should see a window open with two entries on the left side for
+<code class="docutils literal notranslate"><span class="pre">telescope</span></code> and <code class="docutils literal notranslate"><span class="pre">camera</span></code>. Clicking on those will give you controls to move the telescope and take images
+with the camera.</p>
+</div>
+<div class="section" id="virtual-file-system">
+<h2>Virtual file system<a class="headerlink" href="#virtual-file-system" title="Permalink to this headline">¶</a></h2>
+<p>Now, while most buttons should work nicely, when taking an image you will get an error message like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">ValueError</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">find</span> <span class="n">root</span> <span class="n">cache</span> <span class="k">for</span> <span class="n">file</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>This happens, because <em>pyobs</em> does not now where to store your images.</p>
+<p>For this to work, we need to add a <a class="reference internal" href="../api/vfs.html#module-pyobs.vfs" title="pyobs.vfs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">vfs</span></code></a> for both <code class="docutils literal notranslate"><span class="pre">camera</span></code> and <code class="docutils literal notranslate"><span class="pre">gui</span></code>, i.e. the two modules
+that need to access the files. Simply add the following to both configuration files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vfs</span><span class="p">:</span>
+    <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">VirtualFileSystem</span>
+    <span class="n">roots</span><span class="p">:</span>
+        <span class="n">cache</span><span class="p">:</span>
+            <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">LocalFile</span>
+            <span class="n">root</span><span class="p">:</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>Restart both modules and take an image. You will see that the GUI now shows it to you after the exposure is finished.</p>
+</div>
+<div class="section" id="connecting-telescope-and-camera">
+<h2>Connecting telescope and camera<a class="headerlink" href="#connecting-telescope-and-camera" title="Permalink to this headline">¶</a></h2>
+<p>When you look of the FITS headers of the taken images, you see that they contain entries that were automatically
+added from the <code class="docutils literal notranslate"><span class="pre">telescope</span></code> module, like <code class="docutils literal notranslate"><span class="pre">TEL-RA</span></code> and <code class="docutils literal notranslate"><span class="pre">TEL-DEC</span></code>, but these keywords are only added after the
+image has been taken. During the exposure, the simulated camera does not now where the simulated telescope is
+looking at.</p>
+<p>A convenient way to solve this is to run both modules in a shared process via a <a class="reference internal" href="../api/module.html#pyobs.modules.MultiModule" title="pyobs.modules.MultiModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiModule</span></code></a>
+and have a shared object for the simulation. Shut down the two modules for telescope and camera and create new file
+<code class="docutils literal notranslate"><span class="pre">telcam.yaml</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">include</span> <span class="n">_environment</span><span class="o">.</span><span class="n">yaml</span><span class="p">}</span>
+
+<span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">MultiModule</span>
+
+<span class="n">shared</span><span class="p">:</span>
+    <span class="n">world</span><span class="p">:</span>
+        <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">SimWorld</span>
+        <span class="n">time</span><span class="p">:</span> <span class="s2">&quot;2020-10-21 22:00:00&quot;</span>
+
+        <span class="n">telescope</span><span class="p">:</span>
+            <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">SimTelescope</span>
+
+        <span class="n">camera</span><span class="p">:</span>
+            <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">SimCamera</span>
+
+<span class="n">modules</span><span class="p">:</span>
+    <span class="n">camera</span><span class="p">:</span>
+        <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">DummyCamera</span>
+        <span class="n">comm</span><span class="p">:</span>
+            <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+            <span class="n">jid</span><span class="p">:</span> <span class="n">camera</span><span class="nd">@localhost</span>
+            <span class="n">password</span><span class="p">:</span> <span class="n">pyobs</span>
+        <span class="n">vfs</span><span class="p">:</span>
+            <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">VirtualFileSystem</span>
+            <span class="n">roots</span><span class="p">:</span>
+                <span class="n">cache</span><span class="p">:</span>
+                    <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">vfs</span><span class="o">.</span><span class="n">LocalFile</span>
+                    <span class="n">root</span><span class="p">:</span> <span class="o">.</span>
+
+    <span class="n">telescope</span><span class="p">:</span>
+        <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">telescope</span><span class="o">.</span><span class="n">DummyTelescope</span>
+        <span class="n">comm</span><span class="p">:</span>
+            <span class="n">class</span><span class="p">:</span> <span class="n">pyobs</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">xmpp</span><span class="o">.</span><span class="n">XmppComm</span>
+            <span class="n">jid</span><span class="p">:</span> <span class="n">telescope</span><span class="nd">@localhost</span>
+            <span class="n">password</span><span class="p">:</span> <span class="n">pyobs</span>
+</pre></div>
+</div>
+<p>As you can see, this configuration contains exact copies of the previously separate configurations for <code class="docutils literal notranslate"><span class="pre">camera</span></code>
+and <code class="docutils literal notranslate"><span class="pre">telescope</span></code>, but now as entries in the <code class="docutils literal notranslate"><span class="pre">modules</span></code> dictionary.</p>
+<p>If you look at the constructors for <a class="reference internal" href="../modules/pyobs/pyobs.modules.camera.html#pyobs.modules.camera.DummyCamera" title="pyobs.modules.camera.DummyCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">DummyCamera</span></code></a> and
+<a class="reference internal" href="../modules/pyobs/pyobs.modules.telescope.html#pyobs.modules.telescope.DummyTelescope" title="pyobs.modules.telescope.DummyTelescope"><code class="xref py py-class docutils literal notranslate"><span class="pre">DummyTelescope</span></code></a>, you will see that they both accept a
+<a class="reference internal" href="../api/utils/simulation.html#pyobs.utils.simulation.SimWorld" title="pyobs.utils.simulation.SimWorld"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimWorld</span></code></a> object called <code class="docutils literal notranslate"><span class="pre">world</span></code>. And this is exactly what we provide in the
+<code class="docutils literal notranslate"><span class="pre">shared</span></code> dictionary. As you can see, we can also add parameters for the simulation like the time.</p>
+<p>If you start this multi-module via <code class="docutils literal notranslate"><span class="pre">pyobs</span> <span class="pre">telcam.yaml</span></code>, you will again see two modules in the GUI, but now you
+will get a simulated star field according to the position of the telescope.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/pyobs.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Setting up a <em>pyobs</em> system with simulated telescope and camera</a><ul>
+<li><a class="reference internal" href="#setting-up-the-venv">Setting up the venv</a></li>
+<li><a class="reference internal" href="#simulated-telescope">Simulated telescope</a></li>
+<li><a class="reference internal" href="#simulated-camera">Simulated camera</a></li>
+<li><a class="reference internal" href="#graphical-user-interface">Graphical user interface</a></li>
+<li><a class="reference internal" href="#virtual-file-system">Virtual file system</a></li>
+<li><a class="reference internal" href="#connecting-telescope-and-camera">Connecting telescope and camera</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+      <li>Previous: <a href="../cli.html" title="previous chapter">Command Line Interface</a></li>
+      <li>Next: <a href="../api/index.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/recipes/simulation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2021, Tim-Oliver Husser.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+  </div>
+  
+  </body>
+</html>
