@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
     <title>pyobs</title>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="/">
             <img src="/images/pyobs.gif" alt="" width="70" height="30">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -20,15 +20,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% assign url = page.url|remove:'index.html' %}
+                {% for link in site.navigation %}
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="about.html">About</a>
+                    <a class="nav-link {% if url == link.url %}active{% endif %}" aria-current="page"
+                       href="{{ link.url }}" title="{{ link.title }}">{{link.text}}</a>
                 </li>
+                {% endfor %}
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="https://docs.pyobs.org/">Documentation</a>
+                    <a class="nav-link" aria-current="page" href="https://docs.pyobs.org/">Documentation</a>
                 </li>
             </ul>
             <form class="d-flex" action="http://docs.pyobs.org/en/latest/search.html" method="get">
-                <input class="form-control-sm me-2" type="search" name="q" placeholder="Search docs" aria-label="Search">
+                <input class="form-control-sm me-2" type="search" name="q" placeholder="Search docs"
+                       aria-label="Search">
                 <input type="hidden" name="check_keywords" value="yes">
                 <input type="hidden" name="area" value="default">
             </form>
@@ -40,6 +45,6 @@
     {{ content }}
 </div>
 
-<script src="js/bootstrap.bundle.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
