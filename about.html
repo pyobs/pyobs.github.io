@@ -4,4 +4,103 @@ title: About
 permalink: /about/
 ---
 
-pyobs is bla
+<section>
+    <h3>About pyobs</h3>
+    <p>
+        pyobs is an <i>observation control system</i> (OCS) for astronomical telescopes and enables them to be operated
+        remotely and fully autonomously. Its main functionality is not to act as a hardware driver for all the devices
+        used at an observatory (although it can be), but to provide an abstraction layer over existing drivers and a
+        means of communication between different devices (called <i>modules</i> in pyobs). In addition, non-hardware
+        related modules are available for automating the boring stuff (focusing, acquisition, guiding, etc.).
+    </p>
+    <p>
+        pyobs is written in <a href="http://www.python.org/">Python</a>, but could easily be extended using other
+        programming languages. The only requirement is the support for XMPP, the underlying protocol for communication,
+        for which libraries are available for all major languages. The advantage of Python is the availability of
+        outstanding packages like <a href="https://numpy.org">NumPy</a> and especially
+        <a href="https://www.astropy.org">AstroPy</a> and its affiliated packages.
+    </p>
+</section>
+
+<section>
+    <h3>pyobs-core packages</h3>
+    <p>
+        The pyobs-core package (or just pyobs) contains all the gritty code about, e.g., communicating between modules,
+        definining common interfaces and error handling. It also has modules for automating procedures -- going
+        as far as providing a full robotic system that works well with the open-source
+        <a href="https://github.com/observatorycontrolsystem/observation-portal">observing portal</a> from
+        <a href="https://lco.global">Las Cumbres Observatory (LCO)</a>.
+    </p>
+    <p>
+        Details about the pyobs-core package can be found in the <a href="https://docs.pyobs.org/">documentation</a>.
+    </p>
+</section>
+
+<section>
+    <h3>Additional packages</h3>
+    <p>
+        One thing the pyobs-core package does not contain are modules for specific hardware like cameras. Therefore,
+        additional packages are available.
+    </p>
+    <h5>Cameras</h5>
+    <p>This is the list of currently supported camera types.</p>
+    <ul>
+        <li>
+            <a href="https://docs.pyobs.org/projects/pyobs-asi/en/latest/">Aravis (pyobs-aravis)</a>,
+            tested on TIS 23GP031
+        </li>
+        <li>
+            <a href="https://docs.pyobs.org/projects/pyobs-asi/en/latest/">ASI ZWO (pyobs-asi)</a>,
+            tested on ASI 071 MC
+        </li>
+        <li>
+            <a href="https://docs.pyobs.org/projects/pyobs-fli/en/latest/">FLI (pyobs-fli)</a>,
+            tested on ProLine 230
+        </li>
+        <li>
+            <a href="https://docs.pyobs.org/projects/pyobs-sbig/en/latest/">SBIG (pyobs-sbig)</a>,
+            tested on STF-402M, STXL-6303, and STF-8300M
+        </li>
+    </ul>
+    <h5>ASCOM Alpaca</h5>
+    <p>
+        <a href="https://ascom-standards.org">ASCOM</a> is the de-facto standard for accessing astronomical hardware in
+        Windows. Alpaca is a proxy that allows using it via HTTP commands.
+    </p>
+    <ul>
+        <li>
+            <a href="https://docs.pyobs.org/projects/pyobs-alpaca/en/latest/">pyobs-alpaca</a>
+        </li>
+    </ul>
+    <h5>Graphical user interface</h5>
+    <p>
+        pyobs also provides a graphical user interface (GUI) that automatically detects connected modules and
+        shows controls for them.
+    </p>
+    <ul>
+        <li>
+            <a href="https://docs.pyobs.org/projects/pyobs-gui/en/latest/">pyobs-gui</a>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h3>Affiliated packages</h3>
+    <p>
+        There are also some packages that are not part of a the pyobs OCS, but which provide vital parts of an
+        observatory and which can easily be accessed using modules in the pyobs-core package.
+    </p>
+    <h5>Weather monitor</h5>
+    <p>
+        <a href="https://docs.pyobs.org/projects/pyobs-weather/en/latest/">pyobs-weather</a> is mainly a web page
+        that displays weather data from several sources. Behind the scene it is fully configurable to which sources
+        to use and it also provides functionality to classify a situation as "good weather" or "bad weather", which
+        can easily be retrieved from a pyobs module.
+    </p>
+    <h5>Image archive</h5>
+    <p>
+        <a href="https://docs.pyobs.org/projects/pyobs-archive/en/latest/">pyobs-archive</a> provides a web page
+        for searching and downloading images taken by the OCS. The pyobs-core package contains classes for doing this
+        as well as uploading new images.
+    </p>
+</section>
