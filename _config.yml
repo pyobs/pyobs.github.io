@@ -25,6 +25,9 @@ github_username:  thusser
 markdown: kramdown
 theme: minima
 
+sass:
+  quiet_deps: true
+
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
@@ -42,5 +45,7 @@ navigation:
     url: /
   - text: About
     url: /about/
+  - text: Publications
+    url: /publications/
   - text: Team
     url: /team/
